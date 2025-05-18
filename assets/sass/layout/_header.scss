@@ -7,19 +7,20 @@
 /* Header */
 
 	#header {
-		position: fixed;
-		z-index: 10000;
+		position: absolute;
+		z-index: 10;
 		left: 0;
 		top: 0;
 		width: 100%;
-		background: transparentize(_palette(bg), 0.05);
-		height: 3em;
+		background: transparent;
+		// background: transparentize(_palette(bg), 0.05);
+		// height: 3em;
 		line-height: 3em;
-		box-shadow: 0 0 0.15em 0 rgba(0,0,0,0.1);
+		// box-shadow: 0 0 0.15em 0 rgba(0,0,0,0.1);
 
 		h1 {
 			position: absolute;
-			left: 1em;
+			left: 10em;
 			top: 0;
 			height: 3em;
 			line-height: 3em;
@@ -32,7 +33,7 @@
 
 		nav {
 			position: absolute;
-			right: 0.5em;
+			right: 10em;
 			top: 0;
 			height: 3em;
 			line-height: 3em;

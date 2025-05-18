@@ -35,6 +35,7 @@
 			h2 {
 				font-size: 4.25em;
 				line-height: 1em;
+				letter-spacing: 0.11em;
 			}
 
 			> .content {
@@ -90,13 +91,13 @@
 				margin-bottom: 2em;
 			}
 
-			&.primary {
-				background: _palette(bg);
-			}
+			// &.primary {
+			// 	background: _palette(bg);
+			// }
 
-			&.secondary {
-				background: _palette(bg-alt);
-			}
+			// &.secondary {
+			// 	background: _palette(bg-alt);
+			// }
 		}
 
 		&.dark {
@@ -188,11 +189,6 @@
 					text-align: center;
 					@include vendor('transform', 'none');
 				}
-			}
-
-			&.style3 {
-				text-align: center;
-				padding: 3em 10px 3em 10px;
 			}
 		}
 

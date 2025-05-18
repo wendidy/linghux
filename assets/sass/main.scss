@@ -50,32 +50,41 @@
 	@import 'layout/main';
 	@import 'layout/footer';
 
-/* Intro */
+/* Home */
 
-	#intro {
-		background: url('images/overlay.png'), url('../../images/intro.jpg');
-		background-size: 256px 256px, cover;
-		background-attachment: fixed, fixed;
-		background-position: top left, bottom center;
-		background-repeat: repeat, no-repeat;
+	#home {
+		background: url('../../images/background.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		min-height: 100vh;
+		position: relative;
+  		z-index: 1; // below header
 	}
 
 /* One */
 
 	#one {
-		background: url('images/overlay.png'), url('../../images/one.jpg');
-		background-size: 256px 256px, cover;
-		background-attachment: fixed, fixed;
-		background-position: top left, center center;
+		background: url('../../images/ireland.jpg');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		min-height: 100vh;
+		position: relative;
 	}
 
 /* Two */
 
 	#two {
-		background: url('images/overlay.png'), url('../../images/two.jpg');
-		background-size: 256px 256px, cover;
-		background-attachment: fixed, fixed;
-		background-position: top left, center center;
+		background: url('../../images/background2.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		min-height: 100vh;
+		position: relative;
 	}
 
 /* Contact */
