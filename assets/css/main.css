@@ -1034,10 +1034,6 @@ header p {
   padding: 0 0 0.5em 0;
 }
 
-footer {
-  margin-top: 2em;
-}
-
 /* Table */
 table {
   width: 100%;
@@ -1561,73 +1557,44 @@ body.is-touch .main {
 }
 
 /* Footer */
-#footer {
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flex;
+.footer {
+  background-color: #0f1c2e;
+  color: #fff;
+  padding: 2em 3em;
+  text-align: center;
+}
+.footer .footer-content {
   display: flex;
-  -moz-align-items: center;
-  -webkit-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -moz-justify-content: space-between;
-  -webkit-justify-content: space-between;
-  -ms-justify-content: space-between;
+  flex-direction: row;
   justify-content: space-between;
-  position: relative;
+  align-items: center;
+  gap: 1em;
+}
+.footer .footer-content p {
   margin: 0;
-  line-height: 1em;
-  padding: 1.5em;
-  background: #39454b;
-  color: rgba(185, 186, 187, 0.5);
-  overflow: hidden;
-}
-#footer > * {
-  margin-bottom: 0;
-}
-#footer a {
-  color: inherit;
-}
-#footer a:hover {
-  color: rgb(185, 186, 187);
-}
-#footer ul.menu {
-  margin: 0;
-}
-#footer ul.menu li {
-  border-left-color: rgba(185, 186, 187, 0.2);
   font-size: 0.9em;
 }
-@media screen and (max-width: 1000px) {
-  #footer {
-    -moz-flex-direction: column;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
-    justify-content: center;
-    line-height: 1.5em;
-    text-align: center;
-    padding: 2em 1em 2em 1em;
-  }
-  #footer > * {
-    margin: 0 0 1em 0;
-  }
+.footer .footer-content .social-links {
+  display: flex;
+  gap: 2em;
 }
-@media screen and (max-width: 736px) {
-  #footer ul.menu li {
-    border-left: none;
-    display: block;
-    line-height: inherit;
-    margin: 0.25em 0 0 0;
-    padding: 0.25em 0 0 0;
-  }
-  #footer ul.menu li:first-child {
-    margin-top: 0;
-    padding-top: 0;
-  }
+.footer .footer-content .social-links .social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  text-decoration: none;
+  color: #fff;
+  font-size: 1em;
+  transition: color 0.3s ease;
+}
+.footer .footer-content .social-links .social-link i {
+  font-size: 1.5em;
+}
+.footer .footer-content .social-links .social-link.instagram:hover {
+  color: #E1306C;
+}
+.footer .footer-content .social-links .social-link.youtube:hover {
+  color: #FF0000;
 }
 
 /* Home */

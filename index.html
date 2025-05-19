@@ -10,6 +10,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+			/>
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -33,9 +37,6 @@
 					<header>
 						<h2>LINGHUX</h2>
 					</header>
-					<!-- <footer>
-						<a href="#one" class="button style2 down">More</a>
-					</footer> -->
 				</div>
 			</section>
 
@@ -102,41 +103,42 @@
 			<section id="contact" class="main style3 secondary">
 				<div class="content">
 					<header>
-						<h2>Connect With Me!</h2>
+						<h2>Connect With Me</h2>
 					</header>
 					<div class="box">
-						<form method="post" action="#">
+						<form id="contact-form">
 							<div class="fields">
 								<div class="field half"><input type="text" name="name" placeholder="Name" /></div>
 								<div class="field half"><input type="email" name="email" placeholder="Email" /></div>
 								<div class="field"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
 							</div>
 							<ul class="actions special">
-								<li><input type="submit" value="Send Message" /></li>
+								<!-- <li><input type="submit" value="Send Message" /></li> -->
+								<button type="submit">Send</button>
 							</ul>
 						</form>
 					</div>
 				</div>
 			</section>
+			<footer class="footer">
+				<div class="footer-content">
+				<div class="social-links">
+					<a href="https://instagram.com/linghu_x_" target="_blank" class="social-link instagram">
+						<i class="fab fa-instagram"></i>
+						<span>linghu_x_</span>
+					</a>
+					<a href="https://youtube.com/@linghux" target="_blank" class="social-link youtube">
+						<i class="fab fa-youtube"></i>
+						<span>Linghux</span>
+					</a>
+					</div>
+				  <p>&copy; 2025 Linghux</p>
+				</div>
+			  </footer>
 
-		<!-- Footer -->
-			<footer id="footer">
-				<!-- Icons -->
-					<ul class="icons">
-						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-						<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-						<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
-					</ul>
-
-				<!-- Menu -->
-					<ul class="menu">
-						<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-					</ul>
-
-			</footer>
+			<div id="popup" style="display:none; position:fixed; top:20px; right:20px; background:#4CAF50; color:white; padding:10px 20px; border-radius:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index:999;">
+				✅ Message sent successfully!
+			  </div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
@@ -148,5 +150,22 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 
+			<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+			<script>
+			(function() {
+				emailjs.init("YTeXmNaw2azaNGfuH"); // Replace with your actual EmailJS Public Key
+			})();
+
+			document.getElementById('contact-form').addEventListener('submit', function(e) {
+				e.preventDefault(); // Prevent default form submission
+
+				emailjs.sendForm('service_1bbz9d9', 'template_584scza', this)
+				.then(function() {
+					alert('Message sent successfully!');
+				}, function(error) {
+					alert('Failed to send message:\n' + JSON.stringify(error));
+				});
+			});
+			</script>
 	</body>
 </html>
