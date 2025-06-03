@@ -217,3 +217,54 @@
 			});
 
 })(jQuery);
+
+  const overlay = document.getElementById('overlay');
+  const zoomedImage = document.getElementById('zoomedImage');
+  const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+
+const galleryImages = document.querySelectorAll('.zoomable');
+
+let currentIndex = -1;
+
+// Open overlay and show clicked image
+galleryImages.forEach((img, index) => {
+  img.style.cursor = 'pointer';
+  img.addEventListener('click', () => {
+    currentIndex = index;
+    showImage(currentIndex);
+    overlay.classList.remove('hidden');
+  });
+});
+
+function showImage(index) {
+  if (index < 0) {
+    index = galleryImages.length - 1; // loop to last
+  } else if (index >= galleryImages.length) {
+    index = 0; // loop to first
+  }
+  currentIndex = index;
+  zoomedImage.src = galleryImages[currentIndex].src;
+  zoomedImage.alt = galleryImages[currentIndex].alt || '';
+}
+
+// Prev button
+prevBtn.addEventListener('click', (e) => {
+  e.stopPropagation();  // prevent closing overlay
+  showImage(currentIndex - 1);
+});
+
+// Next button
+nextBtn.addEventListener('click', (e) => {
+  e.stopPropagation();  // prevent closing overlay
+  showImage(currentIndex + 1);
+});
+
+// Clicking outside the image closes overlay
+overlay.addEventListener('click', e => {
+  if (e.target === overlay) {
+    overlay.classList.add('hidden');
+    zoomedImage.src = '';
+  }
+});
