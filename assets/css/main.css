@@ -383,7 +383,7 @@ body:before {
   transform-origin: 50% 50%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: "Verdana", "sans-serif";
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: normal;
   text-transform: none !important;
@@ -442,7 +442,7 @@ body.is-preload:after {
 }
 /* Type */
 body, input, textarea, select {
-  font-family: "Source Sans Pro", "sans-serif";
+  font-family: "Montserrat", sans-serif;
   font-weight: 300;
   font-size: 18pt;
   line-height: 1.75em;
@@ -817,7 +817,7 @@ textarea {
   text-rendering: auto;
   line-height: 1;
   text-transform: none !important;
-  font-family: "Verdana", "sans-serif";
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 }
 .icon:before {
@@ -830,7 +830,7 @@ textarea {
   font-weight: 900;
 }
 .icon.brands:before {
-  font-family: "Verdana", "sans-serif";
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Image */
@@ -1087,7 +1087,7 @@ table.default tfoot {
   animation: spinner-rotate 0.75s infinite linear !important;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: "Verdana", "sans-serif";
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: normal;
   text-transform: none !important;
