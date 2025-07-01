@@ -13,74 +13,64 @@
 		top: 0;
 		width: 100%;
 		background: transparent;
-		// background: transparentize(_palette(bg), 0.05);
-		// height: 3em;
 		line-height: 3em;
-		// box-shadow: 0 0 0.15em 0 rgba(0,0,0,0.1);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0em 6em;
+
 
 		h1 {
-			position: absolute;
-			left: 10em;
-			top: 0;
-			height: 3em;
-			line-height: 3em;
-			cursor: default;
-
+			position: static;
+			margin: 0;
+			font-size: 1.25em;
+		
 			a {
-				font-size: 1.25em;
+			  font-size: inherit;
 			}
-		}
-
-		nav {
-			position: absolute;
-			right: 10em;
-			top: 0;
-			height: 3em;
-			line-height: 3em;
-
+		  }
+		
+		  nav {
+			position: static;
+		
 			ul {
-				margin: 0;
-
-				li {
-					display: inline-block;
-					margin-left: 0.5em;
-					font-size: 0.9em;
-
-					a {
-						display: block;
-						color: inherit;
-						text-decoration: none;
-						height: 3em;
-						line-height: 3em;
-						padding: 0 0.5em 0 0.5em;
-						outline: 0;
-					}
-				}
-			}
-		}
-
-		@include breakpoint('<=small') {
-			height: 2.5em;
-			line-height: 2.5em;
-
-			h1 {
-				text-align: center;
-				position: relative;
-				left: 0;
-				top: 0;
-				height: 2.5em;
-				line-height: 2.5em;
-
+			  margin: 0;
+			  display: flex;
+			  gap: 0.75em;
+		
+			  li {
+				display: inline-block;
+				font-size: 0.9em;
+		
 				a {
-					font-size: 1em;
+				  display: block;
+				  color: inherit;
+				  text-decoration: none;
+				  padding: 0 0.5em;
+				  transition: background-color 0.3s ease, color 0.3s ease;
+				  &:hover {
+					background-color: #cee8ef;  // darker blue on hover
+				  }
+		  
+				  &:focus,
+				  &:active {
+					background-color: #cee8ef;  // even darker blue on click/focus
+					outline: none;
+				  }
 				}
+
+				
+			  }
 			}
+		  }
+		  @include breakpoint('<=small') {
+			flex-direction: column;
 
 			nav {
-				display: none;
+			  display: none; // or use a mobile menu later
 			}
+		  }
 		}
-	}
 
 	body {
 		padding-top: 3em;

@@ -669,62 +669,26 @@ button.style2.down {
 
 /* Form */
 form {
-  margin: 0 0 2em 0;
+  width: 100%;
 }
-form > :last-child {
-  margin-bottom: 0;
-}
-form > .fields {
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flex;
+form .fields {
   display: flex;
-  -moz-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  width: calc(100% + 3em);
-  margin: -1.5em 0 2em -1.5em;
+  flex-direction: column;
+  gap: 1.25rem;
 }
-form > .fields > .field {
-  -moz-flex-grow: 0;
-  -webkit-flex-grow: 0;
-  -ms-flex-grow: 0;
-  flex-grow: 0;
-  -moz-flex-shrink: 0;
-  -webkit-flex-shrink: 0;
-  -ms-flex-shrink: 0;
-  flex-shrink: 0;
-  padding: 1.5em 0 0 1.5em;
-  width: calc(100% - 1.5em);
+form .field {
+  width: 100% !important;
+  padding: 0 !important;
 }
-form > .fields > .field.half {
-  width: calc(50% - 0.75em);
+form .actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
-form > .fields > .field.third {
-  width: calc(100%/3 - 0.5em);
-}
-form > .fields > .field.quarter {
-  width: calc(25% - 0.375em);
-}
-@media screen and (max-width: 480px) {
-  form > .fields {
-    width: calc(100% + 2em);
-    margin: -1em 0 2em -1em;
-  }
-  form > .fields > .field {
-    padding: 1em 0 0 1em;
-    width: calc(100% - 1em);
-  }
-  form > .fields > .field.half {
-    width: calc(100% - 1em);
-  }
-  form > .fields > .field.third {
-    width: calc(100% - 1em);
-  }
-  form > .fields > .field.quarter {
-    width: calc(100% - 1em);
-  }
+form .actions .button,
+form .actions input[type=submit] {
+  width: 100%;
+  max-width: 300px;
 }
 
 label {
@@ -800,6 +764,24 @@ textarea {
 
 :-ms-input-placeholder {
   opacity: 0.375;
+}
+
+#mc_embed_signup {
+  width: 100%;
+  border: 2px solid #e5e6e7;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  margin: 0 auto;
+}
+
+.newsletter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
 }
 
 /* Icon */
@@ -1365,57 +1347,48 @@ body.is-touch .poptrox-popup .closer {
   width: 100%;
   background: transparent;
   line-height: 3em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0em 6em;
 }
 #header h1 {
-  position: absolute;
-  left: 10em;
-  top: 0;
-  height: 3em;
-  line-height: 3em;
-  cursor: default;
-}
-#header h1 a {
+  position: static;
+  margin: 0;
   font-size: 1.25em;
 }
+#header h1 a {
+  font-size: inherit;
+}
 #header nav {
-  position: absolute;
-  right: 10em;
-  top: 0;
-  height: 3em;
-  line-height: 3em;
+  position: static;
 }
 #header nav ul {
   margin: 0;
+  display: flex;
+  gap: 0.75em;
 }
 #header nav ul li {
   display: inline-block;
-  margin-left: 0.5em;
   font-size: 0.9em;
 }
 #header nav ul li a {
   display: block;
   color: inherit;
   text-decoration: none;
-  height: 3em;
-  line-height: 3em;
-  padding: 0 0.5em 0 0.5em;
-  outline: 0;
+  padding: 0 0.5em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+#header nav ul li a:hover {
+  background-color: #cee8ef;
+}
+#header nav ul li a:focus, #header nav ul li a:active {
+  background-color: #cee8ef;
+  outline: none;
 }
 @media screen and (max-width: 736px) {
   #header {
-    height: 2.5em;
-    line-height: 2.5em;
-  }
-  #header h1 {
-    text-align: center;
-    position: relative;
-    left: 0;
-    top: 0;
-    height: 2.5em;
-    line-height: 2.5em;
-  }
-  #header h1 a {
-    font-size: 1em;
+    flex-direction: column;
   }
   #header nav {
     display: none;
