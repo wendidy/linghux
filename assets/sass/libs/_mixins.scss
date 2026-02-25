@@ -22,14 +22,14 @@
 		text-transform: none !important;
 
 		@if ($category == brands) {
-			font-family: 'Montserrat', sans-serif;
+			font-family: 'Lora', Georgia, 'Times New Roman', serif;
 		}
 		@elseif ($category == solid) {
-			font-family: 'Montserrat', sans-serif;
+			font-family: 'Lora', Georgia, 'Times New Roman', serif;
 			font-weight: 900;
 		}
 		@else {
-			font-family: 'Montserrat', sans-serif;
+			font-family: 'Lora', Georgia, 'Times New Roman', serif;
 			font-weight: 400;
 		}
 
