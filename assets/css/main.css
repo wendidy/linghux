@@ -1069,80 +1069,62 @@ body.is-touch .poptrox-popup .closer {
 }
 
 /* Gallery */
+/* Gallery */
 .gallery-div {
   margin: 1em;
 }
 
 .gallery {
-  column-count: 3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   margin-top: 3em;
 }
 .gallery .gallery-item {
-  break-inside: avoid;
-  margin: 0.5em;
+  margin: 0;
 }
-.gallery .gallery-item img {
-  width: 100%;
+.gallery .gallery-item a {
   display: block;
-  border-radius: 6px;
-  transition: transform 0.2s;
+  aspect-ratio: 2/3;
+  width: 100%;
+  /* solid background */
+  background: #f6f6f4;
+  /* no rounded corners */
+  border-radius: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.gallery .gallery-item img:hover {
-  transform: scale(1.03);
+.gallery .gallery-item a img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.18s ease;
 }
-.gallery.inactive article {
-  opacity: 0;
+.gallery .gallery-item a:hover img {
+  transform: scale(1.02);
 }
-.gallery.inactive article.from-left {
-  -moz-transform: translateX(-14em);
-  -webkit-transform: translateX(-14em);
-  -ms-transform: translateX(-14em);
-  transform: translateX(-14em);
-}
-.gallery.inactive article.from-right {
-  -moz-transform: translateX(14em);
-  -webkit-transform: translateX(14em);
-  -ms-transform: translateX(14em);
-  transform: translateX(14em);
-}
-.gallery.inactive article.from-top {
-  -moz-transform: translateY(-7em);
-  -webkit-transform: translateY(-7em);
-  -ms-transform: translateY(-7em);
-  transform: translateY(-7em);
-}
-.gallery.inactive article.from-bottom {
-  -moz-transform: translateY(7em);
-  -webkit-transform: translateY(7em);
-  -ms-transform: translateY(7em);
-  transform: translateY(7em);
+.gallery .gallery-item .gallery-meta {
+  margin-top: 0.5rem;
+  text-align: left;
 }
 @media screen and (max-width: 480px) {
-  .gallery {
-    -moz-flex-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -moz-flex-direction: column;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
+  .gallery .gallery {
+    grid-template-columns: 1fr;
   }
-  .gallery article {
-    width: 100%;
+}
+@media (max-width: 900px) {
+  .gallery .gallery {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 900px) {
-  .gallery {
-    column-count: 2;
-  }
-}
-@media (max-width: 500px) {
-  .gallery {
-    column-count: 1;
-  }
-}
 .overlayImg {
   position: fixed;
   inset: 0;
