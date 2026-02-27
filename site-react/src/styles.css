@@ -1,0 +1,35 @@
+@import url('../../assets/css/main.css');
+
+/* App-specific overrides and lightweight rules */
+body { font-family: 'Montserrat', sans-serif; }
+.header, header#header { background: #fff; padding: 1rem 6em; border-bottom: 1px solid #eee }
+.footer { background:#6b6b66; color:#333333; padding:1rem; text-align:center }
+.portfolio-item { padding: 2rem }
+.item-grid { display:flex; gap:2rem; flex-wrap:wrap }
+.item-image img{ max-width: 100%; height: auto }
+.item-details { max-width: 360px }
+.gallery { display:flex; flex-wrap:wrap; gap:1rem }
+.gallery-item { width: calc(33.333% - 1rem); box-sizing:border-box }
+.gallery-item img{ width:100%; display:block }
+.pagination { display:flex; gap:0.5rem; justify-content:center; margin-top:1.5rem }
+.pagination button { padding:0.5rem 0.75rem; border:1px solid #ddd; background:white; cursor:pointer }
+.pagination button.active { background:#222; color:white }
+
+/* Ensure the gallery is centered and constrained like the original site */
+.main.style3 .gallery-div {
+	max-width: calc(55em + 10em);
+	margin: 0 auto;
+}
+
+@media (max-width: 800px) {
+	.gallery-item { width: calc(50% - 1rem) }
+}
+
+@media (max-width: 480px) {
+	.gallery-item { width: 100% }
+	.item-grid { flex-direction:column }
+}
+
+@media (max-width: 800px) {
+  header#header { padding: 0.75rem 1rem }
+}
