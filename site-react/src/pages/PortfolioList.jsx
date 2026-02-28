@@ -12,7 +12,7 @@ export default function PortfolioList(){
         <div className="gallery">
           {items.map(item => (
             <div className="gallery-item" key={item.id}>
-              <Link to={`/portfolio/${item.id}`}>
+              <Link to={`/portfolio/work/${item.id.replace('work-', '')}`}>
                 <img className="zoomable" src={item.image} alt={item.title} />
               </Link>
               <div className="gallery-meta">

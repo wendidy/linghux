@@ -5,9 +5,9 @@ import Footer from './Footer'
 
 export default function Layout(){
   return (
-    <div>
+    <div className="app-shell">
       <Header />
-      <main style={{minHeight: '60vh'}}>
+      <main className="app-main">
         <Outlet />
       </main>
       <Footer />
