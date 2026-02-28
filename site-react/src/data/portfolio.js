@@ -1,6 +1,7 @@
 export const items = [
   {
     id: 'work-1',
+    category: 'originals',
     title: 'Work 1',
     price: '$200',
     size: '30x40 cm',
@@ -12,6 +13,7 @@ export const items = [
   },
   {
     id: 'work-2',
+    category: 'originals',
     title: 'Work 2',
     price: '$180',
     size: '24x36 cm',
@@ -23,6 +25,7 @@ export const items = [
   },
   {
     id: 'work-3',
+    category: 'originals',
     title: 'Work 3',
     price: '$250',
     size: '40x60 cm',
@@ -34,6 +37,7 @@ export const items = [
   },
   {
     id: 'work-4',
+    category: 'originals',
     title: 'Work 4',
     price: '$150',
     size: '20x30 cm',
@@ -45,6 +49,7 @@ export const items = [
   },
   {
     id: 'work-5',
+    category: 'limited-edition-prints',
     title: 'Work 5',
     price: '$220',
     size: '35x45 cm',
@@ -56,6 +61,7 @@ export const items = [
   },
   {
     id: 'work-6',
+    category: 'limited-edition-prints',
     title: 'Work 6',
     price: '$190',
     size: '30x40 cm',
@@ -67,6 +73,7 @@ export const items = [
   },
   {
     id: 'work-7',
+    category: 'limited-edition-prints',
     title: 'Work 7',
     price: '$260',
     size: '45x60 cm',
@@ -78,6 +85,7 @@ export const items = [
   },
   {
     id: 'work-8',
+    category: 'limited-edition-prints',
     title: 'Work 8',
     price: '$170',
     size: '24x30 cm',
@@ -89,6 +97,7 @@ export const items = [
   },
   {
     id: 'work-9',
+    category: 'open-edition-prints',
     title: 'Work 9',
     price: '$210',
     size: '30x40 cm',
@@ -100,6 +109,7 @@ export const items = [
   },
   {
     id: 'work-10',
+    category: 'open-edition-prints',
     title: 'Work 10',
     price: '$230',
     size: '40x50 cm',
@@ -111,6 +121,7 @@ export const items = [
   },
   {
     id: 'work-11',
+    category: 'open-edition-prints',
     title: 'Work 11',
     price: '$160',
     size: '22x30 cm',
@@ -122,6 +133,7 @@ export const items = [
   },
   {
     id: 'work-12',
+    category: 'open-edition-prints',
     title: 'Work 12',
     price: '$205',
     size: '32x42 cm',

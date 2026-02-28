@@ -11,11 +11,20 @@ export default function Header(){
         <ul>
           <li><NavLink to="/" className={linkClass}>Home</NavLink></li>
           <li className="artworks-dropdown">
-            <NavLink to="/portfolio" className={linkClass}>Artworks</NavLink>
+            <a
+              href="/artwork"
+              className="artworks-trigger"
+              onClick={(e) => {
+                e.preventDefault()
+                e.currentTarget.blur()
+              }}
+            >
+              Artwork <i className="fas fa-chevron-down artworks-arrow" aria-hidden="true" />
+            </a>
             <ul className="artworks-menu">
-              <li><Link to="/portfolio?category=originals">Originals</Link></li>
-              <li><Link to="/portfolio?category=limited-edition-prints">Limited Edition Prints</Link></li>
-              <li><Link to="/portfolio?category=open-edition-prints">Open Edition Prints</Link></li>
+              <li><Link to="/artwork/originals">Originals</Link></li>
+              <li><Link to="/artwork/limited-edition-prints">Limited Edition Prints</Link></li>
+              <li><Link to="/artwork/open-edition-prints">Open Edition Prints</Link></li>
             </ul>
           </li>
           <li><NavLink to="/about" className={linkClass}>About Me</NavLink></li>

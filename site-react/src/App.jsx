@@ -3,7 +3,6 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import PortfolioList from './pages/PortfolioList'
-import PortfolioItem from './pages/PortfolioItem'
 import WorkPortfolioItem from './pages/WorkPortfolioItem'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -18,9 +17,26 @@ export default function App(){
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="portfolio" element={<PortfolioList />} />
-          <Route path="portfolio/work/:workId" element={<WorkPortfolioItem />} />
-          <Route path="portfolio/:id" element={<PortfolioItem />} />
+          <Route path="artwork" element={<PortfolioList />} />
+          <Route path="artwork/originals" element={<PortfolioList category="originals" heading="Originals" />} />
+          <Route
+            path="artwork/limited-edition-prints"
+            element={<PortfolioList category="limited-edition-prints" heading="Limited Edition Prints" />}
+          />
+          <Route
+            path="artwork/open-edition-prints"
+            element={<PortfolioList category="open-edition-prints" heading="Open Edition Prints" />}
+          />
+          <Route path="artwork/work/:workId" element={<WorkPortfolioItem />} />
+          <Route path="artwork/originals/:workId" element={<WorkPortfolioItem category="originals" />} />
+          <Route
+            path="artwork/limited-edition-prints/:workId"
+            element={<WorkPortfolioItem category="limited-edition-prints" />}
+          />
+          <Route
+            path="artwork/open-edition-prints/:workId"
+            element={<WorkPortfolioItem category="open-edition-prints" />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

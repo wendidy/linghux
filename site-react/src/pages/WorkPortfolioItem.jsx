@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 
-export default function WorkPortfolioItem() {
+export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
-  const id = `work-${workId}`
-  const item = items.find((i) => i.id === id)
+  const id = workId?.startsWith('work-') ? workId : `work-${workId}`
+  const item = items.find((i) => i.id === id && (!category || i.category === category))
+  const backPath = category ? `/artwork/${category}` : '/artwork'
   const galleryImages = useMemo(() => {
     if (!item) return []
     if (Array.isArray(item.images) && item.images.length > 0) return item.images
@@ -21,7 +22,7 @@ export default function WorkPortfolioItem() {
     return (
       <div className="portfolio-item">
         <p>
-          Item not found. <Link to="/portfolio">Back to portfolio</Link>
+          Item not found. <Link to={backPath}>Back to portfolio</Link>
         </p>
       </div>
     )
@@ -72,7 +73,7 @@ export default function WorkPortfolioItem() {
           </p>
           <p className="meta-line">
             <i className="fas fa-certificate entry-icon" aria-hidden="true" />
-            Sold with a authenticity certificate
+            Signed authenticity certificate
           </p>
           <p className="description">{item.description}</p>
           <button type="button" className="basket-button">Add to Basket</button>
