@@ -3,7 +3,7 @@
 /* App-specific overrides and lightweight rules */
 body { font-family: 'Montserrat', sans-serif; }
 .header, header#header { background: #fff; padding: 1rem 6em; border-bottom: 1px solid #eee }
-.footer { background:#6b6b66; color:#333333; padding:1rem; text-align:center }
+.footer { background:#b8b6aa; color:#333333; padding:1rem; text-align:center }
 .portfolio-item { padding: 2rem }
 .item-grid { display:flex; gap:2rem; flex-wrap:wrap }
 .item-image img{ max-width: 100%; height: auto }

@@ -18,7 +18,6 @@ export default function PortfolioList(){
               <div className="gallery-meta">
                 <h3 className="title">{item.title}</h3>
                 <div className="meta-row"><span className="price">{item.price}</span> — <span className="size">{item.size}</span></div>
-                <div className="meta-row"><span className="date">{item.date}</span></div>
               </div>
             </div>
           ))}
