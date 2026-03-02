@@ -150,6 +150,11 @@ body { font-family: 'Montserrat', sans-serif; }
   align-items: center;
   gap: 0.35rem;
 }
+.mobile-nav-wrap,
+.mobile-menu-button,
+.mobile-menu {
+  display: none;
+}
 .artworks-arrow {
   font-size: 0.8em;
   transition: transform 0.2s ease;
@@ -216,6 +221,86 @@ body { font-family: 'Montserrat', sans-serif; }
 
 @media (max-width: 800px) {
   header#header { padding: 0.75rem 1rem }
+  #header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+  #header nav.desktop-nav {
+    display: none;
+  }
+  .mobile-nav-wrap {
+    display: block;
+  }
+  .mobile-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 1px solid #d9d9d6;
+    border-radius: 0.2rem;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+  }
+  .mobile-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    right: 1rem;
+    display: none;
+    width: min(17rem, calc(100vw - 2rem));
+    background: #fff;
+    border: 1px solid #d9d9d6;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    z-index: 40;
+  }
+  .mobile-menu.is-open {
+    display: block;
+  }
+  .mobile-menu ul {
+    margin: 0;
+    padding: 0.3rem 0;
+    list-style: none;
+  }
+  .mobile-menu li a,
+  .mobile-artworks-trigger {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 0.8rem;
+    color: inherit;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .mobile-menu li a:hover,
+  .mobile-artworks-trigger:hover {
+    background: #f2f2ef;
+  }
+  .mobile-artworks-submenu {
+    display: none;
+    padding: 0;
+  }
+  .mobile-artworks-submenu.is-open {
+    display: block;
+  }
+  .mobile-artworks-submenu li a {
+    padding-left: 1.6rem;
+  }
+  #work.main.style3 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .work-item-page {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
   .work-item-grid { grid-template-columns: 1fr }
   .work-item-visual { max-width: 100% }
 }
