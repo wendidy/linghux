@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
+import { useCart } from '../context/CartContext'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -13,6 +14,7 @@ export default function WorkPortfolioItem({ category }) {
     return [item.image]
   }, [item])
   const [activeImage, setActiveImage] = useState('')
+  const { addItem } = useCart()
 
   useEffect(() => {
     setActiveImage(galleryImages[0] || '')
@@ -76,7 +78,21 @@ export default function WorkPortfolioItem({ category }) {
             Signed authenticity certificate
           </p>
           <p className="description">{item.description}</p>
-          <button type="button" className="basket-button">Add to Basket</button>
+          <button
+            type="button"
+            className="basket-button"
+            onClick={() =>
+              addItem({
+                id: item.id,
+                title: item.title,
+                image: item.image,
+                unitAmount: Math.round(Number(String(item.price).replace(/[^0-9.]/g, '')) * 100),
+                priceId: item.stripePriceId,
+              })
+            }
+          >
+            Add to Basket
+          </button>
           <p className="shipping-line">
             <i className="fas fa-truck entry-icon" aria-hidden="true" />
             Free US and Canada shipping

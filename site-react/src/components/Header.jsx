@@ -32,6 +32,7 @@ export default function Header(){
           </li>
           <li><NavLink to="/about" className={linkClass}>About Me</NavLink></li>
           <li><NavLink to="/contact" className={linkClass}>Contact</NavLink></li>
+          <li><NavLink to="/cart" className={linkClass}>Cart</NavLink></li>
         </ul>
       </nav>
       <button
@@ -64,6 +65,7 @@ export default function Header(){
           </li>
           <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>
           <li><NavLink to="/contact" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink></li>
+          <li><NavLink to="/cart" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Cart</NavLink></li>
         </ul>
       </div>
     </header>
