@@ -3,26 +3,27 @@ import React from 'react'
 export default function About(){
   return (
     <>
-      <section id="one" className="main style2 left dark fullscreen">
+      <section id="one" className="main style2 left">
         <div className="content box style2">
           <header>
-            <h2>About Me</h2>
+            <h2>About</h2>
           </header>
-          <p>Hi I am Wendy, great to see you here!<br />
-            I'm a 22-year-old artist who's lived in three different countries. <br />
-            I love traveling, I love soaking in the beauty of nature and taking time to connect with locals or strangers, listening to the unique stories they have to share. I decided to record these moments using my camera and my watercolor brushes - that’s how my collection of paintings came to life.<br />
-            So my question to you, where’s the most memorable place you've ever been?</p>
+          <p>Wendy Zhang’s work is shaped by a life lived across three countries and varied landscapes. Moving between cultures taught her that what endures beyond language, geography, or circumstance is the connection formed between people. In unfamiliar places, she found herself drawn not only to the natural environment, but to the quiet exchanges and shared moments that give a place its meaning.  </p>
+<p>Watercolor became her way of honoring those encounters. Using both her camera and her brushes, Wendy translates fleeting experiences into gentle, lasting forms—allowing each painting to serve as a bridge: between artist and viewer, between memory and presence, between a moment once lived and a moment newly felt. Through this process, she seeks to preserve the subtle threads of human connection that travel revealed to be essential. </p>
         </div>
       </section>
 
-      <section id="two" className="main style2 right dark fullscreen">
+      <section id="two" className="main style2 right">
         <div className="content box style2">
           <header>
-            <h2>Mission Statement</h2>
+            <h2>Shows</h2>
           </header>
-          <p>With the rise of AI and the current trend of mass-produced goods, we are losing a sense of connectivity with ourselves and the beautiful world around us. Many seek to escape in nature, but many cannot.<br />
-            But no worries. I will bring nature to you, along with the unique story of how I got there.<br />
-            Each piece of my watercolor artwork was started and completed on-site. You are seeing the scenery just exactly as it appeared, in the most imaginary, personal way.</p>
+          <ul>
+            <li><strong>Avon Arts Celebration 2025</strong>, <em>July 2025</em>, Avon, Colorado</li>
+            <li><strong>Silverthorne Fine Art Festival 2025</strong>, <em>July 2025</em>, Silverthorne, Colorado</li>
+            <li><strong>Highlands Art Festival 2025</strong>, <em>June 2025</em>, Denver, Colorado</li>
+          </ul>
+          <p></p>
         </div>
       </section>
     </>
