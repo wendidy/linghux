@@ -6,6 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: parseInt(process.env.PORT) || 5173,
     fs: {
       // allow parent repo root and the assets/webfonts folder explicitly
       allow: [
