@@ -24,7 +24,7 @@ export const PRICE_BY_CATEGORY_AND_SIZE = {
   'open-edition-prints': {
     '5x7': PRICE_IDS.OE_PRINT_SIZE_5X7,
     '8x10': PRICE_IDS.OE_PRINT_SIZE_8X10,
-    '17x23': PRICE_IDS.OE_PRINT_SIZE_17X22,
+    '17x22': PRICE_IDS.OE_PRINT_SIZE_17X22,
   },
 }
 
