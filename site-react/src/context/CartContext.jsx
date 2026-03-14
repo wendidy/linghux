@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { useStripePrices } from '../hooks/useStripePrices'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
@@ -20,6 +21,17 @@ export function CartProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
+
+  const priceIds = useMemo(() => {
+    const ids = items.map((item) => item.priceId).filter(Boolean)
+    return [...new Set(ids)]
+  }, [items])
+
+  const {
+    priceById,
+    loading: pricesLoading,
+    error: pricesError,
+  } = useStripePrices(priceIds)
 
   const addItem = (item) => {
     setItems((prev) => {
@@ -51,10 +63,13 @@ export function CartProvider({ children }) {
 
   const clearCart = () => setItems([])
 
-  const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + item.unitAmount * item.quantity, 0),
-    [items]
-  )
+  const subtotal = useMemo(() => {
+    return items.reduce((sum, item) => {
+      const unitAmount = priceById[item.priceId]?.unit_amount
+      if (typeof unitAmount !== 'number') return sum
+      return sum + unitAmount * item.quantity
+    }, 0)
+  }, [items, priceById])
 
   return (
     <CartContext.Provider
@@ -65,6 +80,9 @@ export function CartProvider({ children }) {
         removeItem,
         clearCart,
         subtotal,
+        priceById,
+        pricesLoading,
+        pricesError,
       }}
     >
       {children}
@@ -77,4 +95,3 @@ export function useCart() {
   if (!context) throw new Error('useCart must be used inside CartProvider')
   return context
 }
-

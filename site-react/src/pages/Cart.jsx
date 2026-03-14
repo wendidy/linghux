@@ -1,18 +1,40 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-
-function formatUsd(cents) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(cents / 100)
-}
+import PriceText from '../components/PriceText'
+import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
 
 export default function Cart() {
-  const { items, updateQuantity, removeItem, clearCart, subtotal } = useCart()
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    clearCart,
+    subtotal,
+    priceById,
+    pricesLoading,
+    pricesError,
+  } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
+
+  const cartCurrency = useMemo(() => {
+    const match = items.find((item) => priceById[item.priceId]?.currency)
+    return match ? priceById[match.priceId].currency : 'USD'
+  }, [items, priceById])
+  const hasMissingPrice = useMemo(() => {
+    return items.some(
+      (item) =>
+        item.priceId &&
+        (!priceById[item.priceId] || priceById[item.priceId].unit_amount == null)
+    )
+  }, [items, priceById])
+
+  const linePriceFor = (item) => {
+    const price = priceById[item.priceId]
+    if (!price || typeof price.unit_amount !== 'number') return null
+    return { ...price, unit_amount: price.unit_amount * item.quantity }
+  }
 
   const checkout = async () => {
     setError('')
@@ -67,7 +89,13 @@ export default function Cart() {
                   <img src={item.image} alt={item.title} className="cart-item-image" />
                   <div className="cart-item-body">
                     <h3>{item.title}</h3>
-                    <p>{formatUsd(item.unitAmount)}</p>
+                    <p>
+                      <PriceText
+                        priceId={item.priceId}
+                        price={priceById[item.priceId]}
+                        loading={pricesLoading}
+                      />
+                    </p>
                     <div className="cart-qty">
                       <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
                       <span>{item.quantity}</span>
@@ -75,7 +103,14 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="cart-item-actions">
-                    <strong>{formatUsd(item.unitAmount * item.quantity)}</strong>
+                    <strong>
+                      <PriceText
+                        priceId={item.priceId}
+                        price={linePriceFor(item)}
+                        loading={pricesLoading}
+                        missingLabel="—"
+                      />
+                    </strong>
                     <button type="button" onClick={() => removeItem(item.id)}>Remove</button>
                   </div>
                 </article>
@@ -83,13 +118,19 @@ export default function Cart() {
             </div>
 
             <div className="cart-summary">
-              <p><strong>Subtotal:</strong> {formatUsd(subtotal)}</p>
+              <p>
+                <strong>Subtotal:</strong>{' '}
+                {pricesLoading
+                  ? 'Loading…'
+                  : (hasMissingPrice ? PRICE_LABELS.unavailable : formatCurrency(subtotal, cartCurrency))}
+              </p>
               <div className="cart-summary-actions">
                 <button type="button" className="button" onClick={clearCart}>Clear cart</button>
                 <button type="button" className="button primary" onClick={checkout} disabled={isCheckingOut}>
                   {isCheckingOut ? 'Redirecting…' : 'Checkout with Stripe'}
                 </button>
               </div>
+              {pricesError && <p className="cart-error">{pricesError}</p>}
               {error && <p className="cart-error">{error}</p>}
             </div>
           </>
@@ -98,4 +139,3 @@ export default function Cart() {
     </section>
   )
 }
-

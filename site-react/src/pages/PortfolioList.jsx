@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
+import { useStripePrices } from '../hooks/useStripePrices'
+import PriceText from '../components/PriceText'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
-  const filteredItems = category ? items.filter((item) => item.category === category) : items
+  const filteredItems = useMemo(
+    () => (category ? items.filter((item) => item.category === category) : items),
+    [category]
+  )
+  const priceIds = useMemo(
+    () => filteredItems.map((item) => item.stripePriceId).filter(Boolean),
+    [filteredItems]
+  )
+  const { priceById, loading: pricesLoading } = useStripePrices(priceIds)
 
   const makeItemPath = (itemId) => {
     const workId = itemId.replace('work-', '')
@@ -24,7 +34,15 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
               </Link>
               <div className="gallery-meta">
                 <h3 className="title">{item.title}</h3>
-                <div className="meta-row"><span className="price">{item.price}</span> — <span className="size">{item.size}</span></div>
+                <div className="meta-row">
+                  <PriceText
+                    className="price"
+                    priceId={item.stripePriceId}
+                    price={priceById[item.stripePriceId]}
+                    loading={pricesLoading}
+                  />{' '}
+                  — <span className="size">{item.size}</span>
+                </div>
               </div>
             </div>
           ))}

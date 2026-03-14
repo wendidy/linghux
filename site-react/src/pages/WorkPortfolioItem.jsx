@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useCart } from '../context/CartContext'
+import { useStripePrice } from '../hooks/useStripePrices'
+import PriceText from '../components/PriceText'
+import { PRICE_LABELS } from '../utils/stripePrices'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -15,10 +18,21 @@ export default function WorkPortfolioItem({ category }) {
   }, [item])
   const [activeImage, setActiveImage] = useState('')
   const { addItem } = useCart()
+  const {
+    price: priceInfo,
+    loading: priceLoading,
+    error: priceError,
+  } = useStripePrice(item?.stripePriceId)
+
+  const canPurchase = Boolean(item?.stripePriceId && priceInfo)
+  const buttonLabel = !item?.stripePriceId
+    ? 'Unavailable'
+    : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable))
 
   useEffect(() => {
-    setActiveImage(galleryImages[0] || '')
-  }, [galleryImages])
+    // Reset active image when the item changes.
+    if (item) setActiveImage(galleryImages[0] || '')
+  }, [item, galleryImages])
 
   if (!item) {
     return (
@@ -55,7 +69,11 @@ export default function WorkPortfolioItem({ category }) {
           <h1>{item.title}</h1>
           <p className="price">
             <i className="fas fa-tag entry-icon" aria-hidden="true" />
-            {item.price}
+            <PriceText
+              priceId={item.stripePriceId}
+              price={priceInfo}
+              loading={priceLoading}
+            />
           </p>
           <p className="meta-line meta-line-framed">
             <span className="meta-main">
@@ -81,18 +99,19 @@ export default function WorkPortfolioItem({ category }) {
           <button
             type="button"
             className="basket-button"
+            disabled={!canPurchase}
             onClick={() =>
               addItem({
                 id: item.id,
                 title: item.title,
                 image: item.image,
-                unitAmount: Math.round(Number(String(item.price).replace(/[^0-9.]/g, '')) * 100),
                 priceId: item.stripePriceId,
               })
             }
           >
-            Add to Basket
+            {buttonLabel}
           </button>
+          {priceError && <p className="meta-line">{priceError}</p>}
           <p className="shipping-line">
             <i className="fas fa-truck entry-icon" aria-hidden="true" />
             Free US and Canada shipping
