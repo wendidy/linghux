@@ -5,18 +5,32 @@ import {
   primaryLookupKeyForItem,
   resolvePriceByLookupKeys,
 } from '../data/stripePriceKeys'
+import { items as catalogItems } from '../data/portfolio'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
 
 function normalizeCartItem(item) {
   if (!item || typeof item !== 'object') return item
-  const priceLookupKey = item.priceLookupKey || primaryLookupKeyForItem(item)
-  const fallbackPriceLookupKey = item.fallbackPriceLookupKey || fallbackLookupKeyForItem(item)
-  return {
+  const catalogItem = catalogItems.find((catalogEntry) => catalogEntry.id === item.id)
+  const category = item.category || catalogItem?.category
+  const size = item.size || catalogItem?.size
+  const normalizedItem = {
     ...item,
+    category,
+    size,
+  }
+  const priceLookupKey = item.priceLookupKey || primaryLookupKeyForItem(normalizedItem)
+  const fallbackPriceLookupKey =
+    item.fallbackPriceLookupKey || fallbackLookupKeyForItem(normalizedItem)
+  const quantity = category === 'originals'
+    ? 1
+    : (Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1)
+  return {
+    ...normalizedItem,
     priceLookupKey,
     fallbackPriceLookupKey,
+    quantity,
   }
 }
 
@@ -56,15 +70,25 @@ export function CartProvider({ children }) {
   } = useStripePrices(lookupKeys)
 
   const addItem = (item) => {
+    if (item?.category === 'originals') {
+      const exists = items.some((existing) => existing.id === item.id)
+      if (exists) {
+        return { added: false, reason: 'already_in_cart' }
+      }
+    }
     setItems((prev) => {
       const found = prev.find((p) => p.id === item.id)
       if (found) {
+        if (item?.category === 'originals') {
+          return prev
+        }
         return prev.map((p) =>
           p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
         )
       }
-      return [...prev, { ...normalizeCartItem(item), quantity: 1 }]
+      return [...prev, normalizeCartItem(item)]
     })
+    return { added: true }
   }
 
   const updateQuantity = (id, quantity) => {
@@ -74,7 +98,9 @@ export function CartProvider({ children }) {
     }
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity } : item
+        item.id === id
+          ? { ...item, quantity: item.category === 'originals' ? 1 : quantity }
+          : item
       )
     )
   }

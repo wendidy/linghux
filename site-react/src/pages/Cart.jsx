@@ -8,7 +8,6 @@ import { resolvePriceByLookupKeys } from '../data/stripePriceKeys'
 export default function Cart() {
   const {
     items,
-    updateQuantity,
     removeItem,
     clearCart,
     subtotal,
@@ -114,9 +113,7 @@ export default function Cart() {
                       />
                     </p>
                     <div className="cart-qty">
-                      <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
-                      <span>{item.quantity}</span>
-                      <button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                      <span>Qty: {item.quantity}</span>
                     </div>
                   </div>
                   <div className="cart-item-actions">

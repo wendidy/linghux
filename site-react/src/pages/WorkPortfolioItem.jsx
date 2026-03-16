@@ -23,11 +23,14 @@ export default function WorkPortfolioItem({ category }) {
     return [item.image]
   }, [item])
   const [activeImage, setActiveImage] = useState('')
-  const { addItem } = useCart()
+  const { addItem, items: cartItems } = useCart()
+  const [cartNotice, setCartNotice] = useState('')
   const lookupKeys = useMemo(() => lookupKeysForItem(item), [item])
   const { priceByKey, loading: priceLoading, error: priceError } = useStripePrices(lookupKeys)
   const priceInfo = resolvePriceForItem(item, priceByKey)
 
+  const isOriginal = item?.category === 'originals'
+  const isAlreadyInCart = isOriginal && cartItems.some((cartItem) => cartItem.id === item?.id)
   const canPurchase = Boolean(lookupKeys.length > 0 && priceInfo)
   const buttonLabel = lookupKeys.length === 0
     ? 'Unavailable'
@@ -36,6 +39,7 @@ export default function WorkPortfolioItem({ category }) {
   useEffect(() => {
     // Reset active image when the item changes.
     if (item) setActiveImage(galleryImages[0] || '')
+    setCartNotice('')
   }, [item, galleryImages])
 
   if (!item) {
@@ -72,7 +76,7 @@ export default function WorkPortfolioItem({ category }) {
         <aside className="work-item-meta">
           <h1>{item.title}</h1>
           <p className="price">
-            <i className="fas fa-tag entry-icon" aria-hidden="true" />
+            <i className="fas" aria-hidden="true" />
             <PriceText
               lookupKey={primaryLookupKeyForItem(item) || fallbackLookupKeyForItem(item)}
               price={priceInfo}
@@ -104,8 +108,12 @@ export default function WorkPortfolioItem({ category }) {
             type="button"
             className="basket-button"
             disabled={!canPurchase}
-            onClick={() =>
-              addItem({
+            onClick={() => {
+              if (isOriginal && isAlreadyInCart) {
+                setCartNotice('This work has already been added to your cart.')
+                return
+              }
+              const result = addItem({
                 id: item.id,
                 title: item.title,
                 image: item.image,
@@ -114,10 +122,16 @@ export default function WorkPortfolioItem({ category }) {
                 priceLookupKey: primaryLookupKeyForItem(item),
                 fallbackPriceLookupKey: fallbackLookupKeyForItem(item),
               })
-            }
+              if (result?.added) {
+                setCartNotice('')
+              } else if (result?.reason === 'already_in_cart') {
+                setCartNotice('This work has already been added to your cart.')
+              }
+            }}
           >
             {buttonLabel}
           </button>
+          {cartNotice && <p className="meta-line">{cartNotice}</p>}
           {priceError && <p className="meta-line">{priceError}</p>}
           <p className="shipping-line">
             <i className="fas fa-truck entry-icon" aria-hidden="true" />
