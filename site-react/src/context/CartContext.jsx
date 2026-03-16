@@ -1,13 +1,24 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useStripePrices } from '../hooks/useStripePrices'
 import {
-  fallbackLookupKeyFromCategorySize,
-  lookupKeyFromItemId,
+  fallbackLookupKeyForItem,
+  primaryLookupKeyForItem,
   resolvePriceByLookupKeys,
 } from '../data/stripePriceKeys'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
+
+function normalizeCartItem(item) {
+  if (!item || typeof item !== 'object') return item
+  const priceLookupKey = item.priceLookupKey || primaryLookupKeyForItem(item)
+  const fallbackPriceLookupKey = item.fallbackPriceLookupKey || fallbackLookupKeyForItem(item)
+  return {
+    ...item,
+    priceLookupKey,
+    fallbackPriceLookupKey,
+  }
+}
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
@@ -18,18 +29,7 @@ export function CartProvider({ children }) {
       if (!raw) return
       const parsed = JSON.parse(raw)
       if (Array.isArray(parsed)) {
-        const normalized = parsed.map((item) => {
-          if (!item || typeof item !== 'object') return item
-          const priceLookupKey = item.priceLookupKey || lookupKeyFromItemId(item.id)
-          const fallbackPriceLookupKey =
-            item.fallbackPriceLookupKey ||
-            fallbackLookupKeyFromCategorySize(item.category, item.size)
-          return {
-            ...item,
-            priceLookupKey,
-            fallbackPriceLookupKey,
-          }
-        })
+        const normalized = parsed.map((item) => normalizeCartItem(item))
         setItems(normalized)
       }
     } catch {
@@ -63,11 +63,7 @@ export function CartProvider({ children }) {
           p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
         )
       }
-      const priceLookupKey = item.priceLookupKey || lookupKeyFromItemId(item.id)
-      const fallbackPriceLookupKey =
-        item.fallbackPriceLookupKey ||
-        fallbackLookupKeyFromCategorySize(item.category, item.size)
-      return [...prev, { ...item, priceLookupKey, fallbackPriceLookupKey, quantity: 1 }]
+      return [...prev, { ...normalizeCartItem(item), quantity: 1 }]
     })
   }
 
