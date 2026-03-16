@@ -14,12 +14,12 @@ export function formatStripePrice(price, locale = 'en-US') {
 
 export const PRICE_LABELS = {
   loading: 'Loading price…',
-  missing: 'Missing price ID',
+  missing: 'Missing price lookup key',
   unavailable: 'Price unavailable',
 }
 
 export function priceLabel({
-  priceId,
+  lookupKey,
   price,
   loading = false,
   missingLabel = PRICE_LABELS.missing,
@@ -27,20 +27,20 @@ export function priceLabel({
   unavailableLabel = PRICE_LABELS.unavailable,
   formatter = formatStripePrice,
 } = {}) {
-  if (!priceId) return missingLabel
+  if (!lookupKey) return missingLabel
   if (price) return formatter(price)
   if (loading) return loadingLabel
   return unavailableLabel
 }
 
-export async function fetchStripePrices(ids, { signal } = {}) {
-  const uniqueIds = [...new Set((Array.isArray(ids) ? ids : []).filter(Boolean))]
-  if (uniqueIds.length === 0) return {}
+export async function fetchStripePrices(lookupKeys, { signal } = {}) {
+  const uniqueKeys = [...new Set((Array.isArray(lookupKeys) ? lookupKeys : []).filter(Boolean))]
+  if (uniqueKeys.length === 0) return {}
 
   const res = await fetch('/api/prices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ids: uniqueIds }),
+    body: JSON.stringify({ lookupKeys: uniqueKeys }),
     signal,
   })
 
@@ -51,7 +51,7 @@ export async function fetchStripePrices(ids, { signal } = {}) {
 
   const map = {}
   for (const price of data.prices || []) {
-    if (price?.id) map[price.id] = price
+    if (price?.lookup_key) map[price.lookup_key] = price
   }
   return map
 }

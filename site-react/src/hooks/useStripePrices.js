@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchStripePrices } from '../utils/stripePrices'
 
-export function useStripePrices(priceIds) {
-  const ids = useMemo(() => {
-    const input = Array.isArray(priceIds) ? priceIds : []
+export function useStripePrices(lookupKeys) {
+  const keys = useMemo(() => {
+    const input = Array.isArray(lookupKeys) ? lookupKeys : []
     return [...new Set(input.filter(Boolean))]
-  }, [priceIds])
-  const idsKey = useMemo(() => ids.join('|'), [ids])
-  const [priceById, setPriceById] = useState({})
+  }, [lookupKeys])
+  const keysKey = useMemo(() => keys.join('|'), [keys])
+  const [priceByKey, setPriceByKey] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -15,8 +15,8 @@ export function useStripePrices(priceIds) {
     let isActive = true
     const controller = new AbortController()
 
-    if (ids.length === 0) {
-      setPriceById({})
+    if (keys.length === 0) {
+      setPriceByKey({})
       setLoading(false)
       setError('')
       return () => controller.abort()
@@ -25,14 +25,14 @@ export function useStripePrices(priceIds) {
     setLoading(true)
     setError('')
 
-    fetchStripePrices(ids, { signal: controller.signal })
+    fetchStripePrices(keys, { signal: controller.signal })
       .then((map) => {
         if (!isActive) return
-        setPriceById(map)
+        setPriceByKey(map)
       })
       .catch((err) => {
         if (!isActive || err?.name === 'AbortError') return
-        setPriceById({})
+        setPriceByKey({})
         setError(err?.message || 'Failed to load prices')
       })
       .finally(() => {
@@ -44,16 +44,7 @@ export function useStripePrices(priceIds) {
       isActive = false
       controller.abort()
     }
-  }, [idsKey])
+  }, [keysKey])
 
-  return { priceById, loading, error }
-}
-
-export function useStripePrice(priceId) {
-  const { priceById, loading, error } = useStripePrices(priceId ? [priceId] : [])
-  return {
-    price: priceId ? priceById[priceId] || null : null,
-    loading,
-    error,
-  }
+  return { priceByKey, loading, error }
 }

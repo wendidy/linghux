@@ -2,9 +2,15 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useCart } from '../context/CartContext'
-import { useStripePrice } from '../hooks/useStripePrices'
+import { useStripePrices } from '../hooks/useStripePrices'
 import PriceText from '../components/PriceText'
 import { PRICE_LABELS } from '../utils/stripePrices'
+import {
+  fallbackLookupKeyForItem,
+  lookupKeysForItem,
+  primaryLookupKeyForItem,
+  resolvePriceForItem,
+} from '../data/stripePriceKeys'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -18,14 +24,12 @@ export default function WorkPortfolioItem({ category }) {
   }, [item])
   const [activeImage, setActiveImage] = useState('')
   const { addItem } = useCart()
-  const {
-    price: priceInfo,
-    loading: priceLoading,
-    error: priceError,
-  } = useStripePrice(item?.stripePriceId)
+  const lookupKeys = useMemo(() => lookupKeysForItem(item), [item])
+  const { priceByKey, loading: priceLoading, error: priceError } = useStripePrices(lookupKeys)
+  const priceInfo = resolvePriceForItem(item, priceByKey)
 
-  const canPurchase = Boolean(item?.stripePriceId && priceInfo)
-  const buttonLabel = !item?.stripePriceId
+  const canPurchase = Boolean(lookupKeys.length > 0 && priceInfo)
+  const buttonLabel = lookupKeys.length === 0
     ? 'Unavailable'
     : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable))
 
@@ -70,7 +74,7 @@ export default function WorkPortfolioItem({ category }) {
           <p className="price">
             <i className="fas fa-tag entry-icon" aria-hidden="true" />
             <PriceText
-              priceId={item.stripePriceId}
+              lookupKey={primaryLookupKeyForItem(item) || fallbackLookupKeyForItem(item)}
               price={priceInfo}
               loading={priceLoading}
             />
@@ -105,7 +109,10 @@ export default function WorkPortfolioItem({ category }) {
                 id: item.id,
                 title: item.title,
                 image: item.image,
-                priceId: item.stripePriceId,
+                category: item.category,
+                size: item.size,
+                priceLookupKey: primaryLookupKeyForItem(item),
+                fallbackPriceLookupKey: fallbackLookupKeyForItem(item),
               })
             }
           >

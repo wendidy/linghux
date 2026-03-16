@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useStripePrices } from '../hooks/useStripePrices'
+import {
+  fallbackLookupKeyFromCategorySize,
+  lookupKeyFromItemId,
+  resolvePriceByLookupKeys,
+} from '../data/stripePriceKeys'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
@@ -12,7 +17,21 @@ export function CartProvider({ children }) {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const parsed = JSON.parse(raw)
-      if (Array.isArray(parsed)) setItems(parsed)
+      if (Array.isArray(parsed)) {
+        const normalized = parsed.map((item) => {
+          if (!item || typeof item !== 'object') return item
+          const priceLookupKey = item.priceLookupKey || lookupKeyFromItemId(item.id)
+          const fallbackPriceLookupKey =
+            item.fallbackPriceLookupKey ||
+            fallbackLookupKeyFromCategorySize(item.category, item.size)
+          return {
+            ...item,
+            priceLookupKey,
+            fallbackPriceLookupKey,
+          }
+        })
+        setItems(normalized)
+      }
     } catch {
       setItems([])
     }
@@ -22,16 +41,19 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
 
-  const priceIds = useMemo(() => {
-    const ids = items.map((item) => item.priceId).filter(Boolean)
-    return [...new Set(ids)]
+  const lookupKeys = useMemo(() => {
+    const keys = items.flatMap((item) => [
+      item.priceLookupKey,
+      item.fallbackPriceLookupKey,
+    ]).filter(Boolean)
+    return [...new Set(keys)]
   }, [items])
 
   const {
-    priceById,
+    priceByKey,
     loading: pricesLoading,
     error: pricesError,
-  } = useStripePrices(priceIds)
+  } = useStripePrices(lookupKeys)
 
   const addItem = (item) => {
     setItems((prev) => {
@@ -41,7 +63,11 @@ export function CartProvider({ children }) {
           p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
         )
       }
-      return [...prev, { ...item, quantity: 1 }]
+      const priceLookupKey = item.priceLookupKey || lookupKeyFromItemId(item.id)
+      const fallbackPriceLookupKey =
+        item.fallbackPriceLookupKey ||
+        fallbackLookupKeyFromCategorySize(item.category, item.size)
+      return [...prev, { ...item, priceLookupKey, fallbackPriceLookupKey, quantity: 1 }]
     })
   }
 
@@ -65,11 +91,16 @@ export function CartProvider({ children }) {
 
   const subtotal = useMemo(() => {
     return items.reduce((sum, item) => {
-      const unitAmount = priceById[item.priceId]?.unit_amount
+      const price = resolvePriceByLookupKeys(
+        item.priceLookupKey,
+        item.fallbackPriceLookupKey,
+        priceByKey
+      )
+      const unitAmount = price?.unit_amount
       if (typeof unitAmount !== 'number') return sum
       return sum + unitAmount * item.quantity
     }, 0)
-  }, [items, priceById])
+  }, [items, priceByKey])
 
   return (
     <CartContext.Provider
@@ -80,7 +111,7 @@ export function CartProvider({ children }) {
         removeItem,
         clearCart,
         subtotal,
-        priceById,
+        priceByKey,
         pricesLoading,
         pricesError,
       }}

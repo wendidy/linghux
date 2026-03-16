@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
+import { resolvePriceByLookupKeys } from '../data/stripePriceKeys'
 
 export default function Cart() {
   const {
@@ -11,27 +12,40 @@ export default function Cart() {
     removeItem,
     clearCart,
     subtotal,
-    priceById,
+    priceByKey,
     pricesLoading,
     pricesError,
   } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
 
+  const priceForItem = useCallback(
+    (item) => resolvePriceByLookupKeys(
+      item.priceLookupKey,
+      item.fallbackPriceLookupKey,
+      priceByKey
+    ),
+    [priceByKey]
+  )
+
   const cartCurrency = useMemo(() => {
-    const match = items.find((item) => priceById[item.priceId]?.currency)
-    return match ? priceById[match.priceId].currency : 'USD'
-  }, [items, priceById])
+    const match = items.find((item) => priceForItem(item)?.currency)
+    if (!match) return 'USD'
+    return priceForItem(match)?.currency || 'USD'
+  }, [items, priceForItem])
   const hasMissingPrice = useMemo(() => {
     return items.some(
       (item) =>
-        item.priceId &&
-        (!priceById[item.priceId] || priceById[item.priceId].unit_amount == null)
+        (item.priceLookupKey || item.fallbackPriceLookupKey) &&
+        (() => {
+          const price = priceForItem(item)
+          return !price || price.unit_amount == null
+        })()
     )
-  }, [items, priceById])
+  }, [items, priceForItem])
 
   const linePriceFor = (item) => {
-    const price = priceById[item.priceId]
+    const price = priceForItem(item)
     if (!price || typeof price.unit_amount !== 'number') return null
     return { ...price, unit_amount: price.unit_amount * item.quantity }
   }
@@ -41,13 +55,16 @@ export default function Cart() {
     setIsCheckingOut(true)
 
     try {
-      const missing = items.find((item) => !item.priceId)
+      const missing = items.find(
+        (item) => !item.priceLookupKey && !item.fallbackPriceLookupKey
+      )
       if (missing) {
-        throw new Error(`Missing Stripe price ID for ${missing.title}`)
+        throw new Error(`Missing Stripe price lookup key for ${missing.title}`)
       }
 
       const lineItems = items.map((item) => ({
-        price: item.priceId,
+        lookupKey: item.priceLookupKey,
+        fallbackLookupKey: item.fallbackPriceLookupKey,
         quantity: item.quantity,
       }))
 
@@ -91,8 +108,8 @@ export default function Cart() {
                     <h3>{item.title}</h3>
                     <p>
                       <PriceText
-                        priceId={item.priceId}
-                        price={priceById[item.priceId]}
+                        lookupKey={item.priceLookupKey || item.fallbackPriceLookupKey}
+                        price={priceForItem(item)}
                         loading={pricesLoading}
                       />
                     </p>
@@ -105,7 +122,7 @@ export default function Cart() {
                   <div className="cart-item-actions">
                     <strong>
                       <PriceText
-                        priceId={item.priceId}
+                        lookupKey={item.priceLookupKey || item.fallbackPriceLookupKey}
                         price={linePriceFor(item)}
                         loading={pricesLoading}
                         missingLabel="—"

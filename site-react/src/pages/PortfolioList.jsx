@@ -3,17 +3,23 @@ import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import PriceText from '../components/PriceText'
+import {
+  lookupKeysForItem,
+  resolvePriceForItem,
+  primaryLookupKeyForItem,
+  fallbackLookupKeyForItem,
+} from '../data/stripePriceKeys'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const filteredItems = useMemo(
     () => (category ? items.filter((item) => item.category === category) : items),
     [category]
   )
-  const priceIds = useMemo(
-    () => filteredItems.map((item) => item.stripePriceId).filter(Boolean),
+  const lookupKeys = useMemo(
+    () => filteredItems.flatMap((item) => lookupKeysForItem(item)),
     [filteredItems]
   )
-  const { priceById, loading: pricesLoading } = useStripePrices(priceIds)
+  const { priceByKey, loading: pricesLoading } = useStripePrices(lookupKeys)
 
   const makeItemPath = (itemId) => {
     const workId = itemId.replace('work-', '')
@@ -37,8 +43,8 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                 <div className="meta-row">
                   <PriceText
                     className="price"
-                    priceId={item.stripePriceId}
-                    price={priceById[item.stripePriceId]}
+                    lookupKey={primaryLookupKeyForItem(item) || fallbackLookupKeyForItem(item)}
+                    price={resolvePriceForItem(item, priceByKey)}
                     loading={pricesLoading}
                   />{' '}
                   — <span className="size">{item.size}</span>

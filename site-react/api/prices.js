@@ -1,6 +1,15 @@
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const LOOKUP_KEYS_BATCH_SIZE = 10
+
+function chunkArray(values, size) {
+  const chunks = []
+  for (let i = 0; i < values.length; i += size) {
+    chunks.push(values.slice(i, i + size))
+  }
+  return chunks
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,26 +18,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    const ids = Array.isArray(req.body?.ids) ? req.body.ids : []
-    const uniqueIds = [...new Set(ids.filter(Boolean))]
+    const lookupKeys = Array.isArray(req.body?.lookupKeys) ? req.body.lookupKeys : []
+    const uniqueKeys = [...new Set(lookupKeys.filter(Boolean))]
 
-    if (uniqueIds.length === 0) {
-      res.status(400).json({ error: 'No price IDs provided' })
+    if (uniqueKeys.length === 0) {
+      res.status(400).json({ error: 'No price lookup keys provided' })
       return
     }
 
-    const prices = await Promise.all(
-      uniqueIds.map(async (id) => {
-        const price = await stripe.prices.retrieve(id)
-        return {
-          id: price.id,
-          unit_amount: price.unit_amount,
-          currency: price.currency,
-          nickname: price.nickname || null,
-          product: price.product,
-        }
-      })
+    const batches = chunkArray(uniqueKeys, LOOKUP_KEYS_BATCH_SIZE)
+    const responses = await Promise.all(
+      batches.map((keys) =>
+        stripe.prices.list({
+          lookup_keys: keys,
+          active: true,
+          limit: 100,
+        })
+      )
     )
+    const prices = responses.flatMap((response) => response.data || []).map((price) => ({
+      id: price.id,
+      lookup_key: price.lookup_key || null,
+      unit_amount: price.unit_amount,
+      currency: price.currency,
+      nickname: price.nickname || null,
+      product: price.product,
+    }))
 
     res.status(200).json({ prices })
   } catch (error) {

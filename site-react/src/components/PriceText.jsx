@@ -2,7 +2,7 @@ import React from 'react'
 import { priceLabel } from '../utils/stripePrices'
 
 export default function PriceText({
-  priceId,
+  lookupKey,
   price,
   loading,
   className,
@@ -13,7 +13,7 @@ export default function PriceText({
   return (
     <span className={className}>
       {priceLabel({
-        priceId,
+        lookupKey,
         price,
         loading,
         missingLabel,

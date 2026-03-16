@@ -1,5 +1,3 @@
-import { priceIdFor } from './stripePriceIds'
-
 const rawItems = [
   {
     id: 'work-1',
@@ -135,7 +133,4 @@ const rawItems = [
   }
 ]
 
-export const items = rawItems.map((item) => ({
-  ...item,
-  stripePriceId: priceIdFor(item),
-}))
+export const items = rawItems
