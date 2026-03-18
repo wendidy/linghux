@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
+import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
@@ -14,6 +15,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
     [filteredItems]
   )
   const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
+  const { availabilityById } = useAvailability(itemIds)
 
   const makeItemPath = (itemId) => {
     return category ? `/artwork/${category}/${itemId}` : `/artwork/work/${itemId}`
@@ -40,6 +42,9 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                     price={priceById[item.id]}
                     loading={pricesLoading}
                   />{' '}
+                  {availabilityById[item.id]?.soldOut && (
+                    <span className="sold-out-badge">Sold out</span>
+                  )}{' '}
                   — <span className="size">{item.size}</span>
                 </div>
               </div>

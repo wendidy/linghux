@@ -1,12 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
 
 export default function Cart() {
   const {
     items,
+    updateQuantity,
     removeItem,
     clearCart,
     subtotal,
@@ -16,10 +18,21 @@ export default function Cart() {
   } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
+  const itemIds = useMemo(() => items.map((item) => item.id).filter(Boolean), [items])
+  const {
+    availabilityById,
+    loading: availabilityLoading,
+    error: availabilityError,
+  } = useAvailability(itemIds)
 
   const priceForItem = useCallback(
     (item) => priceById[item.id] || null,
     [priceById]
+  )
+
+  const availabilityForItem = useCallback(
+    (item) => availabilityById[item.id] || null,
+    [availabilityById]
   )
 
   const cartCurrency = useMemo(() => {
@@ -42,6 +55,16 @@ export default function Cart() {
     const price = priceForItem(item)
     if (!price || typeof price.unit_amount !== 'number') return null
     return { ...price, unit_amount: price.unit_amount * item.quantity }
+  }
+
+  const canIncreaseQuantity = (item) => {
+    if (item.category === 'open-edition-prints') return true
+    if (item.category !== 'limited-edition-prints') return false
+    if (availabilityLoading) return false
+
+    const availability = availabilityForItem(item)
+    if (!availability || typeof availability.available !== 'number') return false
+    return item.quantity < availability.available
   }
 
   const checkout = async () => {
@@ -106,9 +129,23 @@ export default function Cart() {
                         loading={pricesLoading}
                       />
                     </p>
-                    <div className="cart-qty">
-                      <span>Qty: {item.quantity}</span>
-                    </div>
+                    {item.category === 'originals' ? (
+                      <div className="cart-qty">
+                        <span>Qty: {item.quantity}</span>
+                      </div>
+                    ) : (
+                      <div className="cart-qty">
+                        <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                        <span>{item.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          disabled={!canIncreaseQuantity(item)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <div className="cart-item-actions">
                     <strong>
@@ -139,6 +176,7 @@ export default function Cart() {
                 </button>
               </div>
               {pricesError && <p className="cart-error">{pricesError}</p>}
+              {availabilityError && <p className="cart-error">{availabilityError}</p>}
               {error && <p className="cart-error">{error}</p>}
             </div>
           </>

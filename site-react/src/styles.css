@@ -133,8 +133,24 @@ body { font-family: 'Montserrat', sans-serif; }
   display: block;
   text-align: center;
 }
+.work-item-meta .basket-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #b0b0aa !important;
+}
 .work-item-meta .basket-button:hover {
   opacity: 0.92;
+}
+.sold-out-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #b0b0aa;
+  color: #6b6b66;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  line-height: 1.2;
 }
 .work-item-meta .shipping-line {
   font-size: 0.92rem;
@@ -196,6 +212,20 @@ body { font-family: 'Montserrat', sans-serif; }
 .gallery { display:flex; flex-wrap:wrap; gap:1rem }
 .gallery-item { width: calc(33.333% - 1rem); box-sizing:border-box }
 .gallery-item img{ width:100%; display:block }
+.cart-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.cart-qty button {
+  min-width: 2rem;
+  padding: 0.2rem 0.55rem;
+  line-height: 1.2;
+}
+.cart-qty button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 .pagination { display:flex; gap:0.5rem; justify-content:center; margin-top:1.5rem }
 .pagination button { padding:0.5rem 0.75rem; border:1px solid #ddd; background:white; cursor:pointer }
 .pagination button.active { background:#222; color:white }

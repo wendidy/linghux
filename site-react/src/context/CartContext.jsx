@@ -55,12 +55,26 @@ export function CartProvider({ children }) {
   } = useStripePrices(itemIds)
 
   const addItem = (item) => {
+    const maxQuantity = item?.category === 'limited-edition-prints' && Number.isInteger(item.maxQuantity)
+      ? item.maxQuantity
+      : null
+    const existing = items.find((existingItem) => existingItem.id === item?.id)
+
     if (item?.category === 'originals') {
-      const exists = items.some((existing) => existing.id === item.id)
-      if (exists) {
+      if (existing) {
         return { added: false, reason: 'already_in_cart' }
       }
     }
+
+    if (maxQuantity !== null) {
+      if (maxQuantity <= 0) {
+        return { added: false, reason: 'sold_out' }
+      }
+      if (existing && existing.quantity >= maxQuantity) {
+        return { added: false, reason: 'limit_reached' }
+      }
+    }
+
     setItems((prev) => {
       const found = prev.find((p) => p.id === item.id)
       if (found) {
@@ -68,12 +82,34 @@ export function CartProvider({ children }) {
           return prev
         }
         return prev.map((p) =>
-          p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
+          p.id === item.id
+            ? {
+                ...p,
+                quantity: maxQuantity === null
+                  ? p.quantity + 1
+                  : Math.min(p.quantity + 1, maxQuantity),
+              }
+            : p
         )
       }
       return [...prev, normalizeCartItem(item)]
     })
     return { added: true }
+  }
+
+  const updateQuantity = (id, quantity) => {
+    if (quantity <= 0) {
+      setItems((prev) => prev.filter((item) => item.id !== id))
+      return
+    }
+
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, quantity: item.category === 'originals' ? 1 : quantity }
+          : item
+      )
+    )
   }
 
   const removeItem = (id) => {
@@ -95,6 +131,7 @@ export function CartProvider({ children }) {
       value={{
         items,
         addItem,
+        updateQuantity,
         removeItem,
         clearCart,
         subtotal,

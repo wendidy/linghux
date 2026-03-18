@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useCart } from '../context/CartContext'
 import { useStripePrices } from '../hooks/useStripePrices'
+import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { PRICE_LABELS } from '../utils/stripePrices'
 
@@ -20,14 +21,31 @@ export default function WorkPortfolioItem({ category }) {
   const [cartNotice, setCartNotice] = useState('')
   const itemIds = useMemo(() => (item?.id ? [item.id] : []), [item])
   const { priceById, loading: priceLoading, error: priceError } = useStripePrices(itemIds)
+  const { availabilityById, loading: availabilityLoading, error: availabilityError } = useAvailability(itemIds)
   const priceInfo = item?.id ? priceById[item.id] : null
+  const availability = item?.id ? availabilityById[item.id] : null
 
+  const cartItem = cartItems.find((cartItem) => cartItem.id === item?.id)
+  const cartQuantity = cartItem?.quantity || 0
   const isOriginal = item?.category === 'originals'
+  const isLimitedEdition = item?.category === 'limited-edition-prints'
   const isAlreadyInCart = isOriginal && cartItems.some((cartItem) => cartItem.id === item?.id)
-  const canPurchase = Boolean(item?.id && priceInfo)
+  const isSoldOut = Boolean(availability?.soldOut)
+  const hasAvailabilityInfo = !isLimitedEdition || (!availabilityLoading && Boolean(availability))
+  const limitReachedInCart = isLimitedEdition &&
+    !availabilityLoading &&
+    typeof availability?.available === 'number' &&
+    cartQuantity >= availability.available
+  const canPurchase = Boolean(item?.id && priceInfo && hasAvailabilityInfo)
   const buttonLabel = !item?.id
     ? 'Unavailable'
-    : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable))
+    : (
+        isSoldOut
+          ? 'Sold out'
+          : (limitReachedInCart
+              ? 'Limit reached'
+              : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable)))
+      )
 
   useEffect(() => {
     // Reset active image when the item changes.
@@ -69,7 +87,7 @@ export default function WorkPortfolioItem({ category }) {
         <aside className="work-item-meta">
           <h1>{item.title}</h1>
           <p className="price">
-            <i className="fas" aria-hidden="true" />
+            <i className="fas fa-tag entry-icon" aria-hidden="true" />
             <PriceText
               itemId={item.id}
               price={priceInfo}
@@ -100,8 +118,9 @@ export default function WorkPortfolioItem({ category }) {
           <button
             type="button"
             className="basket-button"
-            disabled={!canPurchase}
+            disabled={!canPurchase || isSoldOut || limitReachedInCart}
             onClick={() => {
+              if (isSoldOut || limitReachedInCart) return
               if (isOriginal && isAlreadyInCart) {
                 setCartNotice('This work has already been added to your cart.')
                 return
@@ -112,18 +131,25 @@ export default function WorkPortfolioItem({ category }) {
                 image: item.image,
                 category: item.category,
                 size: item.size,
+                maxQuantity: isLimitedEdition ? availability?.available : undefined,
               })
               if (result?.added) {
                 setCartNotice('')
               } else if (result?.reason === 'already_in_cart') {
                 setCartNotice('This work has already been added to your cart.')
+              } else if (result?.reason === 'limit_reached') {
+                setCartNotice('Maximum available quantity is already in your cart.')
+              } else if (result?.reason === 'sold_out') {
+                setCartNotice('This work is sold out.')
               }
             }}
           >
             {buttonLabel}
           </button>
+          {limitReachedInCart && <p className="meta-line">Maximum available quantity is already in your cart.</p>}
           {cartNotice && <p className="meta-line">{cartNotice}</p>}
           {priceError && <p className="meta-line">{priceError}</p>}
+          {availabilityError && <p className="meta-line">{availabilityError}</p>}
           <p className="shipping-line">
             <i className="fas fa-truck entry-icon" aria-hidden="true" />
             Free US and Canada shipping

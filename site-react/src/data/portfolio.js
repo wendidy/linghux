@@ -44,7 +44,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'universityOfDenver',
+    id: 'universityOfDenver:limited-edition-prints:5x7',
     category: 'limited-edition-prints',
     title: 'University of Denver',
     size: '5x7',
@@ -55,7 +55,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'dakotaRidgePark',
+    id: 'dakotaRidgePark:limited-edition-prints:8x10',
     category: 'limited-edition-prints',
     title: 'Dakota Ridge Park',
     size: '8x10',
@@ -66,7 +66,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'columbiaLake',
+    id: 'columbiaLake:limited-edition-prints:24x36',
     category: 'limited-edition-prints',
     title: 'Columbia Lake',
     size: '24x36',
@@ -77,7 +77,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'petiteParis',
+    id: 'petiteParis:limited-edition-prints:24x36',
     category: 'limited-edition-prints',
     title: 'Petite Paris',
     size: '24x36',
@@ -88,7 +88,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'harbourfront',
+    id: 'harbourfront:open-edition-prints:8x10',
     category: 'open-edition-prints',
     title: 'Harbourfront',
     size: '8x10',
@@ -99,7 +99,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-10',
+    id: 'work-10:open-edition-prints:5x7',
     category: 'open-edition-prints',
     title: 'Work 10',
     size: '5x7',
@@ -110,7 +110,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'chateauDeVersailles',
+    id: 'chateauDeVersailles:open-edition-prints:17x22',
     category: 'open-edition-prints',
     title: 'Château de Versailles',
     size: '17x22',
@@ -121,7 +121,7 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'peleeIsland',
+    id: 'peleeIsland:open-edition-prints:17x22',
     category: 'open-edition-prints',
     title: 'Pelee Island',
     size: '17x22',
