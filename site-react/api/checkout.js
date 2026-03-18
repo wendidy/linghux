@@ -1,13 +1,7 @@
 import Stripe from 'stripe'
-import { listActivePricesByLookupKeys, mapPricesByLookupKey, normalizeLookupKeys } from './stripeLookup.js'
+import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-function resolvePriceByLookupKeys(primaryKey, fallbackKey, priceByKey) {
-  if (primaryKey && priceByKey[primaryKey]) return priceByKey[primaryKey]
-  if (fallbackKey && priceByKey[fallbackKey]) return priceByKey[fallbackKey]
-  return null
-}
 
 function getBaseUrl(req) {
   if (process.env.SITE_URL) {
@@ -33,25 +27,18 @@ export default async function handler(req, res) {
       return
     }
 
-    const lookupKeys = normalizeLookupKeys(items.flatMap((item) => [
-      item?.lookupKey,
-      item?.fallbackLookupKey,
-    ]))
+    const itemIds = normalizeItemIds(items.map((item) => item?.id))
 
-    if (!lookupKeys.length) {
-      res.status(400).json({ error: 'No price lookup keys provided' })
+    if (!itemIds.length) {
+      res.status(400).json({ error: 'No item IDs provided' })
       return
     }
 
-    const prices = await listActivePricesByLookupKeys(stripe, lookupKeys)
-    const priceByKey = mapPricesByLookupKey(prices)
+    const priceMap = await fetchPricesByItemIds(stripe, itemIds)
 
     const lineItems = items.map((item) => {
-      const price = resolvePriceByLookupKeys(
-        item?.lookupKey,
-        item?.fallbackLookupKey,
-        priceByKey
-      )
+      const entry = priceMap.get(item?.id)
+      const price = entry?.price
       if (!price?.id) {
         throw new Error('Unable to resolve Stripe price for cart item')
       }

@@ -1,7 +1,5 @@
 import React from 'react'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PortfolioList from './pages/PortfolioList'
 import WorkPortfolioItem from './pages/WorkPortfolioItem'
 import Cart from './pages/Cart'

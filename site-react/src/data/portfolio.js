@@ -1,8 +1,8 @@
 const rawItems = [
   {
-    id: 'work-1',
+    id: 'dreamLake',
     category: 'originals',
-    title: 'Work 1',
+    title: 'Dream Lake',
     size: '8x10',
     framedSize: 'TBD',
     date: '2024-06-01',
@@ -11,9 +11,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-2',
+    id: 'signalHills',
     category: 'originals',
-    title: 'Work 2',
+    title: 'Signal Hills',
     size: '8x10',
     framedSize: 'TBD',
     date: '2024-05-10',
@@ -22,9 +22,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-3',
+    id: 'bourtonOnTheWater',
     category: 'originals',
-    title: 'Work 3',
+    title: 'Bourton-on-the-Water',
     size: '8x10',
     framedSize: 'TBD',
     date: '2024-04-22',
@@ -33,9 +33,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-4',
+    id: 'priceHolder',
     category: 'originals',
-    title: 'Work 4',
+    title: 'Price Holder',
     size: '8x10',
     framedSize: 'TBD',
     date: '2023-11-15',
@@ -44,9 +44,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-5',
+    id: 'universityOfDenver',
     category: 'limited-edition-prints',
-    title: 'Work 5',
+    title: 'University of Denver',
     size: '5x7',
     framedSize: 'TBD',
     date: '2024-01-05',
@@ -55,9 +55,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-6',
+    id: 'dakotaRidgePark',
     category: 'limited-edition-prints',
-    title: 'Work 6',
+    title: 'Dakota Ridge Park',
     size: '8x10',
     framedSize: 'TBD',
     date: '2023-08-09',
@@ -66,9 +66,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-7',
+    id: 'columbiaLake',
     category: 'limited-edition-prints',
-    title: 'Work 7',
+    title: 'Columbia Lake',
     size: '24x36',
     framedSize: 'TBD',
     date: '2024-02-20',
@@ -77,9 +77,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-8',
+    id: 'petiteParis',
     category: 'limited-edition-prints',
-    title: 'Work 8',
+    title: 'Petite Paris',
     size: '24x36',
     framedSize: 'TBD',
     date: '2023-12-02',
@@ -88,9 +88,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-9',
+    id: 'harbourfront',
     category: 'open-edition-prints',
-    title: 'Work 9',
+    title: 'Harbourfront',
     size: '8x10',
     framedSize: 'TBD',
     date: '2023-07-18',
@@ -110,9 +110,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-11',
+    id: 'chateauDeVersailles',
     category: 'open-edition-prints',
-    title: 'Work 11',
+    title: 'Château de Versailles',
     size: '17x22',
     framedSize: 'TBD',
     date: '2023-10-01',
@@ -121,9 +121,9 @@ const rawItems = [
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
-    id: 'work-12',
+    id: 'peleeIsland',
     category: 'open-edition-prints',
-    title: 'Work 12',
+    title: 'Pelee Island',
     size: '17x22',
     framedSize: 'TBD',
     date: '2024-04-01',

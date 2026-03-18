@@ -1,35 +1,23 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useStripePrices } from '../hooks/useStripePrices'
-import {
-  fallbackLookupKeyForItem,
-  primaryLookupKeyForItem,
-  resolvePriceByLookupKeys,
-} from '../data/stripePriceKeys'
 import { items as catalogItems } from '../data/portfolio'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
+const catalogItemById = new Map(catalogItems.map((item) => [item.id, item]))
 
 function normalizeCartItem(item) {
   if (!item || typeof item !== 'object') return item
-  const catalogItem = catalogItems.find((catalogEntry) => catalogEntry.id === item.id)
+  const catalogItem = catalogItemById.get(item.id)
   const category = item.category || catalogItem?.category
   const size = item.size || catalogItem?.size
-  const normalizedItem = {
-    ...item,
-    category,
-    size,
-  }
-  const priceLookupKey = item.priceLookupKey || primaryLookupKeyForItem(normalizedItem)
-  const fallbackPriceLookupKey =
-    item.fallbackPriceLookupKey || fallbackLookupKeyForItem(normalizedItem)
   const quantity = category === 'originals'
     ? 1
     : (Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1)
   return {
-    ...normalizedItem,
-    priceLookupKey,
-    fallbackPriceLookupKey,
+    ...item,
+    category,
+    size,
     quantity,
   }
 }
@@ -55,19 +43,16 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
 
-  const lookupKeys = useMemo(() => {
-    const keys = items.flatMap((item) => [
-      item.priceLookupKey,
-      item.fallbackPriceLookupKey,
-    ]).filter(Boolean)
-    return [...new Set(keys)]
+  const itemIds = useMemo(() => {
+    const ids = items.map((item) => item.id).filter(Boolean)
+    return [...new Set(ids)]
   }, [items])
 
   const {
-    priceByKey,
+    priceById,
     loading: pricesLoading,
     error: pricesError,
-  } = useStripePrices(lookupKeys)
+  } = useStripePrices(itemIds)
 
   const addItem = (item) => {
     if (item?.category === 'originals') {
@@ -91,20 +76,6 @@ export function CartProvider({ children }) {
     return { added: true }
   }
 
-  const updateQuantity = (id, quantity) => {
-    if (quantity <= 0) {
-      setItems((prev) => prev.filter((item) => item.id !== id))
-      return
-    }
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.category === 'originals' ? 1 : quantity }
-          : item
-      )
-    )
-  }
-
   const removeItem = (id) => {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }
@@ -113,27 +84,21 @@ export function CartProvider({ children }) {
 
   const subtotal = useMemo(() => {
     return items.reduce((sum, item) => {
-      const price = resolvePriceByLookupKeys(
-        item.priceLookupKey,
-        item.fallbackPriceLookupKey,
-        priceByKey
-      )
-      const unitAmount = price?.unit_amount
+      const unitAmount = priceById[item.id]?.unit_amount
       if (typeof unitAmount !== 'number') return sum
       return sum + unitAmount * item.quantity
     }, 0)
-  }, [items, priceByKey])
+  }, [items, priceById])
 
   return (
     <CartContext.Provider
       value={{
         items,
         addItem,
-        updateQuantity,
         removeItem,
         clearCart,
         subtotal,
-        priceByKey,
+        priceById,
         pricesLoading,
         pricesError,
       }}

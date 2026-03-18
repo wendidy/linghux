@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchStripePrices } from '../utils/stripePrices'
 
-export function useStripePrices(lookupKeys) {
-  const keys = useMemo(() => {
-    const input = Array.isArray(lookupKeys) ? lookupKeys : []
+export function useStripePrices(itemIds) {
+  const ids = useMemo(() => {
+    const input = Array.isArray(itemIds) ? itemIds : []
     return [...new Set(input.filter(Boolean))]
-  }, [lookupKeys])
-  const keysKey = useMemo(() => keys.join('|'), [keys])
-  const [priceByKey, setPriceByKey] = useState({})
+  }, [itemIds])
+  const idsKey = useMemo(() => ids.join('|'), [ids])
+  const [priceById, setPriceById] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -15,8 +15,8 @@ export function useStripePrices(lookupKeys) {
     let isActive = true
     const controller = new AbortController()
 
-    if (keys.length === 0) {
-      setPriceByKey({})
+    if (ids.length === 0) {
+      setPriceById({})
       setLoading(false)
       setError('')
       return () => controller.abort()
@@ -25,14 +25,14 @@ export function useStripePrices(lookupKeys) {
     setLoading(true)
     setError('')
 
-    fetchStripePrices(keys, { signal: controller.signal })
+    fetchStripePrices(ids, { signal: controller.signal })
       .then((map) => {
         if (!isActive) return
-        setPriceByKey(map)
+        setPriceById(map)
       })
       .catch((err) => {
         if (!isActive || err?.name === 'AbortError') return
-        setPriceByKey({})
+        setPriceById({})
         setError(err?.message || 'Failed to load prices')
       })
       .finally(() => {
@@ -44,7 +44,7 @@ export function useStripePrices(lookupKeys) {
       isActive = false
       controller.abort()
     }
-  }, [keysKey])
+  }, [idsKey])
 
-  return { priceByKey, loading, error }
+  return { priceById, loading, error }
 }

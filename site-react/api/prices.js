@@ -1,5 +1,5 @@
 import Stripe from 'stripe'
-import { listActivePricesByLookupKeys, normalizeLookupKeys } from './stripeLookup.js'
+import { fetchPricesByItemIds, normalizeItemIds, serializePrice } from './stripeProducts.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -10,21 +10,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const lookupKeys = normalizeLookupKeys(req.body?.lookupKeys)
+    const itemIds = normalizeItemIds(req.body?.itemIds)
 
-    if (lookupKeys.length === 0) {
-      res.status(400).json({ error: 'No price lookup keys provided' })
+    if (itemIds.length === 0) {
+      res.status(400).json({ error: 'No item IDs provided' })
       return
     }
 
-    const prices = (await listActivePricesByLookupKeys(stripe, lookupKeys)).map((price) => ({
-      id: price.id,
-      lookup_key: price.lookup_key || null,
-      unit_amount: price.unit_amount,
-      currency: price.currency,
-      nickname: price.nickname || null,
-      product: price.product,
-    }))
+    const priceMap = await fetchPricesByItemIds(stripe, itemIds)
+    const prices = Array.from(priceMap.entries())
+      .map(([itemId, { price }]) => serializePrice(itemId, price))
+      .filter(Boolean)
 
     res.status(200).json({ prices })
   } catch (error) {

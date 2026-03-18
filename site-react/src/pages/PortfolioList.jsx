@@ -3,27 +3,20 @@ import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import PriceText from '../components/PriceText'
-import {
-  lookupKeysForItem,
-  resolvePriceForItem,
-  primaryLookupKeyForItem,
-  fallbackLookupKeyForItem,
-} from '../data/stripePriceKeys'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const filteredItems = useMemo(
     () => (category ? items.filter((item) => item.category === category) : items),
     [category]
   )
-  const lookupKeys = useMemo(
-    () => filteredItems.flatMap((item) => lookupKeysForItem(item)),
+  const itemIds = useMemo(
+    () => filteredItems.map((item) => item.id).filter(Boolean),
     [filteredItems]
   )
-  const { priceByKey, loading: pricesLoading } = useStripePrices(lookupKeys)
+  const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
 
   const makeItemPath = (itemId) => {
-    const workId = itemId.replace('work-', '')
-    return category ? `/artwork/${category}/${workId}` : `/artwork/work/${workId}`
+    return category ? `/artwork/${category}/${itemId}` : `/artwork/work/${itemId}`
   }
 
   return (
@@ -43,8 +36,8 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                 <div className="meta-row">
                   <PriceText
                     className="price"
-                    lookupKey={primaryLookupKeyForItem(item) || fallbackLookupKeyForItem(item)}
-                    price={resolvePriceForItem(item, priceByKey)}
+                    itemId={item.id}
+                    price={priceById[item.id]}
                     loading={pricesLoading}
                   />{' '}
                   — <span className="size">{item.size}</span>

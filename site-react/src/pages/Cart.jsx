@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
-import { resolvePriceByLookupKeys } from '../data/stripePriceKeys'
 
 export default function Cart() {
   const {
@@ -11,7 +10,7 @@ export default function Cart() {
     removeItem,
     clearCart,
     subtotal,
-    priceByKey,
+    priceById,
     pricesLoading,
     pricesError,
   } = useCart()
@@ -19,12 +18,8 @@ export default function Cart() {
   const [error, setError] = useState('')
 
   const priceForItem = useCallback(
-    (item) => resolvePriceByLookupKeys(
-      item.priceLookupKey,
-      item.fallbackPriceLookupKey,
-      priceByKey
-    ),
-    [priceByKey]
+    (item) => priceById[item.id] || null,
+    [priceById]
   )
 
   const cartCurrency = useMemo(() => {
@@ -35,7 +30,7 @@ export default function Cart() {
   const hasMissingPrice = useMemo(() => {
     return items.some(
       (item) =>
-        (item.priceLookupKey || item.fallbackPriceLookupKey) &&
+        item.id &&
         (() => {
           const price = priceForItem(item)
           return !price || price.unit_amount == null
@@ -55,15 +50,14 @@ export default function Cart() {
 
     try {
       const missing = items.find(
-        (item) => !item.priceLookupKey && !item.fallbackPriceLookupKey
+        (item) => !item.id
       )
       if (missing) {
-        throw new Error(`Missing Stripe price lookup key for ${missing.title}`)
+        throw new Error(`Missing Stripe item ID for ${missing.title}`)
       }
 
       const lineItems = items.map((item) => ({
-        lookupKey: item.priceLookupKey,
-        fallbackLookupKey: item.fallbackPriceLookupKey,
+        id: item.id,
         quantity: item.quantity,
       }))
 
@@ -107,7 +101,7 @@ export default function Cart() {
                     <h3>{item.title}</h3>
                     <p>
                       <PriceText
-                        lookupKey={item.priceLookupKey || item.fallbackPriceLookupKey}
+                        itemId={item.id}
                         price={priceForItem(item)}
                         loading={pricesLoading}
                       />
@@ -119,7 +113,7 @@ export default function Cart() {
                   <div className="cart-item-actions">
                     <strong>
                       <PriceText
-                        lookupKey={item.priceLookupKey || item.fallbackPriceLookupKey}
+                        itemId={item.id}
                         price={linePriceFor(item)}
                         loading={pricesLoading}
                         missingLabel="—"

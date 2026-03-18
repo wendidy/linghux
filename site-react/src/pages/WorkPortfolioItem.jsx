@@ -5,17 +5,10 @@ import { useCart } from '../context/CartContext'
 import { useStripePrices } from '../hooks/useStripePrices'
 import PriceText from '../components/PriceText'
 import { PRICE_LABELS } from '../utils/stripePrices'
-import {
-  fallbackLookupKeyForItem,
-  lookupKeysForItem,
-  primaryLookupKeyForItem,
-  resolvePriceForItem,
-} from '../data/stripePriceKeys'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
-  const id = workId?.startsWith('work-') ? workId : `work-${workId}`
-  const item = items.find((i) => i.id === id && (!category || i.category === category))
+  const item = items.find((i) => i.id === workId && (!category || i.category === category))
   const backPath = category ? `/artwork/${category}` : '/artwork'
   const galleryImages = useMemo(() => {
     if (!item) return []
@@ -25,14 +18,14 @@ export default function WorkPortfolioItem({ category }) {
   const [activeImage, setActiveImage] = useState('')
   const { addItem, items: cartItems } = useCart()
   const [cartNotice, setCartNotice] = useState('')
-  const lookupKeys = useMemo(() => lookupKeysForItem(item), [item])
-  const { priceByKey, loading: priceLoading, error: priceError } = useStripePrices(lookupKeys)
-  const priceInfo = resolvePriceForItem(item, priceByKey)
+  const itemIds = useMemo(() => (item?.id ? [item.id] : []), [item])
+  const { priceById, loading: priceLoading, error: priceError } = useStripePrices(itemIds)
+  const priceInfo = item?.id ? priceById[item.id] : null
 
   const isOriginal = item?.category === 'originals'
   const isAlreadyInCart = isOriginal && cartItems.some((cartItem) => cartItem.id === item?.id)
-  const canPurchase = Boolean(lookupKeys.length > 0 && priceInfo)
-  const buttonLabel = lookupKeys.length === 0
+  const canPurchase = Boolean(item?.id && priceInfo)
+  const buttonLabel = !item?.id
     ? 'Unavailable'
     : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable))
 
@@ -78,7 +71,7 @@ export default function WorkPortfolioItem({ category }) {
           <p className="price">
             <i className="fas" aria-hidden="true" />
             <PriceText
-              lookupKey={primaryLookupKeyForItem(item) || fallbackLookupKeyForItem(item)}
+              itemId={item.id}
               price={priceInfo}
               loading={priceLoading}
             />
@@ -119,8 +112,6 @@ export default function WorkPortfolioItem({ category }) {
                 image: item.image,
                 category: item.category,
                 size: item.size,
-                priceLookupKey: primaryLookupKeyForItem(item),
-                fallbackPriceLookupKey: fallbackLookupKeyForItem(item),
               })
               if (result?.added) {
                 setCartNotice('')
