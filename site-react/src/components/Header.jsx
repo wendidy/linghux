@@ -1,11 +1,23 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 
 export default function Header(){
   const linkClass = ({isActive}) => isActive ? 'active' : ''
   const closeArtworkDropdown = (e) => e.currentTarget.blur()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMobileArtworkOpen, setIsMobileArtworkOpen] = useState(false)
+  const { items } = useCart()
+  const cartCount = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    [items]
+  )
+  const cartLabel = (
+    <span className="cart-link-label">
+      <span>Cart</span>
+      {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+    </span>
+  )
 
   return (
     <header id="header">
@@ -32,7 +44,7 @@ export default function Header(){
           </li>
           <li><NavLink to="/about" className={linkClass}>About Me</NavLink></li>
           <li><NavLink to="/contact" className={linkClass}>Contact</NavLink></li>
-          <li><NavLink to="/cart" className={linkClass}>Cart</NavLink></li>
+          <li><NavLink to="/cart" className={linkClass}>{cartLabel}</NavLink></li>
         </ul>
       </nav>
       <button
@@ -65,7 +77,15 @@ export default function Header(){
           </li>
           <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>
           <li><NavLink to="/contact" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink></li>
-          <li><NavLink to="/cart" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Cart</NavLink></li>
+          <li>
+            <NavLink
+              to="/cart"
+              className={linkClass}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {cartLabel}
+            </NavLink>
+          </li>
         </ul>
       </div>
     </header>

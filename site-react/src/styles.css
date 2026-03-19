@@ -1,11 +1,41 @@
 @import url('../../assets/css/main.css');
 
 /* App-specific overrides and lightweight rules */
+:root {
+  --bg-main: #f6f6f4;
+  --bg-white: #ffffff;
+  --sage: #a8b5a2;
+  --forest: #4f6f52;
+  --deep-forest: #2f3e34;
+  --sand: #e6e2d8;
+  --stone: #c9c5bb;
+}
+
 body { font-family: 'Montserrat', sans-serif; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .app-main { flex: 1; padding-bottom: 2.5rem; }
-.header, header#header { background: #fff; padding: 1rem 6em; border-bottom: 1px solid #eee }
-.footer { background:#6b6c67; color:#333333; padding:1rem; text-align:center }
+.header, header#header { background: var(--bg-white); padding: 1rem 6em; border-bottom: 1px solid var(--sand) }
+.footer { background: var(--forest); color: var(--bg-main); padding:1rem; text-align:center }
+.cart-link-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  vertical-align: middle;
+}
+.cart-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  height: 1.45rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--deep-forest);
+  color: var(--bg-main);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
 .portfolio-item { padding: 2rem }
 .item-grid { display:flex; gap:2rem; flex-wrap:wrap }
 .item-image img{ max-width: 100%; height: auto }
@@ -39,8 +69,8 @@ body { font-family: 'Montserrat', sans-serif; }
   gap: 0.6rem;
 }
 .work-thumb {
-  border: 1px solid #d4d4d0;
-  background: #fff;
+  border: 1px solid var(--stone);
+  background: var(--bg-white);
   padding: 0;
   cursor: pointer;
   border-radius: 0;
@@ -54,7 +84,7 @@ body { font-family: 'Montserrat', sans-serif; }
   object-fit: cover;
 }
 .work-thumb.is-active {
-  border-color: #6b6b66;
+  border-color: var(--forest);
 }
 .work-item-meta h1 {
   font-size: 2rem;
@@ -85,7 +115,7 @@ body { font-family: 'Montserrat', sans-serif; }
   align-items: center;
 }
 .work-item-meta .info-tip {
-  color: #6b6b66;
+  color: var(--forest);
   cursor: help;
   display: inline-flex;
   align-items: center;
@@ -101,8 +131,8 @@ body { font-family: 'Montserrat', sans-serif; }
   max-width: 26rem;
   padding: 0.65rem 0.8rem;
   border-radius: 0.35rem;
-  background: #2d2d2a;
-  color: #fff;
+  background: var(--deep-forest);
+  color: var(--bg-white);
   font-size: 1rem;
   line-height: 1.35;
   opacity: 0;
@@ -127,8 +157,8 @@ body { font-family: 'Montserrat', sans-serif; }
   line-height: 1.2;
   border: 0;
   border-radius: 0;
-  background: #6b6b66 !important;
-  color: #fff;
+  background: var(--forest) !important;
+  color: var(--bg-white);
   cursor: pointer;
   display: block;
   text-align: center;
@@ -136,7 +166,7 @@ body { font-family: 'Montserrat', sans-serif; }
 .work-item-meta .basket-button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #b0b0aa !important;
+  background: var(--sage) !important;
 }
 .work-item-meta .basket-button:hover {
   opacity: 0.92;
@@ -145,8 +175,8 @@ body { font-family: 'Montserrat', sans-serif; }
   display: inline-block;
   margin-left: 0.5rem;
   padding: 0.15rem 0.45rem;
-  border: 1px solid #b0b0aa;
-  color: #6b6b66;
+  border: 1px solid var(--sage);
+  color: var(--forest);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.7rem;
@@ -155,7 +185,7 @@ body { font-family: 'Montserrat', sans-serif; }
 .work-item-meta .shipping-line {
   font-size: 0.92rem;
   margin-top: 0.7rem;
-  color: #3e3e3b;
+  color: var(--deep-forest);
 }
 .artworks-dropdown {
   position: relative;
@@ -181,8 +211,8 @@ body { font-family: 'Montserrat', sans-serif; }
   left: 50%;
   transform: translateX(-50%);
   min-width: 14rem;
-  background: #fff;
-  border: 1px solid #d9d9d6;
+  background: var(--bg-white);
+  border: 1px solid var(--stone);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
   padding: 0.35rem 0;
   display: none;
@@ -209,6 +239,14 @@ body { font-family: 'Montserrat', sans-serif; }
 #header nav ul li.artworks-dropdown:focus-within .artworks-arrow {
   transform: rotate(180deg);
 }
+/* this is to get rid of highlight when clicking, uncomment when needed */
+/* #header nav ul li a:focus:not(:focus-visible) {
+  background-color: transparent;
+}
+#header nav ul li a:focus-visible {
+  background-color: var(--sand);
+  outline: none;
+} */
 .gallery { display:flex; flex-wrap:wrap; gap:1rem }
 .gallery-item { width: calc(33.333% - 1rem); box-sizing:border-box }
 .gallery-item img{ width:100%; display:block }
@@ -227,8 +265,8 @@ body { font-family: 'Montserrat', sans-serif; }
   cursor: not-allowed;
 }
 .pagination { display:flex; gap:0.5rem; justify-content:center; margin-top:1.5rem }
-.pagination button { padding:0.5rem 0.75rem; border:1px solid #ddd; background:white; cursor:pointer }
-.pagination button.active { background:#222; color:white }
+.pagination button { padding:0.5rem 0.75rem; border:1px solid var(--stone); background: var(--bg-white); cursor:pointer }
+.pagination button.active { background: var(--deep-forest); color: var(--bg-white) }
 
 /* Ensure the gallery is centered and constrained like the original site */
 .main.style3 .gallery-div {
@@ -269,10 +307,10 @@ body { font-family: 'Montserrat', sans-serif; }
     justify-content: center;
     width: 2.2rem;
     height: 2.2rem;
-    border: 1px solid #d9d9d6;
+    border: 1px solid var(--stone);
     border-radius: 0.2rem;
-    background: #fff;
-    color: #333;
+    background: var(--bg-white);
+    color: var(--deep-forest);
     cursor: pointer;
   }
   .mobile-menu {
@@ -281,8 +319,8 @@ body { font-family: 'Montserrat', sans-serif; }
     right: 1rem;
     display: none;
     width: min(17rem, calc(100vw - 2rem));
-    background: #fff;
-    border: 1px solid #d9d9d6;
+    background: var(--bg-white);
+    border: 1px solid var(--stone);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     z-index: 40;
   }
@@ -311,7 +349,7 @@ body { font-family: 'Montserrat', sans-serif; }
   }
   .mobile-menu li a:hover,
   .mobile-artworks-trigger:hover {
-    background: #f2f2ef;
+    background: var(--bg-main);
   }
   .mobile-artworks-submenu {
     display: none;
