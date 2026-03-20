@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useCart } from '../context/CartContext'
@@ -6,10 +6,11 @@ import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { PRICE_LABELS } from '../utils/stripePrices'
+import { findArtwork, isLimitedEdition, isOriginal } from '../utils/artwork'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
-  const item = items.find((i) => i.id === workId && (!category || i.category === category))
+  const item = findArtwork(items, workId, category)
   const backPath = category ? `/artwork/${category}` : '/artwork'
   const galleryImages = useMemo(() => {
     if (!item) return []
@@ -27,12 +28,12 @@ export default function WorkPortfolioItem({ category }) {
 
   const cartItem = cartItems.find((cartItem) => cartItem.id === item?.id)
   const cartQuantity = cartItem?.quantity || 0
-  const isOriginal = item?.category === 'originals'
-  const isLimitedEdition = item?.category === 'limited-edition-prints'
-  const isAlreadyInCart = isOriginal && cartItems.some((cartItem) => cartItem.id === item?.id)
+  const original = isOriginal(item)
+  const limitedEdition = isLimitedEdition(item)
+  const isAlreadyInCart = original && cartItems.some((cartItem) => cartItem.id === item?.id)
   const isSoldOut = Boolean(availability?.soldOut)
-  const hasAvailabilityInfo = !isLimitedEdition || (!availabilityLoading && Boolean(availability))
-  const limitReachedInCart = isLimitedEdition &&
+  const hasAvailabilityInfo = !limitedEdition || (!availabilityLoading && Boolean(availability))
+  const limitReachedInCart = limitedEdition &&
     !availabilityLoading &&
     typeof availability?.available === 'number' &&
     cartQuantity >= availability.available
@@ -121,7 +122,7 @@ export default function WorkPortfolioItem({ category }) {
             disabled={!canPurchase || isSoldOut || limitReachedInCart}
             onClick={() => {
               if (isSoldOut || limitReachedInCart) return
-              if (isOriginal && isAlreadyInCart) {
+              if (original && isAlreadyInCart) {
                 setCartNotice('This work has already been added to your cart.')
                 return
               }
@@ -131,7 +132,7 @@ export default function WorkPortfolioItem({ category }) {
                 image: item.image,
                 category: item.category,
                 size: item.size,
-                maxQuantity: isLimitedEdition ? availability?.available : undefined,
+                maxQuantity: limitedEdition ? availability?.available : undefined,
               })
               if (result?.added) {
                 setCartNotice('')

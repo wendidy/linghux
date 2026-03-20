@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
+import { getArtworkBadgeLabel, getArtworkPath, getEditionLabel } from '../utils/artwork'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const filteredItems = useMemo(
@@ -17,22 +18,6 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
   const { availabilityById } = useAvailability(itemIds)
 
-  const makeItemPath = (itemId) => {
-    return category ? `/artwork/${category}/${itemId}` : `/artwork/work/${itemId}`
-  }
-
-  const badgeLabelFor = (item) => {
-    if (item.category === 'originals') return 'Original Watercolor'
-    if (item.category === 'limited-edition-prints') return 'Limited Edition'
-    return 'Open Edition Print'
-  }
-
-  const editionLabelFor = (item) => {
-    if (item.category !== 'limited-edition-prints') return ''
-    const cap = availabilityById[item.id]?.cap
-    return typeof cap === 'number' ? `Edition Size: ${cap}` : 'Limited edition'
-  }
-
   return (
     <section id="work" className="main style3">
       <div className="gallery-div">
@@ -42,20 +27,20 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         <div className="gallery product-grid">
           {filteredItems.map(item => (
             <article className="gallery-item product-card" key={item.id}>
-              <Link to={makeItemPath(item.id)} className="product-image-link">
+              <Link to={getArtworkPath(item.id, category)} className="product-image-link">
                 <img className="zoomable product-image" src={item.image} alt={item.title} />
               </Link>
               <div className="gallery-meta">
                 <div className="product-badge">
-                  <span>{badgeLabelFor(item)}</span>
+                  <span>{getArtworkBadgeLabel(item)}</span>
                   {availabilityById[item.id]?.soldOut && (
                     <span className="sold-out-badge">Sold out</span>
                   )}
                 </div>
-                <h3 className="title product-title">{item.title}</h3>
-                {item.category === 'limited-edition-prints' && (
+                <h3 className="title">{item.title}</h3>
+                {getEditionLabel(item, availabilityById[item.id]) && (
                   <div className="edition-info">
-                    <span>{editionLabelFor(item)}</span>
+                    <span>{getEditionLabel(item, availabilityById[item.id])}</span>
                   </div>
                 )}
                 <div className="meta-row">

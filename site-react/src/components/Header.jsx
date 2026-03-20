@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { ARTWORK_NAV_ITEMS } from '../utils/artwork'
 
 export default function Header(){
   const linkClass = ({isActive}) => isActive ? 'active' : ''
@@ -39,9 +40,11 @@ export default function Header(){
                 Artwork <i className="fas fa-chevron-down artworks-arrow" aria-hidden="true" />
               </a>
               <ul className="artworks-menu">
-                <li><Link to="/artwork/originals" onClick={closeArtworkDropdown}>Originals</Link></li>
-                <li><Link to="/artwork/limited-edition-prints" onClick={closeArtworkDropdown}>Limited Edition Prints</Link></li>
-                <li><Link to="/artwork/open-edition-prints" onClick={closeArtworkDropdown}>Open Edition Prints</Link></li>
+                {ARTWORK_NAV_ITEMS.map((item) => (
+                  <li key={item.category}>
+                    <Link to={`/artwork/${item.category}`} onClick={closeArtworkDropdown}>{item.label}</Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li><NavLink to="/about" className={linkClass}>About Me</NavLink></li>
@@ -72,9 +75,11 @@ export default function Header(){
                 <i className={`fas fa-chevron-${isMobileArtworkOpen ? 'up' : 'down'}`} aria-hidden="true" />
               </button>
               <ul className={`mobile-artworks-submenu${isMobileArtworkOpen ? ' is-open' : ''}`}>
-                <li><Link to="/artwork/originals" onClick={() => setIsMobileMenuOpen(false)}>Originals</Link></li>
-                <li><Link to="/artwork/limited-edition-prints" onClick={() => setIsMobileMenuOpen(false)}>Limited Edition Prints</Link></li>
-                <li><Link to="/artwork/open-edition-prints" onClick={() => setIsMobileMenuOpen(false)}>Open Edition Prints</Link></li>
+                {ARTWORK_NAV_ITEMS.map((item) => (
+                  <li key={item.category}>
+                    <Link to={`/artwork/${item.category}`} onClick={() => setIsMobileMenuOpen(false)}>{item.label}</Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>

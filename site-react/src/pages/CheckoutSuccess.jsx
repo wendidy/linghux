@@ -1,11 +1,11 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 export default function CheckoutSuccess() {
   const { clearCart } = useCart()
 
-  React.useEffect(() => {
+  useEffect(() => {
     clearCart()
   }, [clearCart])
 
@@ -19,4 +19,3 @@ export default function CheckoutSuccess() {
     </section>
   )
 }
-

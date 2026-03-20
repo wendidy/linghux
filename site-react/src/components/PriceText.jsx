@@ -1,4 +1,3 @@
-import React from 'react'
 import { priceLabel } from '../utils/stripePrices'
 
 export default function PriceText({

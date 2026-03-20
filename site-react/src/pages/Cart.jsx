@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
+import { getEditionLabel, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
 
 export default function Cart() {
   const {
@@ -58,17 +59,12 @@ export default function Cart() {
   }
 
   const availabilityLabelForItem = (item) => {
-    if (item.category !== 'limited-edition-prints') return ''
-    const availability = availabilityForItem(item)
-    if (typeof availability?.cap === 'number') {
-      return `Limited Edition, Edition Size: ${availability.cap}`
-    }
-    return 'Limited Edition'
+    return getEditionLabel(item, availabilityForItem(item))
   }
 
   const canIncreaseQuantity = (item) => {
-    if (item.category === 'open-edition-prints') return true
-    if (item.category !== 'limited-edition-prints') return false
+    if (isOpenEdition(item)) return true
+    if (!isLimitedEdition(item)) return false
     if (availabilityLoading) return false
 
     const availability = availabilityForItem(item)
@@ -132,10 +128,10 @@ export default function Cart() {
                   <img src={item.image} alt={item.title} className="cart-item-image" />
                   <div className="cart-item-body">
                     <h3>{item.title}</h3>
-                    {item.category === 'limited-edition-prints' && (
+                    {isLimitedEdition(item) && (
                       <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
                     )}
-                    {item.category === 'originals' ? (
+                    {isOriginal(item) ? (
                       <div className="cart-qty">
                         <span>Qty: {item.quantity}</span>
                       </div>

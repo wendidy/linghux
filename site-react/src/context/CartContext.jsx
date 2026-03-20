@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { items as catalogItems } from '../data/portfolio'
+import { isLimitedEdition, isOriginal } from '../utils/artwork'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
@@ -11,7 +12,7 @@ function normalizeCartItem(item) {
   const catalogItem = catalogItemById.get(item.id)
   const category = item.category || catalogItem?.category
   const size = item.size || catalogItem?.size
-  const quantity = category === 'originals'
+  const quantity = isOriginal(category)
     ? 1
     : (Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1)
   return {
@@ -55,12 +56,12 @@ export function CartProvider({ children }) {
   } = useStripePrices(itemIds)
 
   const addItem = (item) => {
-    const maxQuantity = item?.category === 'limited-edition-prints' && Number.isInteger(item.maxQuantity)
+    const maxQuantity = isLimitedEdition(item) && Number.isInteger(item.maxQuantity)
       ? item.maxQuantity
       : null
     const existing = items.find((existingItem) => existingItem.id === item?.id)
 
-    if (item?.category === 'originals') {
+    if (isOriginal(item)) {
       if (existing) {
         return { added: false, reason: 'already_in_cart' }
       }
@@ -78,7 +79,7 @@ export function CartProvider({ children }) {
     setItems((prev) => {
       const found = prev.find((p) => p.id === item.id)
       if (found) {
-        if (item?.category === 'originals') {
+        if (isOriginal(item)) {
           return prev
         }
         return prev.map((p) =>
@@ -106,7 +107,7 @@ export function CartProvider({ children }) {
     setItems((prev) =>
       prev.map((item) =>
         item.id === id
-          ? { ...item, quantity: item.category === 'originals' ? 1 : quantity }
+          ? { ...item, quantity: isOriginal(item) ? 1 : quantity }
           : item
       )
     )
