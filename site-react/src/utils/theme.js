@@ -1,9 +1,10 @@
 export const THEME_COLORS = {
-  bgMain: '#f6f6f4',
+  bgMain: '#eeefea',
   bgWhite: '#ffffff',
-  sage: '#a8b5a2',
-  forest: '#4f6f52',
-  deepForest: '#2f3e34',
-  sand: '#e6e2d8',
-  stone: '#c9c5bb',
+  ink: '#3b342f',
+  charcoal: '#524941',
+  surfaceSoft: '#e3d6cb',
+  surfaceMuted: '#d2c7bd',
+  accentSoft: '#d5beaf',
+  accentMain: '#cbab8d',
 }

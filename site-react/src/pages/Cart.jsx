@@ -57,6 +57,15 @@ export default function Cart() {
     return { ...price, unit_amount: price.unit_amount * item.quantity }
   }
 
+  const availabilityLabelForItem = (item) => {
+    if (item.category !== 'limited-edition-prints') return ''
+    const availability = availabilityForItem(item)
+    if (typeof availability?.cap === 'number') {
+      return `Limited Edition, Edition Size: ${availability.cap}`
+    }
+    return 'Limited Edition'
+  }
+
   const canIncreaseQuantity = (item) => {
     if (item.category === 'open-edition-prints') return true
     if (item.category !== 'limited-edition-prints') return false
@@ -106,7 +115,7 @@ export default function Cart() {
     <section className="cart-page">
       <div className="cart-wrap">
         <header>
-          <h2>Shopping Cart</h2>
+          <h2>Your Basket</h2>
         </header>
 
         {items.length === 0 ? (
@@ -115,20 +124,17 @@ export default function Cart() {
             <Link to="/artwork" className="button">Browse artwork</Link>
           </div>
         ) : (
-          <>
-            <div className="cart-list">
+          <div className="cart-layout">
+            <div className="cart-main">
+              <div className="cart-list">
               {items.map((item) => (
                 <article className="cart-item-row" key={item.id}>
                   <img src={item.image} alt={item.title} className="cart-item-image" />
                   <div className="cart-item-body">
                     <h3>{item.title}</h3>
-                    <p>
-                      <PriceText
-                        itemId={item.id}
-                        price={priceForItem(item)}
-                        loading={pricesLoading}
-                      />
-                    </p>
+                    {item.category === 'limited-edition-prints' && (
+                      <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
+                    )}
                     {item.category === 'originals' ? (
                       <div className="cart-qty">
                         <span>Qty: {item.quantity}</span>
@@ -147,8 +153,15 @@ export default function Cart() {
                       </div>
                     )}
                   </div>
-                  <div className="cart-item-actions">
-                    <strong>
+                  <div className="cart-item-prices">
+                    <span className="cart-item-unit-price">
+                      <PriceText
+                        itemId={item.id}
+                        price={priceForItem(item)}
+                        loading={pricesLoading}
+                      />
+                    </span>
+                    <strong className="cart-item-line-price">
                       <PriceText
                         itemId={item.id}
                         price={linePriceFor(item)}
@@ -156,30 +169,44 @@ export default function Cart() {
                         missingLabel="—"
                       />
                     </strong>
-                    <button type="button" onClick={() => removeItem(item.id)}>Remove</button>
+                    <button type="button" className="cart-remove" onClick={() => removeItem(item.id)}>Remove</button>
                   </div>
                 </article>
               ))}
+              </div>
+              <div className="cart-list-actions">
+                <button type="button" className="link-subtle" onClick={clearCart}>Clear basket</button>
+              </div>
             </div>
 
-            <div className="cart-summary">
-              <p>
-                <strong>Subtotal:</strong>{' '}
-                {pricesLoading
-                  ? 'Loading…'
-                  : (hasMissingPrice ? PRICE_LABELS.unavailable : formatCurrency(subtotal, cartCurrency))}
-              </p>
+            <aside className="cart-summary">
+              <h3>Summary</h3>
+              <div className="cart-notice">
+                Items in your basket are not reserved. Complete checkout to secure your artwork.
+              </div>
+              <div className="cart-summary-row">
+                <span>Subtotal</span>
+                <strong>
+                  {pricesLoading
+                    ? 'Loading…'
+                    : (hasMissingPrice ? PRICE_LABELS.unavailable : formatCurrency(subtotal, cartCurrency))}
+                </strong>
+              </div>
               <div className="cart-summary-actions">
-                <button type="button" className="button" onClick={clearCart}>Clear cart</button>
-                <button type="button" className="button primary" onClick={checkout} disabled={isCheckingOut}>
-                  {isCheckingOut ? 'Redirecting…' : 'Checkout with Stripe'}
+                <button type="button" className="checkout-primary" onClick={checkout} disabled={isCheckingOut}>
+                  {isCheckingOut ? 'Redirecting…' : 'Proceed to Secure Checkout'}
                 </button>
+              </div>
+              <div className="trust-badges">
+                <span className="trust-badge">Secure checkout</span>
+                {/* <span className="trust-badge">Insured shipping</span> */}
+                <span className="trust-badge">Certificate of authenticity included</span>
               </div>
               {pricesError && <p className="cart-error">{pricesError}</p>}
               {availabilityError && <p className="cart-error">{availabilityError}</p>}
               {error && <p className="cart-error">{error}</p>}
-            </div>
-          </>
+            </aside>
+          </div>
         )}
       </div>
     </section>
