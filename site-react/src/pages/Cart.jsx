@@ -131,11 +131,7 @@ export default function Cart() {
                     {isLimitedEdition(item) && (
                       <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
                     )}
-                    {isOriginal(item) ? (
-                      <div className="cart-qty">
-                        <span>Qty: {item.quantity}</span>
-                      </div>
-                    ) : (
+                    {!isOriginal(item) && (
                       <div className="cart-qty">
                         <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
                         <span>{item.quantity}</span>

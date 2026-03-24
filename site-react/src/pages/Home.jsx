@@ -1,4 +1,23 @@
+import { useEffect } from 'react'
+
 export default function Home(){
+  useEffect(() => {
+    const existing = document.querySelector('script[data-beehiiv-embed]')
+    if (existing) {
+      return undefined
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://subscribe-forms.beehiiv.com/embed.js'
+    script.async = true
+    script.dataset.beehiivEmbed = 'true'
+    document.body.appendChild(script)
+
+    return () => {
+      script.remove()
+    }
+  }, [])
+
   return (
     <>
       <section id="home" className="main style1 dark fullscreen">
@@ -10,41 +29,20 @@ export default function Home(){
         </div>
       </section>
 
-      <section className="newsletter">
-        <div id="mc_embed_shell">
-          <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css" />
-          <div id="mc_embed_signup" className="content">
-            <header id="mc_embed_signup_scroll">
-              <h3>Join my collectors list to receive early access to new paintings and limited edition releases</h3>
-            </header>
-            <div className="box">
-              <form action="https://linghux.us5.list-manage.com/subscribe/post?u=3dcbb24c74c83b0c00845905d&amp;id=ef71d4947b&amp;f_id=009c21ebf0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank">
-                <div className="fields">
-                  <div className="field">
-                    <label htmlFor="mce-EMAIL">Email Address <span className="asterisk">*</span></label>
-                    <input type="email" name="EMAIL" className="required email" id="mce-EMAIL" required defaultValue="" />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="mce-FNAME">First Name </label>
-                    <input type="text" name="FNAME" className="text" id="mce-FNAME" defaultValue="" />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="mce-LNAME">Last Name </label>
-                    <input type="text" name="LNAME" className="text" id="mce-LNAME" defaultValue="" />
-                  </div>
-                </div>
-                <div id="mce-responses" className="clear foot">
-                  <div className="response" id="mce-error-response" style={{display: 'none'}}></div>
-                  <div className="response" id="mce-success-response" style={{display: 'none'}}></div>
-                </div>
-                <div style={{position: 'absolute', left: '-5000px'}} aria-hidden="true">
-                  <input type="text" name="b_3dcbb24c74c83b0c00845905d_ef71d4947b" tabIndex={-1} defaultValue="" />
-                </div>
-                <ul className="actions special">
-                  <input type="submit" name="subscribe" id="mc-embedded-subscribe" className="button" value="Subscribe" />
-                </ul>
-              </form>
-            </div>
+      <section className="newsletter-section">
+        <div className="newsletter-wrap">
+          <h2 className="newsletter-title">
+            Join my collectors list for first access to new paintings and limited releases
+          </h2>
+          <div className="newsletter-frame-shell">
+            <iframe
+              src="https://subscribe-forms.beehiiv.com/7a8eb526-6862-430e-b8d2-51301982db42"
+              className="beehiiv-embed newsletter-frame"
+              data-test-id="beehiiv-embed"
+              scrolling="no"
+              loading="lazy"
+              title="Subscribe to my newsletter"
+            />
           </div>
         </div>
       </section>
