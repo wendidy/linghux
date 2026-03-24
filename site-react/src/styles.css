@@ -605,22 +605,21 @@ button:active {
   padding: 96px 24px;
 }
 .newsletter-wrap {
-  max-width: 920px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
   padding: 42px 56px;
   box-sizing: border-box;
   background: #ffffff;
   border: 1px solid #e6ddd3;
-  border-radius: 28px;
   box-shadow: 0 10px 30px rgba(47, 42, 38, 0.04);
 }
 .newsletter-title {
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto 32px;
   color: var(--ink, #2f2a26);
   font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.8rem, 3.3vw, 2.7rem);
   font-weight: 500;
   line-height: 1.15;
 }
@@ -676,7 +675,7 @@ button:active {
   }
   .newsletter-title {
     margin-bottom: 24px;
-    font-size: clamp(1.7rem, 4.4vw, 2.45rem);
+    font-size: clamp(1.55rem, 4vw, 2.1rem);
     line-height: 1.12;
   }
 }
@@ -723,7 +722,7 @@ button:active {
   }
   .newsletter-title {
     margin-bottom: 20px;
-    font-size: 1.7rem;
+    font-size: 1.45rem;
     line-height: 1.1;
   }
   .newsletter-frame-shell {
