@@ -16,6 +16,7 @@
 }
 
 body { font-family: 'Montserrat', sans-serif; background: var(--bg-main); color: var(--charcoal); padding-top: 0; }
+header { margin-bottom: 0; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .app-main { flex: 1; padding-bottom: 2.5rem; }
 .site-header-stack {
@@ -39,7 +40,11 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg-main); color:
   width: 100%;
   z-index: auto;
 }
-header#header { background: var(--bg-white); padding: 1rem 6em; border-bottom: 1px solid var(--surface-muted) }
+header#header { 
+  background: var(--bg-white); 
+  padding: 1rem 6em; 
+  border-bottom: 1px solid var(--surface-muted) 
+}
 .footer { background: var(--ink); color: var(--bg-white); padding:1rem; text-align:center }
 input[type=button],
 input[type=submit],
@@ -93,6 +98,10 @@ button:active {
   line-height: 1;
 }
 .portfolio-item { padding: 2rem }
+.about-section > .content {
+  width: min(58rem, calc(100% - 4rem)) !important;
+  max-width: 58rem;
+}
 .page-title {
   margin: 0 0 1rem;
   font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
@@ -681,6 +690,9 @@ button:active {
 }
 
 @media (max-width: 800px) {
+  .about-section > .content {
+    width: min(52rem, calc(100% - 2.5rem)) !important;
+  }
 	.gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
@@ -708,6 +720,9 @@ button:active {
 }
 
 @media (max-width: 480px) {
+  .about-section > .content {
+    width: calc(100% - 1.5rem) !important;
+  }
 	.gallery { grid-template-columns: 1fr }
   .page-title {
     font-size: 2.3rem;
@@ -763,7 +778,7 @@ button:active {
 }
 
 @media (max-width: 800px) {
-  header#header { padding: 0.75rem 1rem }
+  header#header { padding: 0 1rem }
   #header {
     flex-direction: row;
     align-items: center;
