@@ -1674,6 +1674,23 @@ body.is-touch .main {
   position: relative;
 }
 
+#one > .content,
+#two > .content {
+  width: 44%;
+}
+@media screen and (max-width: 1920px) {
+  #one > .content,
+  #two > .content {
+    width: 56%;
+  }
+}
+@media screen and (max-width: 1370px) {
+  #one > .content,
+  #two > .content {
+    width: 100%;
+  }
+}
+
 /* Contact */
 #contact {
   overflow: hidden;
@@ -1695,6 +1712,15 @@ body.is-touch .main {
   -webkit-transform: translateY(100%);
   -ms-transform: translateY(100%);
   transform: translateY(100%);
+}
+#contact button[type=submit] {
+  background-color: #4f8b48;
+}
+#contact button[type=submit]:hover {
+  background-color: #5a9953;
+}
+#contact button[type=submit]:active {
+  background-color: #44763f;
 }
 @media screen and (max-width: 736px) {
   #contact .box {
