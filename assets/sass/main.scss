@@ -87,6 +87,31 @@
 		position: relative;
 	}
 
+	#one,
+	#two {
+		> .content {
+			width: 44%;
+		}
+
+		@include breakpoint('<=xxlarge') {
+			> .content {
+				width: 48%;
+			}
+		}
+
+		@include breakpoint('<=xlarge') {
+			> .content {
+				width: 56%;
+			}
+		}
+
+		@include breakpoint('<=large') {
+			> .content {
+				width: 66%;
+			}
+		}
+	}
+
 /* Contact */
 
 	#contact {
@@ -103,6 +128,18 @@
 			.box {
 				@include vendor('transform', 'translateY(100%)');
 			}
+		}
+
+		button[type="submit"] {
+			background-color: #4f8b48;
+		}
+
+		button[type="submit"]:hover {
+			background-color: #5a9953;
+		}
+
+		button[type="submit"]:active {
+			background-color: #44763f;
 		}
 
 		@include breakpoint('<=small') {
