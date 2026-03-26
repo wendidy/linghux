@@ -1,16 +1,13 @@
+/*
+ Main SCSS — imports partials in a clear, top-down order.
+ Edit the SCSS files in this folder; `assets/css/main.css` is generated.
+*/
+
 @import 'libs/vars';
 @import 'libs/functions';
 @import 'libs/mixins';
 @import 'libs/vendor';
 @import 'libs/breakpoints';
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900');
-@import url('fontawesome-all.min.css');
-
-/*
-	Big Picture by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
 
 // Breakpoints.
 
@@ -34,13 +31,13 @@
 	@import 'components/box';
 	@import 'components/button';
 	@import 'components/form';
-	@import 'components/icon';
-	@import 'components/image';
-	@import 'components/list';
+	// components/icon (moved to assets/sass/unused/_icon.scss)
+	// components/image (moved to assets/sass/unused/_image.scss)
+	// components/list (moved to assets/sass/unused/_list.scss)
 	@import 'components/actions';
-	@import 'components/icons';
+	// components/icons (moved to assets/sass/unused/_icons.scss)
 	@import 'components/section';
-	@import 'components/table';
+	// components/table (moved to assets/sass/unused/_table.scss)
 	@import 'components/poptrox-popup';
 	@import 'components/gallery';
 

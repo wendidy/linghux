@@ -1,8 +1,3 @@
-/*
-	Big Picture by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
 
 (function($) {
 
@@ -97,14 +92,14 @@
 			// Hack: Adjust margins when 'small' activates.
 				breakpoints.on('>small', function() {
 					$gallery.each(function() {
-						$(this)[0]._poptrox.windowMargin = 50;
-					});
+							if ($(this)[0] && $(this)[0]._poptrox) $(this)[0]._poptrox.windowMargin = 50;
+						});
 				});
 
 				breakpoints.on('<=small', function() {
 					$gallery.each(function() {
-						$(this)[0]._poptrox.windowMargin = 5;
-					});
+							if ($(this)[0] && $(this)[0]._poptrox) $(this)[0]._poptrox.windowMargin = 5;
+						});
 				});
 
 		});
@@ -218,53 +213,102 @@
 
 })(jQuery);
 
-  const overlay = document.getElementById('overlay');
-  const zoomedImage = document.getElementById('zoomedImage');
-  const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+// Removed image overlay/zoom handlers so image clicks follow their anchor links.
 
+// Include loader: inject shared header/footer from /assets/includes/*.html
+(function() {
+	function injectHtml(target, html) {
+		if (!target) return;
+		target.innerHTML = html;
+	}
 
-const galleryImages = document.querySelectorAll('.zoomable');
+	function buildCandidates(relativePath) {
+		var candidates = [];
 
-let currentIndex = -1;
+		// absolute path from site root
+		candidates.push('/' + relativePath);
 
-// Open overlay and show clicked image
-galleryImages.forEach((img, index) => {
-  img.style.cursor = 'pointer';
-  img.addEventListener('click', () => {
-    currentIndex = index;
-    showImage(currentIndex);
-    overlay.classList.remove('hidden');
-  });
-});
+		// try origin-based absolute URL
+		try {
+			candidates.push(window.location.origin + '/' + relativePath);
+		} catch (e) {}
 
-function showImage(index) {
-  if (index < 0) {
-    index = galleryImages.length - 1; // loop to last
-  } else if (index >= galleryImages.length) {
-    index = 0; // loop to first
-  }
-  currentIndex = index;
-  zoomedImage.src = galleryImages[currentIndex].src;
-  zoomedImage.alt = galleryImages[currentIndex].alt || '';
-}
+		// try script base (where main.js is hosted)
+		var scripts = document.getElementsByTagName('script');
+		for (var i = 0; i < scripts.length; i++) {
+			var s = scripts[i].src || '';
+			if (s.indexOf('assets/js/main.js') !== -1) {
+				var base = s.slice(0, s.indexOf('assets/js/main.js'));
+				candidates.push(base + 'assets/includes/' + relativePath.split('/').pop());
+				break;
+			}
+		}
 
-// Prev button
-prevBtn.addEventListener('click', (e) => {
-  e.stopPropagation();  // prevent closing overlay
-  showImage(currentIndex - 1);
-});
+		// try a few relative depths (covers nested pages like portfolio/untitled-8)
+		candidates.push('assets/includes/' + relativePath.split('/').pop());
+		candidates.push('../assets/includes/' + relativePath.split('/').pop());
+		candidates.push('../../assets/includes/' + relativePath.split('/').pop());
+		candidates.push('../../../assets/includes/' + relativePath.split('/').pop());
 
-// Next button
-nextBtn.addEventListener('click', (e) => {
-  e.stopPropagation();  // prevent closing overlay
-  showImage(currentIndex + 1);
-});
+		// de-duplicate while keeping order
+		var seen = {};
+		return candidates.filter(function(c) {
+			if (!c) return false;
+			if (seen[c]) return false;
+			seen[c] = true;
+			return true;
+		});
+	}
 
-// Clicking outside the image closes overlay
-overlay.addEventListener('click', e => {
-  if (e.target === overlay) {
-    overlay.classList.add('hidden');
-    zoomedImage.src = '';
-  }
-});
+	function fetchFirst(candidates) {
+		return new Promise(function(resolve, reject) {
+			var i = 0;
+			function next() {
+				if (i >= candidates.length) return reject(new Error('All include fetches failed'));
+				var url = candidates[i++];
+				fetch(url, {cache: 'no-store'}).then(function(res) {
+					if (!res.ok) return next();
+					return res.text().then(function(text) { resolve({text: text, url: url}); });
+				}).catch(function() { next(); });
+			}
+			next();
+		});
+	}
+
+	function loadInclude(relativePath, selectorOrEl) {
+		var candidates = buildCandidates(relativePath);
+		fetchFirst(candidates).then(function(result) {
+			if (typeof selectorOrEl === 'string') {
+				var el = document.querySelector(selectorOrEl);
+				injectHtml(el, result.text);
+			} else if (selectorOrEl instanceof Element) {
+				injectHtml(selectorOrEl, result.text);
+			}
+		}).catch(function(err) {
+			console.warn('Include load failed for', relativePath, err);
+		});
+	}
+
+	function doIncludes() {
+		// Primary replacement: replace existing #header and .footer content
+		loadInclude('assets/includes/header.html', '#header');
+		var foot = document.querySelector('.footer');
+		if (foot) loadInclude('assets/includes/footer.html', foot);
+
+		// Support placeholders: <div data-include="header"></div>
+		document.querySelectorAll('[data-include="header"]').forEach(function(el) {
+			loadInclude('assets/includes/header.html', el);
+		});
+		document.querySelectorAll('[data-include="footer"]').forEach(function(el) {
+			loadInclude('assets/includes/footer.html', el);
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', doIncludes);
+	} else {
+		// DOM already ready — run immediately
+		doIncludes();
+	}
+
+})();

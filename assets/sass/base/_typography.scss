@@ -1,13 +1,9 @@
-///
-/// Big Picture by HTML5 UP
-/// html5up.net | @ajlkn
-/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-///
+
 
 /* Type */
 
 	body, input, textarea, select {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Lora', Georgia, 'Times New Roman', serif;
 		font-weight: _font(weight);
 		font-size: 18pt;
 		line-height: 1.75em;
@@ -37,6 +33,7 @@
 	}
 
 	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Spectral', Georgia, 'Times New Roman', serif;
 		font-weight: _font(weight-bold);
 		color: inherit;
 		// letter-spacing: -0.0325em;

@@ -1,75 +1,69 @@
-///
-/// Big Picture by HTML5 UP
-/// html5up.net | @ajlkn
-/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-///
 
 /* Gallery */
 
-.gallery-div {
-	margin: 1em;
-}
+		/* Gallery */
 
-	.gallery {
-		column-count: 3;        // number of columns
-		margin-top: 3em;
-		.gallery-item {
-			break-inside: avoid;
-			margin: 0.5em;
-				img {
-					width: 100%;
+		.gallery-div {
+			margin: 1em;
+		}
+
+		.gallery {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+			margin-top: 3em;
+
+			.gallery-item {
+				margin: 0;
+
+				a {
 					display: block;
-        			border-radius: 6px;
-					transition: transform 0.2s;
-					&:hover {
-						transform: scale(1.03);
-					  }
-				}			
-		}
+					aspect-ratio: 2 / 3;
+					width: 100%;
+					/* solid background */
+					background: #f6f6f4;
+					/* no rounded corners */
+					border-radius: 0;
+					overflow: hidden;
+					box-sizing: border-box;
+					padding: 1.2rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 
-		&.inactive {
-			article {
-				opacity: 0;
+					img {
+						max-width: 100%;
+						max-height: 100%;
+						width: auto;
+						height: auto;
+						object-fit: contain;
+						display: block;
+						transition: transform 0.18s ease;
+					}
 
-				&.from-left {
-					@include vendor('transform', 'translateX(-14em)');
+					&:hover img {
+						transform: scale(1.02);
+					}
 				}
 
-				&.from-right {
-					@include vendor('transform', 'translateX(14em)');
-				}
-
-				&.from-top {
-					@include vendor('transform', 'translateY(-7em)');
-				}
-
-				&.from-bottom {
-					@include vendor('transform', 'translateY(7em)');
+				.gallery-meta {
+					margin-top: 0.5rem;
+					text-align: left;
 				}
 			}
-		}
 
-		@include breakpoint('<=xsmall') {
-			@include vendor('flex-wrap', 'nowrap');
-			@include vendor('flex-direction', 'column');
-
-			article {
-				width: 100%;
+			@include breakpoint('<=xsmall') {
+				.gallery {
+					grid-template-columns: 1fr;
+				}
 			}
-		}
-	}
 
-	@media (max-width: 900px) {
-		.gallery {
-		  column-count: 2;
-		}
-	  }
-	  
-	  @media (max-width: 500px) {
-		.gallery {
-		  column-count: 1;
-		}
-	}
+			@media (max-width: 900px) {
+				.gallery {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+			}
 
 	.overlayImg {
 		position: fixed;
