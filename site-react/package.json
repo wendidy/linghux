@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.4",
@@ -17,6 +20,9 @@
     "stripe": "^17.5.0"
   },
   "devDependencies": {
+    "@vitest/ui": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "vitest": "^1.0.0",
     "vite": "^7.3.1"
   }
 }
