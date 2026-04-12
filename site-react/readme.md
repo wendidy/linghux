@@ -35,12 +35,13 @@ ___
   Vercel → Environment Variables → STRIPE_SECRET_KEY
   ```
 
+TODO: Currently webhook is pointing to https://linghux-u7a0p5aju-linghuxiaolhx-4206s-projects.vercel.app/api/stripe-webhook, need to change it to the real website once the domain is set up with vercel
 ---
 
 ## DB
-Neon is only storing limited-edition inventory state in this codebase.
+Neon is storing limited-edition inventory state and completed Stripe orders in this codebase.
 
-Specifically, db.js (line 18) creates two tables:
+Specifically, `api/db.js` creates these tables:
 
 inventory
 
@@ -56,6 +57,74 @@ product_id
 quantity
 status
 created_at
+
+orders
+
+id
+payment_intent_id
+customer_email
+customer_name
+customer_phone
+shipping_name
+shipping_phone
+shipping_address
+billing_address
+currency
+amount_subtotal
+amount_total
+payment_status
+notified_at
+notification_error
+created_at
+updated_at
+
+order_items
+
+id
+order_id
+price_id
+product_id
+title
+quantity
+unit_amount
+amount_subtotal
+amount_total
+currency
+product_metadata
+created_at
+
+## Order Notifications
+
+Completed orders are handled by `/api/stripe-webhook`.
+
+Flow:
+
+1. Stripe Checkout completes payment.
+2. Vercel receives the `checkout.session.completed` webhook.
+3. The webhook finalizes reserved inventory.
+4. The webhook stores the order and its line items in Neon.
+5. The webhook emails the order details to you through Resend.
+
+Required Vercel environment variables for notifications:
+
+* `RESEND_API_KEY`
+* `ORDER_NOTIFICATION_EMAIL_TO`
+* `ORDER_NOTIFICATION_EMAIL_FROM`
+
+Suggested values:
+
+* `ORDER_NOTIFICATION_EMAIL_TO=you@your-inbox.com` or your preferred inbox
+* `ORDER_NOTIFICATION_EMAIL_FROM=orders@linghux.com`
+
+The order email includes:
+
+* customer name
+* customer email
+* customer phone
+* shipping address
+* billing address
+* items ordered
+* paid total
 
 ## 📬 Newsletter (Beehiiv)
 

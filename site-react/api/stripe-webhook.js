@@ -1,5 +1,11 @@
 import Stripe from 'stripe'
 import { finalizeReservations, releaseReservations } from './inventory.js'
+import {
+  markOrderNotificationFailed,
+  markOrderNotificationSent,
+  upsertCompletedOrder,
+} from './orders.js'
+import { sendOrderNotification } from './orderNotifications.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -48,6 +54,23 @@ export default async function handler(req, res) {
       const session = event.data.object
       const reservationIds = parseReservationIds(session.metadata)
       await finalizeReservations(reservationIds)
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+        limit: 100,
+        expand: ['data.price.product'],
+      })
+      const order = await upsertCompletedOrder(session, lineItems)
+
+      if (!order.notifiedAt) {
+        try {
+          const notification = await sendOrderNotification(order)
+          if (notification.sent) {
+            await markOrderNotificationSent(order.id)
+          }
+        } catch (error) {
+          await markOrderNotificationFailed(order.id, error.message)
+          throw error
+        }
+      }
     }
 
     if (event.type === 'checkout.session.expired') {

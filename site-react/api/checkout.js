@@ -90,6 +90,9 @@ export default async function handler(req, res) {
       success_url: `${baseUrl}/success`,
       cancel_url: `${baseUrl}/cancel`,
       billing_address_collection: 'required',
+      phone_number_collection: {
+        enabled: true,
+      },
       shipping_address_collection: {
         allowed_countries: ['US', 'CA'],
       },
