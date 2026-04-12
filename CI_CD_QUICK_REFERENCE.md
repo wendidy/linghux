@@ -33,10 +33,10 @@ Your tests now run automatically on every commit.
 
 ## How It Works
 
-Every time you push code or create a PR:
+Every time you push code to **any branch** or create a PR:
 
 ```
-1. Your commit arrives
+1. Your commit arrives (on any branch)
    ↓
 2. GitHub detects changes to /site-react/api/
    ↓
@@ -114,8 +114,8 @@ Your workflow tests:
 ## Workflow Details
 
 ### When It Triggers
-- ✅ Push to `main` or `develop` branches
-- ✅ Pull requests to `main` or `develop`
+- ✅ Push to **any branch**
+- ✅ Pull requests to **any branch**
 - ✅ Changes to API code or dependencies
 - ✅ Manual trigger via Actions tab
 

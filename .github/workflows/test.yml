@@ -2,7 +2,6 @@ name: Test API Services
 
 on:
   push:
-    branches: [main, develop]
     paths:
       - 'site-react/api/**'
       - 'site-react/package.json'
@@ -10,7 +9,6 @@ on:
       - '.github/workflows/test.yml'
 
   pull_request:
-    branches: [main, develop]
     paths:
       - 'site-react/api/**'
       - 'site-react/package.json'

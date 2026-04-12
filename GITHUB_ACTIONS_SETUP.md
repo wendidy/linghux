@@ -9,8 +9,8 @@ I've created a GitHub Actions workflow that automatically runs your tests on eve
 This workflow:
 
 1. **Triggers on:**
-   - Push to `main` or `develop` branches
-   - Pull requests to `main` or `develop` branches
+   - Push to **any branch**
+   - **Any** pull request (to any branch)
    - Changes to API code, dependencies, or the workflow itself
    - Manual trigger (via GitHub Actions UI)
 
@@ -31,7 +31,7 @@ This workflow:
 
 ## How It Works
 
-### On Every Push to Main/Develop:
+### On Every Push to Any Branch:
 ```
 Your Commit
     ↓
@@ -132,8 +132,8 @@ strategy:
     node-version: [18.x, 20.x]  # Add or remove versions here
 ```
 
-### Only Runs When Needed
-The workflow only triggers when API code changes:
+### Runs on All Branches & PRs
+The workflow triggers on all branches and all pull requests when these files change:
 
 ```yaml
 paths:
@@ -143,7 +143,7 @@ paths:
   - '.github/workflows/test.yml'
 ```
 
-This saves GitHub Actions minutes. It won't re-run for unrelated changes.
+This ensures every feature branch, bug fix, and PR gets tested before merging. It only re-runs for relevant changes (saves GitHub Actions minutes).
 
 ---
 
