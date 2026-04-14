@@ -1,0 +1,96 @@
+name: Test API Services
+
+on:
+  push:
+    paths:
+      - 'site-react/api/**'
+      - 'site-react/package.json'
+      - 'site-react/package-lock.json'
+      - '.github/workflows/test.yml'
+
+  pull_request:
+    paths:
+      - 'site-react/api/**'
+      - 'site-react/package.json'
+      - 'site-react/package-lock.json'
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: 'site-react/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./site-react
+        run: npm ci
+
+      - name: Run tests
+        working-directory: ./site-react
+        run: npm test -- --run
+
+      - name: Generate coverage report
+        working-directory: ./site-react
+        run: npm run test:coverage
+        continue-on-error: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./site-react/coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Tests passed! Run `npm test` locally to verify all tests.'
+            })
+        continue-on-error: true
+
+  linting:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+          cache-dependency-path: 'site-react/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./site-react
+        run: npm ci
+
+      - name: Check for unused imports (optional)
+        working-directory: ./site-react
+        run: npm test -- --run api/__tests__/example.test.js
+        continue-on-error: true

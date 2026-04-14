@@ -16,8 +16,10 @@ export async function reserveInventory(requests) {
     try {
       for (const request of normalized) {
         const cap = Number.parseInt(request.cap, 10)
-        const quantity = Number.parseInt(request.quantity, 10)
         if (!Number.isInteger(cap) || cap <= 0) continue
+        
+        if (typeof request.quantity !== 'number') continue
+        const quantity = Number.parseInt(request.quantity, 10)
         if (!Number.isInteger(quantity) || quantity <= 0) continue
 
         await client.query(

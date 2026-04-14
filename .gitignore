@@ -19,3 +19,12 @@ yarn-error.log*
 .env.local
 .vercel
 .env*.local
+
+# Test coverage
+coverage/
+site-react/coverage/
+*.lcov
+
+# Test outputs
+.vitest/
+site-react/.vitest/
