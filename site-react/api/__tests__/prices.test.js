@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import handler from '../prices.js'
+
+// Set environment variable before importing handler
+process.env.STRIPE_SECRET_KEY = 'sk_test_mock_key'
 
 // Mock stripeProducts
 vi.mock('../stripeProducts.js', () => ({
@@ -19,6 +21,20 @@ vi.mock('../stripeProducts.js', () => ({
   }),
 }))
 
+// Mock Stripe before importing handler
+vi.mock('stripe', () => ({
+  default: vi.fn(() => ({
+    products: {
+      search: vi.fn(),
+    },
+    prices: {
+      retrieve: vi.fn(),
+      list: vi.fn(),
+    },
+  })),
+}))
+
+import handler from '../prices.js'
 import { fetchPricesByItemIds, serializePrice } from '../stripeProducts.js'
 
 describe('Prices API Handler', () => {

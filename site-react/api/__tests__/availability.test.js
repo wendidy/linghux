@@ -1,13 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import handler from '../availability.js'
+
+// Set environment before importing handler
+process.env.STRIPE_SECRET_KEY = 'sk_test_mock_key'
+
+// Create mock instance before vi.mock so it's reused
+const { mockStripeInstance } = vi.hoisted(() => {
+  return {
+    mockStripeInstance: {
+      products: {
+        retrieve: vi.fn(),
+      },
+    },
+  }
+})
 
 // Mock Stripe and database
 vi.mock('stripe', () => ({
-  default: vi.fn(() => ({
-    products: {
-      retrieve: vi.fn(),
-    },
-  })),
+  default: vi.fn(() => mockStripeInstance),
 }))
 
 vi.mock('../stripeProducts.js', () => ({
@@ -19,43 +28,47 @@ vi.mock('../stripeProducts.js', () => ({
 }))
 
 vi.mock('../db.js', () => ({
-  withClient: vi.fn(async (callback) => {
-    return callback({
-      query: vi.fn(async (sql, params) => {
-        if (sql.includes('SELECT product_id, cap, sold, reserved')) {
-          return {
-            rows: [
-              {
-                product_id: params[0]?.[0],
-                cap: 100,
-                sold: 10,
-                reserved: 5,
-              },
-            ],
-          }
-        }
-        return { rows: [] }
-      }),
-    })
-  }),
+  withClient: vi.fn(),
 }))
 
+import handler from '../availability.js'
 import { fetchPricesByItemIds, normalizeItemIds } from '../stripeProducts.js'
+import { withClient } from '../db.js'
 import Stripe from 'stripe'
 
 describe('Availability API Handler', () => {
-  let req, res, mockStripe
+  let req, res
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    mockStripe = Stripe()
-    mockStripe.products.retrieve.mockResolvedValue({
+    mockStripeInstance.products.retrieve.mockResolvedValue({
       id: 'prod_1',
       name: 'Test Product',
       metadata: {
         edition_cap: '100',
       },
+    })
+
+    // Default db mock behavior
+    withClient.mockImplementation(async (callback) => {
+      return callback({
+        query: vi.fn(async (sql, params) => {
+          if (sql.includes('SELECT product_id, cap, sold, reserved')) {
+            return {
+              rows: [
+                {
+                  product_id: params[0]?.[0],
+                  cap: 100,
+                  sold: 10,
+                  reserved: 5,
+                },
+              ],
+            }
+          }
+          return { rows: [] }
+        }),
+      })
     })
 
     req = {
@@ -179,6 +192,11 @@ describe('Availability API Handler', () => {
           ],
         ])
       )
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce({
+        id: 'prod_1',
+        name: 'Test Product',
+        metadata: {}, // No edition_cap
+      })
 
       await handler(req, res)
 
@@ -199,6 +217,7 @@ describe('Availability API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', createPriceEntry()]])
       )
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(mockProduct())
 
       await handler(req, res)
 
@@ -247,6 +266,9 @@ describe('Availability API Handler', () => {
           ['item_2', createPriceEntry('prod_2')],
         ])
       )
+      mockStripeInstance.products.retrieve
+        .mockResolvedValueOnce(mockProduct('prod_1'))
+        .mockResolvedValueOnce(mockProduct('prod_2'))
 
       await handler(req, res)
 
@@ -295,9 +317,9 @@ describe('Availability API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', createPriceEntry()]])
       )
-      vi.doMock('../db.js', () => ({
-        withClient: vi.fn().mockRejectedValueOnce(new Error('DB error')),
-      }))
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(mockProduct())
+
+      withClient.mockRejectedValueOnce(new Error('DB error'))
 
       await handler(req, res)
 

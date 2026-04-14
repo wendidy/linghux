@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { fetchProductsByItemIds } from '../stripeProducts.js'
+import { fetchPricesByItemIds } from '../stripeProducts.js'
 
 describe('Stripe Products', () => {
   let mockStripe
@@ -34,15 +34,15 @@ describe('Stripe Products', () => {
     product: 'prod_test_1',
   })
 
-  describe('fetchProductsByItemIds', () => {
-    it('should fetch products by item IDs', async () => {
+  describe('fetchPricesByItemIds', () => {
+    it('should fetch products and prices by item IDs', async () => {
       const product = mockProduct('prod_test_1')
       mockStripe.products.search.mockResolvedValueOnce({
         data: [product],
       })
       mockStripe.prices.retrieve.mockResolvedValueOnce(mockPrice())
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(result.get('item-1')).toEqual({
         product: expect.any(Object),
@@ -51,7 +51,7 @@ describe('Stripe Products', () => {
     })
 
     it('should return empty map for empty item IDs', async () => {
-      const result = await fetchProductsByItemIds(mockStripe, [])
+      const result = await fetchPricesByItemIds(mockStripe, [])
 
       expect(result).toBeInstanceOf(Map)
       expect(result.size).toBe(0)
@@ -59,7 +59,7 @@ describe('Stripe Products', () => {
     })
 
     it('should handle null item IDs', async () => {
-      const result = await fetchProductsByItemIds(mockStripe, [null, undefined, ''])
+      const result = await fetchPricesByItemIds(mockStripe, [null, undefined, ''])
 
       expect(result.size).toBe(0)
     })
@@ -71,7 +71,7 @@ describe('Stripe Products', () => {
       })
       mockStripe.prices.retrieve.mockResolvedValueOnce(mockPrice())
 
-      await fetchProductsByItemIds(mockStripe, ['item-1', 'item-1', 'item-1'])
+      await fetchPricesByItemIds(mockStripe, ['item-1', 'item-1', 'item-1'])
 
       expect(mockStripe.products.search).toHaveBeenCalledOnce()
     })
@@ -81,7 +81,7 @@ describe('Stripe Products', () => {
         data: [],
       })
 
-      await fetchProductsByItemIds(mockStripe, ['item"with"quotes', 'item\\with\\backslash'])
+      await fetchPricesByItemIds(mockStripe, ['item"with"quotes', 'item\\with\\backslash'])
 
       const calls = mockStripe.products.search.mock.calls
       expect(calls[0][0].query).toContain('item\\"with\\"quotes')
@@ -93,7 +93,7 @@ describe('Stripe Products', () => {
         data: [],
       })
 
-      const result = await fetchProductsByItemIds(mockStripe, ['non-existent'])
+      const result = await fetchPricesByItemIds(mockStripe, ['non-existent'])
 
       expect(result.get('non-existent')).toEqual({
         product: null,
@@ -111,7 +111,7 @@ describe('Stripe Products', () => {
         data: [product],
       })
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(result.get('item-1').price).toEqual(price)
       expect(mockStripe.prices.retrieve).not.toHaveBeenCalled()
@@ -125,7 +125,7 @@ describe('Stripe Products', () => {
       })
       mockStripe.prices.retrieve.mockResolvedValueOnce(price)
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(mockStripe.prices.retrieve).toHaveBeenCalledWith('price_test_1')
       expect(result.get('item-1').price).toEqual(price)
@@ -144,7 +144,7 @@ describe('Stripe Products', () => {
         data: [price],
       })
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(mockStripe.prices.list).toHaveBeenCalledWith({
         product: 'prod_test_1',
@@ -166,7 +166,7 @@ describe('Stripe Products', () => {
         data: [],
       })
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(result.get('item-1').price).toBeNull()
     })
@@ -177,7 +177,7 @@ describe('Stripe Products', () => {
       )
 
       await expect(
-        fetchProductsByItemIds(mockStripe, ['item-1'])
+        fetchPricesByItemIds(mockStripe, ['item-1'])
       ).rejects.toThrow('Stripe API error')
     })
 
@@ -191,7 +191,7 @@ describe('Stripe Products', () => {
       )
 
       await expect(
-        fetchProductsByItemIds(mockStripe, ['item-1'])
+        fetchPricesByItemIds(mockStripe, ['item-1'])
       ).rejects.toThrow('Price not found')
     })
 
@@ -207,7 +207,7 @@ describe('Stripe Products', () => {
         .mockResolvedValueOnce(mockPrice('price_1'))
         .mockResolvedValueOnce(mockPrice('price_2'))
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1', 'item-2'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1', 'item-2'])
 
       expect(result.size).toBe(2)
       expect(result.get('item-1')).toBeDefined()
@@ -227,7 +227,7 @@ describe('Stripe Products', () => {
       })
       mockStripe.prices.retrieve.mockResolvedValueOnce(mockPrice())
 
-      const result = await fetchProductsByItemIds(mockStripe, ['item-1'])
+      const result = await fetchPricesByItemIds(mockStripe, ['item-1'])
 
       expect(result.get('item-1').product.metadata).toEqual({
         collection: 'Spring 2024',

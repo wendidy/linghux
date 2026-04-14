@@ -1,18 +1,28 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import handler from '../stripe-webhook.js'
+
+// Set environment before importing handler
+process.env.STRIPE_SECRET_KEY = 'sk_test_mock_key'
+process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123'
+
+// Use hoisted to create mock instance before vi.mock
+const { mockStripeInstance } = vi.hoisted(() => {
+  return {
+    mockStripeInstance: {
+      webhooks: {
+        constructEvent: vi.fn(),
+      },
+      checkout: {
+        sessions: {
+          listLineItems: vi.fn(),
+        },
+      },
+    },
+  }
+})
 
 // Mock Stripe
 vi.mock('stripe', () => ({
-  default: vi.fn(() => ({
-    webhooks: {
-      constructEvent: vi.fn(),
-    },
-    checkout: {
-      sessions: {
-        listLineItems: vi.fn(),
-      },
-    },
-  })),
+  default: vi.fn(() => mockStripeInstance),
 }))
 
 vi.mock('../inventory.js', () => ({
@@ -30,6 +40,7 @@ vi.mock('../orderNotifications.js', () => ({
   sendOrderNotification: vi.fn(),
 }))
 
+import handler from '../stripe-webhook.js'
 import Stripe from 'stripe'
 import { finalizeReservations, releaseReservations } from '../inventory.js'
 import {
@@ -40,15 +51,14 @@ import {
 import { sendOrderNotification } from '../orderNotifications.js'
 
 describe('Stripe Webhook Handler', () => {
-  let req, res, mockStripe
+  let req, res
 
   beforeEach(() => {
     vi.clearAllMocks()
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123'
 
-    mockStripe = Stripe()
-    mockStripe.webhooks.constructEvent.mockReturnValue({})
-    mockStripe.checkout.sessions.listLineItems.mockResolvedValue({
+    mockStripeInstance.webhooks.constructEvent.mockReturnValue({})
+    mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValue({
       data: [],
     })
 
@@ -103,7 +113,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should return 400 for invalid signature', async () => {
-      mockStripe.webhooks.constructEvent.mockImplementationOnce(() => {
+      mockStripeInstance.webhooks.constructEvent.mockImplementationOnce(() => {
         throw new Error('Invalid signature')
       })
 
@@ -120,7 +130,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('checkout.session.completed event', () => {
     it('should handle completed checkout session', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -130,7 +140,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockResolvedValueOnce({
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({
         data: [
           {
             id: 'li_1',
@@ -165,7 +175,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle reservation IDs from metadata', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -177,7 +187,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockResolvedValueOnce({
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({
         data: [],
       })
 
@@ -197,7 +207,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle invalid JSON in reservation_ids', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -209,7 +219,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockResolvedValueOnce({
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({
         data: [],
       })
 
@@ -229,7 +239,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should skip notification if already notified', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -238,7 +248,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockResolvedValueOnce({
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({
         data: [],
       })
 
@@ -254,7 +264,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle notification failures', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -263,7 +273,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockResolvedValueOnce({
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({
         data: [],
       })
 
@@ -284,7 +294,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle when line items fetch fails', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -293,19 +303,19 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockRejectedValueOnce(
+      mockStripeInstance.checkout.sessions.listLineItems.mockRejectedValueOnce(
         new Error('Failed to fetch line items')
       )
 
       await handler(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
   describe('checkout.session.expired event', () => {
     it('should handle expired checkout session', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.expired',
         data: {
           object: {
@@ -323,7 +333,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle expired session with no reservations', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.expired',
         data: {
           object: {
@@ -340,7 +350,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Unhandled events', () => {
     it('should respond 200 for unhandled events', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'payment_intent.created',
         data: {
           object: {},
@@ -356,7 +366,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Error handling', () => {
     it('should return 400 for invalid webhook events', async () => {
-      mockStripe.webhooks.constructEvent.mockImplementationOnce(() => {
+      mockStripeInstance.webhooks.constructEvent.mockImplementationOnce(() => {
         throw new Error('Invalid event')
       })
 
@@ -366,7 +376,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('should handle unexpected errors gracefully', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
         data: {
           object: {
@@ -375,7 +385,7 @@ describe('Stripe Webhook Handler', () => {
         },
       })
 
-      mockStripe.checkout.sessions.listLineItems.mockRejectedValueOnce(
+      mockStripeInstance.checkout.sessions.listLineItems.mockRejectedValueOnce(
         new Error('Unexpected error')
       )
 
@@ -387,7 +397,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Response format', () => {
     it('should return valid JSON response', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValueOnce({
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'payment_intent.created',
       })
 

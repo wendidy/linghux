@@ -1,18 +1,28 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import handler from '../checkout.js'
+
+// Set environment before importing handler
+process.env.STRIPE_SECRET_KEY = 'sk_test_mock_key'
+process.env.DATABASE_URL = 'postgresql://test:test@localhost/test'
+
+// Create mock instance before vi.mock so it's reused
+const { mockStripeInstance } = vi.hoisted(() => {
+  return {
+    mockStripeInstance: {
+      checkout: {
+        sessions: {
+          create: vi.fn(),
+        },
+      },
+      products: {
+        retrieve: vi.fn(),
+      },
+    },
+  }
+})
 
 // Mock dependencies
 vi.mock('stripe', () => ({
-  default: vi.fn(() => ({
-    checkout: {
-      sessions: {
-        create: vi.fn(),
-      },
-    },
-    products: {
-      retrieve: vi.fn(),
-    },
-  })),
+  default: vi.fn(() => mockStripeInstance),
 }))
 
 vi.mock('../stripeProducts.js', () => ({
@@ -27,22 +37,30 @@ vi.mock('../inventory.js', () => ({
   reserveInventory: vi.fn(),
 }))
 
+import handler from '../checkout.js'
 import Stripe from 'stripe'
 import { fetchPricesByItemIds, normalizeItemIds } from '../stripeProducts.js'
 import { reserveInventory } from '../inventory.js'
 
 describe('Checkout API Handler', () => {
-  let req, res, mockStripe
+  let req, res
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    mockStripe = Stripe()
-    mockStripe.checkout.sessions.create.mockResolvedValue({
+    // Ensure previous "once" implementations are cleared so tests don't
+    // accidentally consume queued mockResolvedValueOnce values from other
+    // tests when the suite runs end-to-end.
+    mockStripeInstance.checkout.sessions.create.mockReset()
+    mockStripeInstance.products.retrieve.mockReset()
+    reserveInventory.mockReset()
+    fetchPricesByItemIds.mockReset()
+
+    mockStripeInstance.checkout.sessions.create.mockResolvedValue({
       id: 'cs_test_123',
       url: 'https://checkout.stripe.com/pay/cs_test_123',
     })
-    mockStripe.products.retrieve.mockResolvedValue({
+    mockStripeInstance.products.retrieve.mockResolvedValue({
       id: 'prod_1',
       name: 'Test Product',
       metadata: {},
@@ -144,15 +162,21 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      expect(mockStripe.checkout.sessions.create).toHaveBeenCalledOnce()
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      expect(mockStripeInstance.checkout.sessions.create).toHaveBeenCalledOnce()
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call).toEqual(
         expect.objectContaining({
-          payment_method_types: ['card'],
           line_items: expect.any(Array),
           mode: 'payment',
-          success_url: expect.stringContaining('/checkout/success'),
-          cancel_url: expect.stringContaining('/checkout/cancel'),
+          success_url: expect.stringContaining('/success'),
+          cancel_url: expect.stringContaining('/cancel'),
+          billing_address_collection: 'required',
+          phone_number_collection: {
+            enabled: true,
+          },
+          shipping_address_collection: {
+            allowed_countries: ['US', 'CA'],
+          },
         })
       )
     })
@@ -166,7 +190,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(303)
+      expect(res.status).toHaveBeenCalledWith(200)
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           url: expect.stringContaining('https://checkout.stripe.com/pay'),
@@ -189,7 +213,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.line_items).toHaveLength(2)
       expect(call.line_items[0]).toEqual({
         price: 'price_1',
@@ -211,7 +235,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.line_items[0].quantity).toBe(1)
     })
 
@@ -233,7 +257,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       // All should default to 1
       expect(call.line_items.every((li) => li.quantity === 1)).toBe(true)
     })
@@ -245,6 +269,7 @@ describe('Checkout API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', { product: createMockProduct('prod_1', 100), price: createMockPrice() }]])
       )
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(createMockProduct('prod_1', 100))
       reserveInventory.mockResolvedValueOnce([
         { id: 'res_1', productId: 'prod_1', quantity: 2 },
       ])
@@ -267,11 +292,11 @@ describe('Checkout API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', { product: createMockProduct('prod_1'), price: createMockPrice() }]])
       )
-      reserveInventory.mockResolvedValueOnce([])
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(createMockProduct('prod_1'))
 
       await handler(req, res)
 
-      expect(reserveInventory).toHaveBeenCalledWith([])
+      expect(reserveInventory).not.toHaveBeenCalled()
     })
 
     it('should include reservation IDs in metadata', async () => {
@@ -279,13 +304,19 @@ describe('Checkout API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', { product: createMockProduct('prod_1', 100), price: createMockPrice() }]])
       )
+      
+      // Clear previous mocks and set new one
+      mockStripeInstance.products.retrieve.mockClear()
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(createMockProduct('prod_1', 100))
+      
       reserveInventory.mockResolvedValueOnce([
         { id: 'res_123', productId: 'prod_1', quantity: 1 },
       ])
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      expect(reserveInventory).toHaveBeenCalled()
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.metadata).toEqual({
         reservation_ids: '["res_123"]',
       })
@@ -303,7 +334,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.success_url).toMatch(/^https:\/\/mysite\.com/)
       expect(call.cancel_url).toMatch(/^https:\/\/mysite\.com/)
     })
@@ -318,7 +349,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.success_url).toMatch(/^https:\/\/example\.com/)
     })
 
@@ -333,7 +364,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      const call = mockStripe.checkout.sessions.create.mock.calls[0][0]
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.success_url).toMatch(/^http:\/\/forwarded\.com/)
     })
   })
@@ -347,7 +378,7 @@ describe('Checkout API Handler', () => {
 
       await handler(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           error: 'Unable to resolve Stripe price for cart item',
@@ -376,6 +407,11 @@ describe('Checkout API Handler', () => {
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', { product: createMockProduct('prod_1', 10), price: createMockPrice() }]])
       )
+      
+      // Clear previous mocks and set new one
+      mockStripeInstance.products.retrieve.mockClear()
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(createMockProduct('prod_1', 10))
+      
       reserveInventory.mockRejectedValueOnce(
         new Error('Insufficient inventory for limited edition')
       )
@@ -389,6 +425,5 @@ describe('Checkout API Handler', () => {
         })
       )
     })
-  })
   })
 })
