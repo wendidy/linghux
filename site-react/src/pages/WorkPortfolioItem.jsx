@@ -151,10 +151,16 @@ export default function WorkPortfolioItem({ category }) {
           {cartNotice && <p className="meta-line">{cartNotice}</p>}
           {priceError && <p className="meta-line">{priceError}</p>}
           {availabilityError && <p className="meta-line">{availabilityError}</p>}
-          <p className="shipping-line">
-            <i className="fas fa-truck entry-icon" aria-hidden="true" />
-            Free US and Canada shipping
-          </p>
+          <div className="shipping-block">
+            <p className="shipping-line">
+              <i className="fas fa-truck entry-icon" aria-hidden="true" />
+              Ships from Canada.
+            </p>
+            <p className="shipping-line">Prints ship within 3-7 business days with tracked delivery.</p>
+            <p className="shipping-line">Original artworks are carefully packed and fully insured.</p>
+            <p className="shipping-line">Shipping for originals is calculated separately after purchase.</p>
+            <p className="meta-line"><Link to="/shipping">Learn more</Link></p>
+          </div>
         </aside>
       </div>
     </section>

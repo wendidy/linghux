@@ -22,7 +22,7 @@ export default function Header(){
 
   return (
     <div className="site-header-stack">
-      <div className="site-announcement">Available shipping to Canada and USA</div>
+      <div className="site-announcement">Available shipping to Canada and USA — <Link to="/shipping">More info</Link></div>
       <header id="header">
         <h1><a href="/">linghux</a></h1>
         <nav className="desktop-nav">

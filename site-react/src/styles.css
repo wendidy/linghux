@@ -15,6 +15,51 @@
 --accent-main: #c2a487; 
 }
 
+/* Shipping page specific typography and announcement link styles */
+#shipping {
+  background: none !important;
+}
+
+#shipping .content {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--charcoal);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+#shipping h2 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+
+#shipping h3 {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+}
+
+#shipping p {
+  font-size: 1rem;
+  color: var(--charcoal);
+}
+
+#shipping p strong {
+  font-weight: 700; /* reduce from ultra-bold */
+  font-size: 1rem;
+}
+
+/* Ensure the announcement link is readable on dark background */
+.site-announcement a {
+  color: var(--bg-white);
+  text-decoration: underline;
+}
+
 body { font-family: 'Montserrat', sans-serif; background: var(--bg-main); color: var(--charcoal); padding-top: 0; }
 header { margin-bottom: 0; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }

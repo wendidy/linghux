@@ -24,7 +24,7 @@ export default function Home(){
         <div className="content">
           <header>
             <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
-            <p>Tell me, where did the world speak to you most clearly?</p>
+            <p>Tell me, where did the world speak to you most dearly?</p>
           </header>
         </div>
       </section>

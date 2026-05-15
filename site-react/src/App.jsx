@@ -7,6 +7,7 @@ import CheckoutCancel from './pages/CheckoutCancel'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Shipping from './pages/Shipping'
 import Layout from './components/Layout'
 import { ARTWORK_NAV_ITEMS } from './utils/artwork'
 
@@ -23,6 +24,7 @@ export default function App(){
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="shipping" element={<Shipping />} />
           <Route path="cart" element={<Cart />} />
           <Route path="success" element={<CheckoutSuccess />} />
           <Route path="cancel" element={<CheckoutCancel />} />
