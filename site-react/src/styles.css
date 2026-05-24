@@ -159,6 +159,16 @@ button:active {
 .work-item-page {
   padding: 4rem 2rem 4rem;
 }
+
+/* Responsive padding for wide screens: balance whitespace without breaking layout.
+   Recommendation: 6rem left/right at desktop widths (>=1200px).
+   Alternatives: 4rem (conservative), 8rem (airy). */
+@media (min-width: 1500px) {
+  .work-item-page {
+    padding-left: 20rem;
+    padding-right: 20rem;
+  }
+}
 .work-item-grid {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
@@ -166,7 +176,7 @@ button:active {
   align-items: start;
 }
 .work-item-visual {
-  max-width: 60vw;
+  max-width: 100%;
 }
 .work-item-image {
   margin-bottom: 0.9rem;
@@ -303,6 +313,61 @@ button:active {
   font-size: 0.92rem;
   margin-top: 0.7rem;
   color: var(--charcoal);
+}
+/* Collapsible shipping block */
+.shipping-block {
+  margin-top: 0.6rem;
+}
+.shipping-summary {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.shipping-summary:focus {
+  outline: none;
+  box-shadow: none;
+}
+.shipping-summary:hover,
+.shipping-summary:active {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--ink);
+}
+.shipping-chevron::before {
+  content: '▾';
+  display: inline-block;
+  transition: transform 0.18s ease;
+  font-size: 0.9rem;
+  color: var(--charcoal);
+  margin-left: auto;
+}
+.shipping-chevron.is-open::before {
+  transform: rotate(180deg);
+}
+.shipping-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+.shipping-details.is-open {
+  max-height: 600px;
+  opacity: 1;
+}
+.shipping-details .meta-line {
+  margin-bottom: 0.4rem;
 }
 .artworks-dropdown {
   position: relative;

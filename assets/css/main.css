@@ -1483,7 +1483,7 @@ body.is-touch .main {
 
 /* Home */
 #home {
-  background: url("../../images/background.png");
+  background: url("../../site-react/public/images/mountSanitas1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

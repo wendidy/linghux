@@ -20,6 +20,7 @@ export default function WorkPortfolioItem({ category }) {
   const [activeImage, setActiveImage] = useState('')
   const { addItem, items: cartItems } = useCart()
   const [cartNotice, setCartNotice] = useState('')
+  const [shippingOpen, setShippingOpen] = useState(false)
   const itemIds = useMemo(() => (item?.id ? [item.id] : []), [item])
   const { priceById, loading: priceLoading, error: priceError } = useStripePrices(itemIds)
   const { availabilityById, loading: availabilityLoading, error: availabilityError } = useAvailability(itemIds)
@@ -152,14 +153,23 @@ export default function WorkPortfolioItem({ category }) {
           {priceError && <p className="meta-line">{priceError}</p>}
           {availabilityError && <p className="meta-line">{availabilityError}</p>}
           <div className="shipping-block">
-            <p className="shipping-line">
+            <button
+              type="button"
+              className="shipping-summary"
+              aria-expanded={shippingOpen}
+              onClick={() => setShippingOpen((s) => !s)}
+            >
               <i className="fas fa-truck entry-icon" aria-hidden="true" />
-              Ships from Canada.
-            </p>
-            <p className="shipping-line">Prints ship within 3-7 business days with tracked delivery.</p>
-            <p className="shipping-line">Original artworks are carefully packed and fully insured.</p>
-            <p className="shipping-line">Shipping for originals is calculated separately after purchase.</p>
-            <p className="meta-line"><Link to="/shipping">Learn more</Link></p>
+              Shipping &amp; Delivery
+              <span className={`shipping-chevron${shippingOpen ? ' is-open' : ''}`} aria-hidden="true" />
+            </button>
+
+            <div className={`shipping-details${shippingOpen ? ' is-open' : ''}`} aria-hidden={!shippingOpen}>
+              <p className="meta-line">Ships from Canada.</p>
+              <p className="meta-line">Prints ship within 3-7 business days with tracked delivery.</p>
+              <p className="meta-line">Original artworks are carefully packed and fully insured. Shipping for originals is calculated separately after purchase.</p>
+              <p className="meta-line"><Link to="/shipping">Learn more</Link></p>
+            </div>
           </div>
         </aside>
       </div>
