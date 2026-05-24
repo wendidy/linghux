@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
@@ -8,6 +8,7 @@ import { getArtworkBadgeLabel, getArtworkPath, getEditionLabel } from '../utils/
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const navigate = useNavigate()
+  const [hoveredItemId, setHoveredItemId] = useState('')
   const filteredItems = useMemo(
     () => (category ? items.filter((item) => item.category === category) : items),
     [category]
@@ -36,6 +37,12 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
           {filteredItems.map(item => {
             const path = getArtworkPath(item.id, category)
             const editionLabel = getEditionLabel(item, availabilityById[item.id])
+            const galleryImages = Array.isArray(item.images)
+              ? item.images.filter(Boolean)
+              : (item.images ? [item.images] : [])
+            const primaryImage = galleryImages[0] || item.image
+            const hoverImage = galleryImages[1] || ''
+            const isHovered = hoveredItemId === item.id && Boolean(hoverImage)
 
             return (
               <article
@@ -47,8 +54,24 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                 onKeyDown={(event) => handleCardKeyDown(event, path)}
                 aria-label={`View ${item.title}`}
               >
-                <div className="product-image-link">
-                  <img className="zoomable product-image" src={item.image} alt={item.title} />
+                <div
+                  className={`product-image-link${isHovered ? ' is-hovered' : ''}`}
+                  onMouseEnter={() => hoverImage && setHoveredItemId(item.id)}
+                  onMouseLeave={() => setHoveredItemId('')}
+                >
+                  <img
+                    className="zoomable product-image product-image-primary"
+                    src={primaryImage}
+                    alt={item.title}
+                  />
+                  {hoverImage && (
+                    <img
+                      className="zoomable product-image product-image-hover"
+                      src={hoverImage}
+                      alt=""
+                      aria-hidden="true"
+                    />
+                  )}
                 </div>
                 <div className="gallery-meta">
                   <div className="product-badge">

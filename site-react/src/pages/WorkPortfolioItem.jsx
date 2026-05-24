@@ -15,7 +15,8 @@ export default function WorkPortfolioItem({ category }) {
   const galleryImages = useMemo(() => {
     if (!item) return []
     if (Array.isArray(item.images) && item.images.length > 0) return item.images
-    return [item.image]
+    if (typeof item.images === 'string' && item.images) return [item.images]
+    return item.image ? [item.image] : []
   }, [item])
   const [activeImage, setActiveImage] = useState('')
   const { addItem, items: cartItems } = useCart()
@@ -72,19 +73,21 @@ export default function WorkPortfolioItem({ category }) {
           <div className="work-item-image">
             <img src={activeImage || item.image} alt={item.title} />
           </div>
-          <div className="work-item-gallery">
-            {galleryImages.map((src, index) => (
-              <button
-                key={`${src}-${index}`}
-                type="button"
-                className={`work-thumb${src === activeImage ? ' is-active' : ''}`}
-                onClick={() => setActiveImage(src)}
-                aria-label={`Show image ${index + 1}`}
-              >
-                <img src={src} alt={`${item.title} view ${index + 1}`} />
-              </button>
-            ))}
-          </div>
+          {galleryImages.length > 1 && (
+            <div className="work-item-gallery">
+              {galleryImages.map((src, index) => (
+                <button
+                  key={`${src}-${index}`}
+                  type="button"
+                  className={`work-thumb${src === activeImage ? ' is-active' : ''}`}
+                  onClick={() => setActiveImage(src)}
+                  aria-label={`Show image ${index + 1}`}
+                >
+                  <img src={src} alt={`${item.title} view ${index + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <aside className="work-item-meta">
           <h1>{item.title}</h1>
