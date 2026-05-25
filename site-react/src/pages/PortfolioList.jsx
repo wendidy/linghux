@@ -4,11 +4,12 @@ import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
-import { getArtworkBadgeLabel, getArtworkPath, getEditionLabel } from '../utils/artwork'
+import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../utils/artwork'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const navigate = useNavigate()
   const [hoveredItemId, setHoveredItemId] = useState('')
+  const isOriginalsPage = category === ARTWORK_CATEGORIES.originals
   const filteredItems = useMemo(
     () => (category ? items.filter((item) => item.category === category) : items),
     [category]
@@ -36,7 +37,9 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         <div className="gallery product-grid">
           {filteredItems.map(item => {
             const path = getArtworkPath(item.slug || item.id, category)
-            const editionLabel = getEditionLabel(item, availabilityById[item.id])
+            const badgeLabel = isOriginalsPage && item.type
+              ? `${item.type} Original Watercolor`
+              : getArtworkBadgeLabel(item)
             const galleryImages = Array.isArray(item.images)
               ? item.images.filter(Boolean)
               : (item.images ? [item.images] : [])
@@ -75,17 +78,12 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                 </div>
                 <div className="gallery-meta">
                   <div className="product-badge">
-                    <span>{getArtworkBadgeLabel(item)}</span>
+                    <span>{badgeLabel}</span>
                     {availabilityById[item.id]?.soldOut && (
                       <span className="sold-out-badge">Sold out</span>
                     )}
                   </div>
                   <h3 className="title">{item.title}</h3>
-                  {editionLabel && (
-                    <div className="edition-info">
-                      <span>{editionLabel}</span>
-                    </div>
-                  )}
                   <div className="meta-row">
                     <PriceText
                       className="price"
@@ -93,7 +91,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                       price={priceById[item.id]}
                       loading={pricesLoading}
                     />
-                    <span className="size">{item.size}</span>
+                    {isOriginalsPage && <span className="size">{item.size}</span>}
                   </div>
                 </div>
               </article>

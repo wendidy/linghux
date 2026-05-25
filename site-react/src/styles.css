@@ -165,8 +165,8 @@ button:active {
    Alternatives: 4rem (conservative), 8rem (airy). */
 @media (min-width: 1500px) {
   .work-item-page {
-    padding-left: 20rem;
-    padding-right: 20rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
   }
 }
 .work-item-grid {
