@@ -22,25 +22,38 @@ export default function WorkPortfolioItem({ category }) {
   const { addItem, items: cartItems } = useCart()
   const [cartNotice, setCartNotice] = useState('')
   const [shippingOpen, setShippingOpen] = useState(false)
-  const itemIds = useMemo(() => (item?.id ? [item.id] : []), [item])
+  const variants = useMemo(() => {
+    if (!item) return []
+    if (Array.isArray(item.variants) && item.variants.length > 0) return item.variants
+    return [{ id: item.id, size: item.size, framedSize: item.framedSize }]
+  }, [item])
+  const initialVariantId = useMemo(() => {
+    if (!item) return ''
+    if (variants.some((variant) => variant.id === workId)) return workId
+    return item.defaultVariantId || variants[0]?.id || item.id
+  }, [item, variants, workId])
+  const [selectedVariantId, setSelectedVariantId] = useState('')
+  const selectedVariant = variants.find((variant) => variant.id === selectedVariantId) || variants[0] || null
+  const selectedItemId = selectedVariant?.id || item?.id || ''
+  const itemIds = useMemo(() => variants.map((variant) => variant.id).filter(Boolean), [variants])
   const { priceById, loading: priceLoading, error: priceError } = useStripePrices(itemIds)
   const { availabilityById, loading: availabilityLoading, error: availabilityError } = useAvailability(itemIds)
-  const priceInfo = item?.id ? priceById[item.id] : null
-  const availability = item?.id ? availabilityById[item.id] : null
+  const priceInfo = selectedItemId ? priceById[selectedItemId] : null
+  const availability = selectedItemId ? availabilityById[selectedItemId] : null
 
-  const cartItem = cartItems.find((cartItem) => cartItem.id === item?.id)
+  const cartItem = cartItems.find((cartItem) => cartItem.id === selectedItemId)
   const cartQuantity = cartItem?.quantity || 0
   const original = isOriginal(item)
   const limitedEdition = isLimitedEdition(item)
-  const isAlreadyInCart = original && cartItems.some((cartItem) => cartItem.id === item?.id)
+  const isAlreadyInCart = original && cartItems.some((cartItem) => cartItem.id === selectedItemId)
   const isSoldOut = Boolean(availability?.soldOut)
   const hasAvailabilityInfo = !limitedEdition || (!availabilityLoading && Boolean(availability))
   const limitReachedInCart = limitedEdition &&
     !availabilityLoading &&
     typeof availability?.available === 'number' &&
     cartQuantity >= availability.available
-  const canPurchase = Boolean(item?.id && priceInfo && hasAvailabilityInfo)
-  const buttonLabel = !item?.id
+  const canPurchase = Boolean(selectedItemId && priceInfo && hasAvailabilityInfo)
+  const buttonLabel = !selectedItemId
     ? 'Unavailable'
     : (
         isSoldOut
@@ -55,6 +68,11 @@ export default function WorkPortfolioItem({ category }) {
     if (item) setActiveImage(galleryImages[0] || '')
     setCartNotice('')
   }, [item, galleryImages])
+
+  useEffect(() => {
+    setSelectedVariantId(initialVariantId)
+    setCartNotice('')
+  }, [initialVariantId])
 
   if (!item) {
     return (
@@ -94,19 +112,39 @@ export default function WorkPortfolioItem({ category }) {
           <p className="price">
             <i className="fas fa-tag entry-icon" aria-hidden="true" />
             <PriceText
-              itemId={item.id}
+              itemId={selectedItemId}
               price={priceInfo}
               loading={priceLoading}
             />
           </p>
+          {variants.length > 1 && (
+            <div className="size-selector" aria-label="Select print size">
+              {variants.map((variant) => {
+                const variantAvailability = availabilityById[variant.id]
+                const variantSoldOut = Boolean(variantAvailability?.soldOut)
+                return (
+                  <button
+                    key={variant.id}
+                    type="button"
+                    className={`size-option${variant.id === selectedItemId ? ' is-active' : ''}`}
+                    onClick={() => setSelectedVariantId(variant.id)}
+                    aria-pressed={variant.id === selectedItemId}
+                  >
+                    <span>{variant.size}</span>
+                    {variantSoldOut && <small>Sold out</small>}
+                  </button>
+                )
+              })}
+            </div>
+          )}
           <p className="meta-line meta-line-framed">
             <span className="meta-main">
               <i className="fas fa-ruler-combined entry-icon" aria-hidden="true" />
-              Framed size: {item.framedSize}
+              Framed size: {selectedVariant?.framedSize || item.framedSize}
               <span className="info-tip" aria-label="Framing information" tabIndex={0}>
                 <i className="fas fa-info-circle" aria-hidden="true" />
                 <span className="info-bubble">
-                  Framed: This artwork is framed by hand to order. Unframed artwork size: {item.size}
+                  Framed: This artwork is framed by hand to order. Unframed artwork size: {selectedVariant?.size || item.size}
                 </span>
               </span>
             </span>
@@ -131,11 +169,12 @@ export default function WorkPortfolioItem({ category }) {
                 return
               }
               const result = addItem({
-                id: item.id,
+                id: selectedItemId,
                 title: item.title,
                 image: item.image,
                 category: item.category,
-                size: item.size,
+                size: selectedVariant?.size || item.size,
+                framedSize: selectedVariant?.framedSize || item.framedSize,
                 maxQuantity: limitedEdition ? availability?.available : undefined,
               })
               if (result?.added) {

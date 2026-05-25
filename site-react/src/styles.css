@@ -231,6 +231,45 @@ button:active {
   font-weight: 600;
   margin-bottom: 0.8rem;
 }
+.size-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.8rem 0 1rem;
+}
+.size-option {
+  min-height: 3rem;
+  padding: 0.45rem 0.35rem;
+  border: 1px solid var(--surface-muted);
+  border-radius: 0;
+  background: var(--bg-white);
+  color: var(--ink);
+  line-height: 1.15;
+  box-shadow: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  white-space: normal;
+}
+.size-option:hover,
+.size-option:active {
+  background: var(--surface-soft);
+  color: var(--ink);
+  border-color: var(--surface-muted);
+}
+.size-option.is-active {
+  background: var(--ink);
+  color: var(--bg-white);
+  border-color: var(--ink);
+}
+.size-option small {
+  font-size: 0.68rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 .work-item-meta .entry-icon {
   width: 1.1em;
   margin-right: 0.5rem;

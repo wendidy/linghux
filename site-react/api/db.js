@@ -23,11 +23,21 @@ async function ensureSchema(client) {
   await client.query(`
     CREATE TABLE IF NOT EXISTS inventory (
       product_id TEXT PRIMARY KEY,
+      sku TEXT,
       cap INTEGER NOT NULL,
       sold INTEGER NOT NULL DEFAULT 0,
       reserved INTEGER NOT NULL DEFAULT 0,
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+  `)
+  await client.query(`
+    ALTER TABLE inventory
+    ADD COLUMN IF NOT EXISTS sku TEXT;
+  `)
+  await client.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS inventory_sku_idx
+    ON inventory(sku)
+    WHERE sku IS NOT NULL;
   `)
   await client.query(`
     CREATE TABLE IF NOT EXISTS reservations (

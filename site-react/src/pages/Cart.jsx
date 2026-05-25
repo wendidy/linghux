@@ -128,6 +128,9 @@ export default function Cart() {
                   <img src={item.image} alt={item.title} className="cart-item-image" />
                   <div className="cart-item-body">
                     <h3>{item.title}</h3>
+                    {item.size && (
+                      <p className="cart-item-detail">Size: {item.size}</p>
+                    )}
                     {isLimitedEdition(item) && (
                       <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
                     )}

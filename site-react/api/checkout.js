@@ -53,6 +53,7 @@ export default async function handler(req, res) {
       }
       const quantity = Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1
       return {
+        itemId: item.id,
         price: price.id,
         quantity,
         productId: price.product,
@@ -68,14 +69,17 @@ export default async function handler(req, res) {
       const product = productById.get(line.productId)
       const cap = parseEditionCap(product)
       if (!cap) continue
-      requestedByProduct.set(line.productId, (requestedByProduct.get(line.productId) || 0) + line.quantity)
+      const current = requestedByProduct.get(line.productId) || {
+        productId: line.productId,
+        sku: line.itemId,
+        quantity: 0,
+        cap,
+      }
+      current.quantity += line.quantity
+      requestedByProduct.set(line.productId, current)
     }
 
-    const reservationRequests = Array.from(requestedByProduct.entries()).map(([productId, quantity]) => ({
-      productId,
-      quantity,
-      cap: parseEditionCap(productById.get(productId)),
-    }))
+    const reservationRequests = Array.from(requestedByProduct.values())
 
     if (reservationRequests.length > 0) {
       const reservations = await reserveInventory(reservationRequests)

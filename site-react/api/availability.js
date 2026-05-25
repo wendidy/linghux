@@ -15,7 +15,7 @@ async function getInventoryByProductId(productIds) {
   if (!productIds.length) return new Map()
   return withClient(async (client) => {
     const { rows } = await client.query(
-      `SELECT product_id, cap, sold, reserved
+      `SELECT product_id, cap, sold, reserved, sku
        FROM inventory
        WHERE product_id = ANY($1)`,
       [productIds]
@@ -79,6 +79,7 @@ export default async function handler(req, res) {
         status: available <= 0 ? 'sold_out' : 'available',
         soldOut: available <= 0,
         productId,
+        sku: inventoryRow?.sku || itemId,
         cap,
         sold,
         reserved,

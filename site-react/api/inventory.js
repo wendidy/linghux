@@ -23,10 +23,13 @@ export async function reserveInventory(requests) {
         if (!Number.isInteger(quantity) || quantity <= 0) continue
 
         await client.query(
-          `INSERT INTO inventory (product_id, cap)
-           VALUES ($1, $2)
-           ON CONFLICT (product_id) DO NOTHING`,
-          [request.productId, cap]
+          `INSERT INTO inventory (product_id, sku, cap)
+           VALUES ($1, $2, $3)
+           ON CONFLICT (product_id) DO UPDATE
+           SET sku = COALESCE(EXCLUDED.sku, inventory.sku),
+               cap = EXCLUDED.cap,
+               updated_at = NOW()`,
+          [request.productId, request.sku || null, cap]
         )
 
         const { rows } = await client.query(

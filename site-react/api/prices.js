@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       res.status(400).json({ error: 'No item IDs provided' })
       return
     }
-
+    // console.log("KEY:", process.env.STRIPE_SECRET_KEY?.slice(0, 8), "itemIds:", itemIds)
     const priceMap = await fetchPricesByItemIds(stripe, itemIds)
     const prices = Array.from(priceMap.entries())
       .map(([itemId, { price }]) => serializePrice(itemId, price))

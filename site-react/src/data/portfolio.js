@@ -8,10 +8,42 @@ function normalizeImages(image, images) {
   return image ? [image] : []
 }
 
+const PRINT_SIZE_OPTIONS = {
+  'limited-edition-prints': ['5x7', '8x10', '24x36'],
+  'open-edition-prints': ['5x7', '8x10', '17x22'],
+}
+
+function parsePrintId(id, category) {
+  if (typeof id !== 'string') return null
+  const parts = id.split(':')
+  if (parts.length !== 3 || parts[1] !== category) return null
+  return {
+    artworkId: parts[0],
+    size: parts[2],
+  }
+}
+
+function variantIdFor(artworkId, category, size) {
+  return `${artworkId}:${category}:${size}`
+}
+
+function buildPrintVariants(item) {
+  const parsed = parsePrintId(item.id, item.category)
+  const sizes = PRINT_SIZE_OPTIONS[item.category]
+  if (!parsed || !sizes?.length) return null
+
+  return sizes.map((size) => ({
+    id: variantIdFor(parsed.artworkId, item.category, size),
+    size,
+    framedSize: item.framedSize,
+  }))
+}
+
 const rawItems = [
   {
     id: 'dreamLake',
     category: 'originals',
+    type: 'Plein Air',
     title: 'Dream Lake',
     size: '8x10',
     framedSize: 'TBD',
@@ -23,6 +55,7 @@ const rawItems = [
   {
     id: 'signalHill',
     category: 'originals',
+    type: 'Plein Air',
     title: 'Signal Hill',
     size: '8x10',
     framedSize: 'TBD',
@@ -34,6 +67,7 @@ const rawItems = [
   {
     id: 'bourtonOnTheWater',
     category: 'originals',
+    type: 'Plein Air',
     title: 'Bourton-on-the-Water',
     size: '8x10',
     framedSize: 'TBD',
@@ -45,6 +79,7 @@ const rawItems = [
   {
     id: 'chateauDeVersailles',
     category: 'originals',
+    type: 'Plein Air',
     title: 'Château De Versailles',
     size: '8x10',
     framedSize: 'TBD',
@@ -145,6 +180,9 @@ const rawItems = [
 
 export const items = rawItems.map((item) => ({
   ...item,
+  slug: parsePrintId(item.id, item.category)?.artworkId || item.id,
+  defaultVariantId: item.id,
+  variants: buildPrintVariants(item),
   images: normalizeImages(item.image, item.images),
 }))
 

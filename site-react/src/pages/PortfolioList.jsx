@@ -35,7 +35,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         </header>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
-            const path = getArtworkPath(item.id, category)
+            const path = getArtworkPath(item.slug || item.id, category)
             const editionLabel = getEditionLabel(item, availabilityById[item.id])
             const galleryImages = Array.isArray(item.images)
               ? item.images.filter(Boolean)

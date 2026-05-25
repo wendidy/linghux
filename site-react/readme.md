@@ -43,14 +43,22 @@ Neon is storing limited-edition inventory state and completed Stripe orders in t
 
 Specifically, `api/db.js` creates these tables:
 
-inventory
+For every selectable size, create an active Stripe product whose product name exactly matches the SKU, for example:
 
-product_id
+universityOfDenver:limited-edition-prints:5x7
+
+Then set:
+
+Stripe product default price = that size’s price
+For limited editions only: Stripe product metadata edition_cap=100 or whatever the cap is
+Neon inventory will use:
+
+product_id: Stripe product ID
+sku: readable size SKU
 cap
 sold
 reserved
-updated_at
-reservations
+The inventory row is created/updated when checkout reserves stock. You can also pre-seed rows manually if you want inventory visible in Neon before the first checkout.
 
 id
 product_id
@@ -175,42 +183,27 @@ The order email includes:
 
 ---
 
-## Core Newsletter Template (your signature style)
-Subject:
-A place I keep coming back to
+Testing with live stripe key:
 
----
+Careful way: pull production env into a separate local file, then run Vercel dev with it only when you need to check live Stripe data.
 
-Hi, it’s Wendy,
+From site-react:
 
-Lately I’ve been thinking about how certain places stay with us—not because they were grand, but because of how they made us feel.
+cd site-react
+vercel link
+vercel env pull .env.production.local --environment=production
+Then inspect that .env.production.local has STRIPE_SECRET_KEY. Do not commit it. It should be ignored because site-react/.gitignore ignores .env*.local.
 
-[Write 2–4 sentences about a moment]
-– where you were  
-– what you noticed  
-– a small detail (light, air, sound, a person)
+To use it locally:
 
----
+cp .env.local .env.local.backup
+cp .env.production.local .env.local
+vercel dev
+Then test only the prices endpoint first:
 
-I painted this piece after that moment.
+curl -i -X POST http://localhost:3000/api/prices \
+  -H 'Content-Type: application/json' \
+  -d '{"itemIds":["signalHill:open-edition-prints:5x7"]}'
+After testing, restore your normal dev env:
 
-[Insert image of your artwork]
-
-It wasn’t about capturing the exact scene, but about holding onto that feeling—the quiet, the stillness, the sense that time had slowed down, even if just for a little while.
-
----
-
-Sometimes I think the most meaningful parts of traveling aren’t the places themselves, but the brief connections we make along the way.
-
-A conversation. A glance. A shared silence.
-
----
-
-If this piece resonates with you, you can see it here:
-[link to your website]
-
----
-
-Thank you for being here.
-
-Wendy
+mv .env.local.backup .env.local

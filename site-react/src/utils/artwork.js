@@ -30,7 +30,11 @@ export function getArtworkPath(itemId, category) {
 }
 
 export function findArtwork(items, itemId, category) {
-  return items.find((item) => item.id === itemId && (!category || item.category === category))
+  return items.find((item) => {
+    if (category && item.category !== category) return false
+    if (item.id === itemId || item.slug === itemId) return true
+    return Array.isArray(item.variants) && item.variants.some((variant) => variant.id === itemId)
+  })
 }
 
 export function getArtworkBadgeLabel(itemOrCategory) {
