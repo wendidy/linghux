@@ -1,4 +1,30 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { ARTWORK_CATEGORIES } from '../utils/artwork'
+
+const shopPanels = [
+  {
+    title: 'Originals',
+    image: '/images/dreamLake/dreamLake.jpg',
+    alt: 'Dream Lake original watercolor',
+    button: 'Go Shop Originals',
+    to: `/artwork/${ARTWORK_CATEGORIES.originals}`,
+  },
+  {
+    title: 'Limited Edition Prints',
+    image: '/images/petiteParis/petiteParis.jpg',
+    alt: 'Petite Paris limited edition print',
+    button: 'Go Shop Limited Edition Prints',
+    to: `/artwork/${ARTWORK_CATEGORIES.limitedEditionPrints}`,
+  },
+  {
+    title: 'Open Edition Prints',
+    image: '/images/harbourfront/harbourfront.jpg',
+    alt: 'Harbourfront open edition print',
+    button: 'Go Shop Open Edition Prints',
+    to: `/artwork/${ARTWORK_CATEGORIES.openEditionPrints}`,
+  },
+]
 
 export default function Home(){
   useEffect(() => {
@@ -26,6 +52,24 @@ export default function Home(){
             <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
             <p>Tell me, where did the world speak to you most dearly?</p>
           </header>
+        </div>
+      </section>
+
+      <section className="shop-panels-section" aria-label="Shop artwork collections">
+        <div className="shop-panels">
+          {shopPanels.map((panel) => (
+            <Link to={panel.to} className="shop-panel-link" key={panel.to}>
+              <article className="shop-panel">
+                <img src={panel.image} alt={panel.alt} />
+                <div className="shop-panel-body">
+                  <h2>{panel.title}</h2>
+                  <button className="button shop-panel-button" type="button">
+                    {panel.button}
+                  </button>
+                </div>
+              </article>
+            </Link>
+          ))}
         </div>
       </section>
 

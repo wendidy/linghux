@@ -24,21 +24,19 @@ function normalizeCartItem(item) {
 }
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
-
-  useEffect(() => {
+  const [items, setItems] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
+      if (!raw) return []
       const parsed = JSON.parse(raw)
       if (Array.isArray(parsed)) {
-        const normalized = parsed.map((item) => normalizeCartItem(item))
-        setItems(normalized)
+        return parsed.map((item) => normalizeCartItem(item))
       }
     } catch {
-      setItems([])
+      return []
     }
-  }, [])
+    return []
+  })
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))

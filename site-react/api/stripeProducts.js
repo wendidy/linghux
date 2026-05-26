@@ -72,4 +72,4 @@ export async function fetchPricesByItemIds(stripe, itemIds) {
   return new Map(entries)
 }
 
-export { normalizeItemIds, resolvePriceForProduct, serializePrice }
+export { normalizeItemIds, serializePrice }

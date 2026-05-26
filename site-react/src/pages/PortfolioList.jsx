@@ -10,6 +10,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   const navigate = useNavigate()
   const [hoveredItemId, setHoveredItemId] = useState('')
   const isOriginalsPage = category === ARTWORK_CATEGORIES.originals
+  const isLimitedEditionPage = category === ARTWORK_CATEGORIES.limitedEditionPrints
   const filteredItems = useMemo(
     () => (category ? items.filter((item) => item.category === category) : items),
     [category]
@@ -33,6 +34,22 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
       <div className="gallery-div">
         <header>
           <h2 className="page-title">{heading}</h2>
+          {isOriginalsPage && (
+            <p className="page-intro">
+              Painted in the field or by studio light, these are originals in the truest sense — one moment, one hand, one painting. Each piece is tagged so you know exactly where it began.
+            </p>
+          )}
+          {isLimitedEditionPage && (
+            <p className="page-intro">
+              A limited edition print, produced on archival cotton paper and signed by hand.
+              Once the edition is complete, it will never be released again.
+            </p>
+          )}
+          {category === ARTWORK_CATEGORIES.openEditionPrints && (
+            <p className="page-intro">
+              The painting, faithfully reproduced and always available. Open edition prints for those who found a piece they couldn't leave behind.
+            </p>
+          )}
         </header>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
