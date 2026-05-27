@@ -61,7 +61,7 @@ const rawItems = [
     framedSize: 'TBD',
     date: '2024-05-10',
     image: '/images/signalHill/signalHill.jpg',
-    images: gallery('signalHill', ['signalHill.jpg']),
+    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   },
   {
@@ -87,6 +87,112 @@ const rawItems = [
     image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
     images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+   {
+    id: 'rooseveltPark',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Roosevelt Park',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/rooseveltPark/rooseveltPark.jpg',
+    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg', 'rooseveltPark3.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'standleyPark',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Standley Park',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/standleyPark/standleyPark.jpg',
+    images: gallery('standleyPark', ['standleyPark.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'lakeOfTwoRivers',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Lake of Two Rivers',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/lakeOfTwoRivers/lakeOfTwoRivers.jpg',
+    images: gallery('lakeOfTwoRivers', ['lakeOfTwoRivers.jpg', 'lakeOfTwoRivers2.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'oxenPond',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Oxen Pond',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/oxenPond/oxenPond.jpg',
+    images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond2.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'pacificBeach',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Pacific Beach',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/pacificBeach/pacificBeach.jpg',
+    images: gallery('pacificBeach', ['pacificBeach.jpg', 'pacificBeach2.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'majorsHillPark',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Major\'s Hill Park',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/majorsHillPark/majorsHillPark2.jpg',
+    images: gallery('majorsHillPark', ['majorsHillPark2.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'tobermory',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Tobermory',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2023-11-15',
+    image: '/images/tobermory/tobermory.jpg',
+    images: gallery('tobermory', ['tobermory.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'eldoradoCanyon:limited-edition-prints:8x10',
+    category: 'limited-edition-prints',
+    title: 'Eldorado Canyon',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2024-01-05',
+    image: '/images/eldoradoCanyon/eldoradoCanyon.jpg',
+    images: gallery('eldoradoCanyon', ['eldoradoCanyon.jpg', 'eldoradoCanyon2.jpg']),
+    description: 'My friend and I were waiting for the concert to begin and decided to drive to Denver earlier to avoid the traffic. The University of Denver was just a compacted size, with white and red lounge chairs scattered around. The accent colors popped among the trees. I hid underneath a leafy one and made 1 red chair to be my main subject.'
+  },
+  {
+    id: 'theLaughingGoat:limited-edition-prints:8x10',
+    category: 'limited-edition-prints',
+    title: 'The Laughing Goat',
+    size: '8x10',
+    framedSize: 'TBD',
+    date: '2024-01-05',
+    image: '/images/theLaughingGoat/theLaughingGoat.jpg',
+    images: gallery('theLaughingGoat', ['theLaughingGoat.jpg']),
+    description: 'My friend and I were waiting for the concert to begin and decided to drive to Denver earlier to avoid the traffic. The University of Denver was just a compacted size, with white and red lounge chairs scattered around. The accent colors popped among the trees. I hid underneath a leafy one and made 1 red chair to be my main subject.'
   },
   {
     id: 'universityOfDenver:limited-edition-prints:5x7',
@@ -174,6 +280,39 @@ const rawItems = [
     date: '2024-04-01',
     image: '/images/peleeIsland/peleeIsland.jpg',
     images: gallery('peleeIsland', ['peleeIsland.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'marshallLake:open-edition-prints:17x22',
+    category: 'open-edition-prints',
+    title: 'Marshall Lake',
+    size: '17x22',
+    framedSize: 'TBD',
+    date: '2024-04-01',
+    image: '/images/marshallLake/marshallLake.jpg',
+    images: gallery('marshallLake', ['marshallLake.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'neckPoint:open-edition-prints:17x22',
+    category: 'open-edition-prints',
+    title: 'Neck Point',
+    size: '17x22',
+    framedSize: 'TBD',
+    date: '2024-04-01',
+    image: '/images/neckPoint/neckPoint.jpg',
+    images: gallery('neckPoint', ['neckPoint.jpg']),
+    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+  },
+  {
+    id: 'petiteParis:open-edition-prints:17x22',
+    category: 'open-edition-prints',
+    title: 'Petite Paris',
+    size: '17x22',
+    framedSize: 'TBD',
+    date: '2024-04-01',
+    image: '/images/petiteParis/petiteParis.jpg',
+    images: gallery('petiteParis', ['petiteParis.jpg']),
     description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
   }
 ]
