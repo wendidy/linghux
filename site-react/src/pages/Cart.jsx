@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useCurrency } from '../context/CurrencyContext'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
@@ -17,6 +18,8 @@ export default function Cart() {
     pricesLoading,
     pricesError,
   } = useCart()
+  const { currency, setCurrency } = useCurrency()
+  const [shippingCountry, setShippingCountry] = useState(() => (currency === 'CAD' ? 'CA' : 'US'))
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
   const itemIds = useMemo(() => items.map((item) => item.id).filter(Boolean), [items])
@@ -30,6 +33,10 @@ export default function Cart() {
     (item) => priceById[item.id] || null,
     [priceById]
   )
+
+  useEffect(() => {
+    setShippingCountry(currency === 'CAD' ? 'CA' : 'US')
+  }, [currency])
 
   const availabilityForItem = useCallback(
     (item) => availabilityById[item.id] || null,
@@ -92,7 +99,7 @@ export default function Cart() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(lineItems),
+        body: JSON.stringify({ lineItems, currency, shippingCountry }),
       })
 
       if (!res.ok) {
@@ -187,6 +194,20 @@ export default function Cart() {
                     : (hasMissingPrice ? PRICE_LABELS.unavailable : formatCurrency(subtotal, cartCurrency))}
                 </strong>
               </div>
+              <label className="cart-shipping-country">
+                <span>Ship to</span>
+                <select
+                  value={shippingCountry}
+                  onChange={(event) => {
+                    const country = event.target.value
+                    setShippingCountry(country)
+                    setCurrency(country === 'CA' ? 'CAD' : 'USD')
+                  }}
+                >
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                </select>
+              </label>
               <div className="cart-summary-actions">
                 <button type="button" className="checkout-primary" onClick={checkout} disabled={isCheckingOut}>
                   {isCheckingOut ? 'Redirecting…' : 'Proceed to Secure Checkout'}

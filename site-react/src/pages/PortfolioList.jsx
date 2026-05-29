@@ -16,7 +16,13 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
     [category]
   )
   const itemIds = useMemo(
-    () => filteredItems.map((item) => item.id).filter(Boolean),
+    () => filteredItems
+      .flatMap((item) => (
+        Array.isArray(item.variants) && item.variants.length > 0
+          ? item.variants.map((variant) => variant.id)
+          : [item.id]
+      ))
+      .filter(Boolean),
     [filteredItems]
   )
   const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
@@ -63,11 +69,17 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
             const primaryImage = galleryImages[0] || item.image
             const hoverImage = galleryImages[1] || ''
             const isHovered = hoveredItemId === item.id && Boolean(hoverImage)
+            const displayItemId = item.defaultVariantId || item.id
+            const displaySize = Array.isArray(item.size) ? item.size.join(', ') : item.size
+            const variants = Array.isArray(item.variants) ? item.variants : []
+            const isSoldOut = variants.length > 0
+              ? variants.every((variant) => availabilityById[variant.id]?.soldOut)
+              : availabilityById[item.id]?.soldOut
 
             return (
               <article
                 className="gallery-item product-card"
-                key={item.id}
+                key={`${item.category}:${item.id}`}
                 role="link"
                 tabIndex={0}
                 onClick={() => navigate(path)}
@@ -96,7 +108,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                 <div className="gallery-meta">
                   <div className="product-badge">
                     <span>{badgeLabel}</span>
-                    {availabilityById[item.id]?.soldOut && (
+                    {isSoldOut && (
                       <span className="sold-out-badge">Sold out</span>
                     )}
                   </div>
@@ -104,11 +116,11 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                   <div className="meta-row">
                     <PriceText
                       className="price"
-                      itemId={item.id}
-                      price={priceById[item.id]}
+                      itemId={displayItemId}
+                      price={priceById[displayItemId]}
                       loading={pricesLoading}
                     />
-                    {isOriginalsPage && <span className="size">{item.size}</span>}
+                    {displaySize && <span className="size">{displaySize}</span>}
                   </div>
                 </div>
               </article>

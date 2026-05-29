@@ -110,7 +110,7 @@ export default function WorkPortfolioItem({ category }) {
         <aside className="work-item-meta">
           <h1>{item.title}</h1>
           <p className="price">
-            <i className="fas fa-tag entry-icon" aria-hidden="true" />
+            <i aria-hidden="true" />
             <PriceText
               itemId={selectedItemId}
               price={priceInfo}
@@ -131,6 +131,13 @@ export default function WorkPortfolioItem({ category }) {
                     aria-pressed={variant.id === selectedItemId}
                   >
                     <span>{variant.size}</span>
+                    <small className="size-option-price">
+                      <PriceText
+                        itemId={variant.id}
+                        price={priceById[variant.id]}
+                        loading={priceLoading}
+                      />
+                    </small>
                     {variantSoldOut && <small>Sold out</small>}
                   </button>
                 )
@@ -207,9 +214,19 @@ export default function WorkPortfolioItem({ category }) {
             </button>
 
             <div className={`shipping-details${shippingOpen ? ' is-open' : ''}`} aria-hidden={!shippingOpen}>
-              <p className="meta-line">Ships from Canada.</p>
-              <p className="meta-line">Prints ship within 3-7 business days with tracked delivery.</p>
-              <p className="meta-line">Original artworks are carefully packed and fully insured. Shipping for originals is calculated separately after purchase.</p>
+              <p className="meta-line">Carefully packaged by Wendy and shipped from Canada with tracked delivery.</p>
+              <p className="meta-line">Flat-rate shipping: 
+                <ul>
+                  <li>Canada — CAD $20</li>
+                  <li>United States — USD $25</li>
+                </ul>
+              </p>
+              <p className="meta-line">Complimentary shipping is available on qualifying orders: 
+                <ul>
+                  <li>Canada — orders over CAD $550</li>
+                  <li>United States — orders over USD $400</li>
+                </ul>
+              </p>
               <p className="meta-line"><Link to="/shipping">Learn more</Link></p>
             </div>
           </div>

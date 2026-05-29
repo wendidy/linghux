@@ -47,11 +47,13 @@ export default function Home(){
   return (
     <>
       <section id="home" className="main style1 dark fullscreen">
-        <div className="content">
-          <header>
-            <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
-            <p>Tell me, where did the world speak to you most dearly?</p>
-          </header>
+        <div className="content" aria-hidden="true" />
+      </section>
+
+      <section className="home-intro-section">
+        <div className="home-intro-copy">
+          <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
+          <p>Tell me, where did the world speak to you most dearly?</p>
         </div>
       </section>
 

@@ -49,11 +49,16 @@ function serializePrice(itemId, price) {
   }
 }
 
+
+// itemIds can be: ["artworkId", "artworkId:category:size", ...]
+// For limited/open edition prints, expect keys like "artworkId:category:size"
 export async function fetchProductsByItemIds(stripe, itemIds) {
   const uniqueIds = normalizeItemIds(itemIds)
   if (!uniqueIds.length) return new Map()
   const entries = await Promise.all(
     uniqueIds.map(async (itemId) => {
+      // If id is in the form artworkId:category:size, use as is
+      // Otherwise, fallback to original id
       const product = await findProductByName(stripe, itemId)
       return [itemId, product]
     })
@@ -70,6 +75,31 @@ export async function fetchPricesByItemIds(stripe, itemIds) {
     })
   )
   return new Map(entries)
+}
+
+export async function fetchPricesByItemIdsAndCurrency(stripe, itemIds, currency = 'USD') {
+  const productsByItemId = await fetchProductsByItemIds(stripe, itemIds)
+  const entries = await Promise.all(
+    Array.from(productsByItemId.entries()).map(async ([itemId, product]) => {
+      const price = await resolvePriceForProductAndCurrency(stripe, product, currency)
+      return [itemId, { product, price }]
+    })
+  )
+  return new Map(entries)
+}
+
+async function resolvePriceForProductAndCurrency(stripe, product, currency = 'USD') {
+  if (!product) return null
+  
+  // List all active prices for this product in the specified currency
+  const prices = await stripe.prices.list({
+    product: product.id,
+    active: true,
+    currency: currency.toLowerCase(), // 'usd' or 'cad'
+    limit: 1,
+  })
+  
+  return prices?.data?.[0] || null
 }
 
 export { normalizeItemIds, serializePrice }

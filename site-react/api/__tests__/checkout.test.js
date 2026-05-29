@@ -27,6 +27,7 @@ vi.mock('stripe', () => ({
 
 vi.mock('../stripeProducts.js', () => ({
   fetchPricesByItemIds: vi.fn(),
+  fetchPricesByItemIdsAndCurrency: vi.fn(),
   normalizeItemIds: vi.fn((ids) => {
     const arr = Array.isArray(ids) ? ids : []
     return [...new Set(arr.filter(Boolean))]
@@ -39,7 +40,7 @@ vi.mock('../inventory.js', () => ({
 
 import handler from '../checkout.js'
 import Stripe from 'stripe'
-import { fetchPricesByItemIds, normalizeItemIds } from '../stripeProducts.js'
+import { fetchPricesByItemIds, fetchPricesByItemIdsAndCurrency, normalizeItemIds } from '../stripeProducts.js'
 import { reserveInventory } from '../inventory.js'
 
 describe('Checkout API Handler', () => {
@@ -55,6 +56,8 @@ describe('Checkout API Handler', () => {
     mockStripeInstance.products.retrieve.mockReset()
     reserveInventory.mockReset()
     fetchPricesByItemIds.mockReset()
+    fetchPricesByItemIdsAndCurrency.mockReset()
+    fetchPricesByItemIdsAndCurrency.mockImplementation((...args) => fetchPricesByItemIds(...args))
 
     mockStripeInstance.checkout.sessions.create.mockResolvedValue({
       id: 'cs_test_123',
@@ -175,8 +178,9 @@ describe('Checkout API Handler', () => {
             enabled: true,
           },
           shipping_address_collection: {
-            allowed_countries: ['US', 'CA'],
+            allowed_countries: ['US'],
           },
+          shipping_options: [{ shipping_rate: 'shr_1TcEee2VIu8UkxmlUSw3XsDr' }],
         })
       )
     })
@@ -319,7 +323,69 @@ describe('Checkout API Handler', () => {
       const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.metadata).toEqual({
         reservation_ids: '["res_123"]',
+        currency: 'USD',
+        shipping_country: 'US',
+        shipping_rate_id: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
       })
+    })
+
+    it('should select Canada free shipping for CAD subtotals at or above 550', async () => {
+      req.body = {
+        lineItems: [{ id: 'item_1', quantity: 1 }],
+        currency: 'CAD',
+        shippingCountry: 'CA',
+      }
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([[
+          'item_1',
+          {
+            product: createMockProduct('prod_1'),
+            price: { ...createMockPrice('price_1', 'prod_1'), unit_amount: 55000, currency: 'CAD' },
+          },
+        ]])
+      )
+      reserveInventory.mockResolvedValueOnce([])
+
+      await handler(req, res)
+
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
+      expect(call.shipping_address_collection.allowed_countries).toEqual(['CA'])
+      expect(call.shipping_options).toEqual([
+        { shipping_rate: 'shr_1TcEfb2VIu8UkxmlkxZowGRw' },
+      ])
+      expect(call.metadata).toEqual(
+        expect.objectContaining({
+          currency: 'CAD',
+          shipping_country: 'CA',
+          shipping_rate_id: 'shr_1TcEfb2VIu8UkxmlkxZowGRw',
+        })
+      )
+    })
+
+    it('should select United States free shipping for USD subtotals at or above 400', async () => {
+      req.body = {
+        lineItems: [{ id: 'item_1', quantity: 4 }],
+        currency: 'USD',
+        shippingCountry: 'US',
+      }
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([['item_1', createPriceEntry('prod_1')]])
+      )
+      reserveInventory.mockResolvedValueOnce([])
+
+      await handler(req, res)
+
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
+      expect(call.shipping_options).toEqual([
+        { shipping_rate: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw' },
+      ])
+      expect(call.metadata).toEqual(
+        expect.objectContaining({
+          currency: 'USD',
+          shipping_country: 'US',
+          shipping_rate_id: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw',
+        })
+      )
     })
   })
 
@@ -381,7 +447,7 @@ describe('Checkout API Handler', () => {
       expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
-          error: 'Unable to resolve Stripe price for cart item',
+          error: 'Unable to resolve Stripe USD price for cart item',
         })
       )
     })

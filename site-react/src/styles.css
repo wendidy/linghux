@@ -64,6 +64,7 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg-main); color:
 header { margin-bottom: 0; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .app-main { flex: 1; padding-bottom: 2.5rem; }
+
 .site-header-stack {
   position: sticky;
   top: 0;
@@ -274,6 +275,12 @@ button:active {
   line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+.size-option .size-option-price {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .work-item-meta .entry-icon {
   width: 1.1em;
@@ -761,6 +768,22 @@ button:active {
 .cart-summary-row strong {
   color: var(--ink);
 }
+.cart-shipping-country {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--charcoal);
+  font-size: 0.92rem;
+}
+.cart-shipping-country select {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--surface-muted);
+  border-radius: 0;
+  background: var(--bg-white);
+  color: var(--ink);
+  font: inherit;
+}
 .cart-summary-actions {
   margin-top: 0.15rem;
 }
@@ -796,9 +819,20 @@ button:active {
   margin: 0;
   color: var(--ink);
 }
+.home-intro-section {
+  padding: 72px 20px 28px;
+}
+.home-intro-copy {
+  margin: 0 auto;
+  text-align: center;
+}
+.home-intro-copy p {
+  color: black;
+  /* font-size: clamp(1.1rem, 1.6vw, 1.5rem); */
+}
 .shop-panels-section {
   background: var(--bg-main, #f7f6f2);
-  padding: 96px 24px 0;
+  padding: 36px 24px 0;
 }
 .shop-panels {
   width: min(1120px, 100%);

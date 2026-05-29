@@ -1,15 +1,21 @@
 export function formatCurrency(cents, currency = 'USD', locale = 'en-US') {
   if (typeof cents !== 'number' || Number.isNaN(cents)) return ''
-  const safeCurrency = typeof currency === 'string' && currency.trim() ? currency.toUpperCase() : 'USD'
-  return new Intl.NumberFormat(locale, {
+  // Show a plain dollar-style symbol ("$") for both USD and CAD,
+  // and append the currency code separately in formatStripePrice.
+  // Using en-US + USD produces a clean "$1,234.56" without a "CA" prefix.
+  const formatted = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: safeCurrency,
+    currency: 'USD',
+    minimumFractionDigits: 2,
   }).format(cents / 100)
+  return formatted
 }
 
 export function formatStripePrice(price, locale = 'en-US') {
   if (!price || typeof price.unit_amount !== 'number') return ''
-  return formatCurrency(price.unit_amount, price.currency, locale)
+  const currencyCode = price.currency ? price.currency.toUpperCase() : 'USD'
+  const formattedPrice = formatCurrency(price.unit_amount, price.currency, locale)
+  return `${formattedPrice} ${currencyCode}`
 }
 
 export const PRICE_LABELS = {
@@ -33,14 +39,14 @@ export function priceLabel({
   return unavailableLabel
 }
 
-export async function fetchStripePrices(itemIds, { signal } = {}) {
+export async function fetchStripePrices(itemIds, currency = 'USD', { signal } = {}) {
   const uniqueIds = [...new Set((Array.isArray(itemIds) ? itemIds : []).filter(Boolean))]
   if (uniqueIds.length === 0) return {}
 
   const res = await fetch('/api/prices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ itemIds: uniqueIds }),
+    body: JSON.stringify({ itemIds: uniqueIds, currency }),
     signal,
   })
 

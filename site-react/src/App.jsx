@@ -32,7 +32,13 @@ export default function App(){
             <Route
               key={route.category || 'all'}
               path={route.category ? `artwork/${route.category}` : 'artwork'}
-              element={<PortfolioList category={route.category || undefined} heading={route.heading} />}
+              element={
+                <PortfolioList
+                  key={route.category || 'all'}
+                  category={route.category || undefined}
+                  heading={route.heading}
+                />
+              }
             />
           ))}
           <Route path="artwork/work/:workId" element={<WorkPortfolioItem />} />

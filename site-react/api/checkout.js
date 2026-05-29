@@ -1,8 +1,23 @@
 import Stripe from 'stripe'
-import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
+import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
 import { reserveInventory, releaseReservations } from './inventory.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+const SHIPPING_RATE_RULES = {
+  CA: {
+    currency: 'CAD',
+    freeThreshold: 55000,
+    freeRateId: 'shr_1TcEfb2VIu8UkxmlkxZowGRw',
+    paidRateId: 'shr_1TcEfA2VIu8Ukxml9abGIJNN',
+  },
+  US: {
+    currency: 'USD',
+    freeThreshold: 40000,
+    freeRateId: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw',
+    paidRateId: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
+  },
+}
 
 function parseEditionCap(product) {
   const raw = product?.metadata?.edition_cap
@@ -21,6 +36,17 @@ function getBaseUrl(req) {
   return `${proto}://${host}`.replace(/\/$/, '')
 }
 
+function normalizeShippingCountry(country, currency = 'USD') {
+  if (country === 'CA' || country === 'US') return country
+  return currency === 'CAD' ? 'CA' : 'US'
+}
+
+function shippingRateFor(country, subtotal) {
+  const rule = SHIPPING_RATE_RULES[country]
+  if (!rule) return null
+  return subtotal >= rule.freeThreshold ? rule.freeRateId : rule.paidRateId
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).send('Method not allowed')
@@ -29,7 +55,19 @@ export default async function handler(req, res) {
 
   let reservationIds = []
   try {
-    const items = Array.isArray(req.body) ? req.body : []
+    // Handle both old format (array) and new format ({ lineItems, currency })
+    let items = []
+    let currency = 'USD'
+    let shippingCountry = 'US'
+    
+    if (Array.isArray(req.body)) {
+      items = req.body
+    } else if (req.body && typeof req.body === 'object') {
+      items = req.body.lineItems || []
+      currency = (req.body.currency || 'USD').toUpperCase()
+      shippingCountry = normalizeShippingCountry(req.body.shippingCountry, currency)
+    }
+    currency = SHIPPING_RATE_RULES[shippingCountry]?.currency || currency
 
     if (!items.length) {
       res.status(400).json({ error: 'Cart is empty' })
@@ -43,13 +81,13 @@ export default async function handler(req, res) {
       return
     }
 
-    const priceMap = await fetchPricesByItemIds(stripe, itemIds)
+    const priceMap = await fetchPricesByItemIdsAndCurrency(stripe, itemIds, currency)
 
     const lineItems = items.map((item) => {
       const entry = priceMap.get(item?.id)
       const price = entry?.price
       if (!price?.id) {
-        throw new Error('Unable to resolve Stripe price for cart item')
+        throw new Error(`Unable to resolve Stripe ${currency} price for cart item`)
       }
       const quantity = Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1
       return {
@@ -57,8 +95,11 @@ export default async function handler(req, res) {
         price: price.id,
         quantity,
         productId: price.product,
+        unitAmount: price.unit_amount,
       }
     })
+    const subtotal = lineItems.reduce((sum, line) => sum + line.unitAmount * line.quantity, 0)
+    const shippingRateId = shippingRateFor(shippingCountry, subtotal)
 
     const productIds = [...new Set(lineItems.map((line) => line.productId).filter(Boolean))]
     const products = await Promise.all(productIds.map((id) => stripe.products.retrieve(id)))
@@ -88,6 +129,15 @@ export default async function handler(req, res) {
 
     const baseUrl = getBaseUrl(req)
 
+    const metadata = {}
+    if (reservationIds.length > 0) {
+      metadata.reservation_ids = JSON.stringify(reservationIds)
+    }
+    // Store currency for reference in webhook
+    metadata.currency = currency
+    metadata.shipping_country = shippingCountry
+    if (shippingRateId) metadata.shipping_rate_id = shippingRateId
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems.map(({ price, quantity }) => ({ price, quantity })),
@@ -98,11 +148,10 @@ export default async function handler(req, res) {
         enabled: true,
       },
       shipping_address_collection: {
-        allowed_countries: ['US', 'CA'],
+        allowed_countries: [shippingCountry],
       },
-      metadata: reservationIds.length > 0
-        ? { reservation_ids: JSON.stringify(reservationIds) }
-        : undefined,
+      shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+      metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     })
 
     res.status(200).json({ url: session.url })
