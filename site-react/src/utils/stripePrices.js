@@ -39,14 +39,13 @@ export function priceLabel({
   return unavailableLabel
 }
 
-export async function fetchStripePrices(itemIds, currency = 'USD', { signal } = {}) {
-  const uniqueIds = [...new Set((Array.isArray(itemIds) ? itemIds : []).filter(Boolean))]
-  if (uniqueIds.length === 0) return {}
+const PRICE_FETCH_CHUNK_SIZE = 4
 
+async function fetchStripePriceChunk(itemIds, currency, signal) {
   const res = await fetch('/api/prices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ itemIds: uniqueIds, currency }),
+    body: JSON.stringify({ itemIds, currency }),
     signal,
   })
 
@@ -55,9 +54,36 @@ export async function fetchStripePrices(itemIds, currency = 'USD', { signal } = 
     throw new Error(data?.error || 'Unable to load prices')
   }
 
-  const map = {}
-  for (const price of data.prices || []) {
-    if (price?.item_id) map[price.item_id] = price
+  return data.prices || []
+}
+
+export async function fetchStripePrices(itemIds, currency = 'USD', { signal } = {}) {
+  const uniqueIds = [...new Set((Array.isArray(itemIds) ? itemIds : []).filter(Boolean))]
+  if (uniqueIds.length === 0) return {}
+
+  const chunks = []
+  for (let index = 0; index < uniqueIds.length; index += PRICE_FETCH_CHUNK_SIZE) {
+    chunks.push(uniqueIds.slice(index, index + PRICE_FETCH_CHUNK_SIZE))
   }
+
+  const map = {}
+  const errors = []
+
+  for (const chunk of chunks) {
+    try {
+      const prices = await fetchStripePriceChunk(chunk, currency, signal)
+      for (const price of prices) {
+        if (price?.item_id) map[price.item_id] = price
+      }
+    } catch (error) {
+      if (error?.name === 'AbortError') throw error
+      errors.push(error)
+    }
+  }
+
+  if (Object.keys(map).length === 0 && errors.length > 0) {
+    throw errors[0]
+  }
+
   return map
 }

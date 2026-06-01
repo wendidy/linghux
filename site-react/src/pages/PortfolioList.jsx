@@ -113,6 +113,12 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                     )}
                   </div>
                   <h3 className="title">{item.title}</h3>
+                  {item.location && (
+                    <p className="card-location">
+                      <i className="fas fa-map-marker-alt" aria-hidden="true" />
+                      <span>{item.location}</span>
+                    </p>
+                  )}
                   <div className="meta-row">
                     <PriceText
                       className="price"

@@ -62,7 +62,7 @@ export function useStripePrices(itemIds) {
   }, [itemIds])
   const idsKey = useMemo(() => [...ids].sort().join('|'), [ids])
   const [priceById, setPriceById] = useState(() => cachedPricesFor(ids, currency))
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(() => ids.some((id) => !priceCache.get(cacheKey(currency, id))))
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -84,11 +84,10 @@ export function useStripePrices(itemIds) {
       .then((map) => {
         if (!isActive) return
         cachePrices(map, currency)
-        setPriceById(mergeKnownPrices(ids, currency, map))
+        setPriceById((current) => mergeKnownPrices(ids, currency, { ...current, ...map }))
       })
       .catch((err) => {
         if (!isActive || err?.name === 'AbortError') return
-        setPriceById({})
         setError(err?.message || 'Failed to load prices')
       })
       .finally(() => {

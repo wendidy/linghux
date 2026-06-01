@@ -18,10 +18,26 @@ export default async function handler(req, res) {
       return
     }
 
-    // For per-size pricing, itemIds may be id:category:size
-    const priceMap = currency && currency !== 'USD'
+    // For per-size pricing, itemIds may be id:category:size.
+    // Display requests can fall back to default Stripe prices if a selected
+    // display currency has not been configured for every product yet.
+    let priceMap = currency && currency !== 'USD'
       ? await fetchPricesByItemIdsAndCurrency(stripe, itemIds, currency)
       : await fetchPricesByItemIds(stripe, itemIds)
+
+    if (currency && currency !== 'USD') {
+      const missingIds = Array.from(priceMap.entries())
+        .filter(([, entry]) => !entry?.price)
+        .map(([itemId]) => itemId)
+
+      if (missingIds.length > 0) {
+        const fallbackMap = await fetchPricesByItemIds(stripe, missingIds)
+        priceMap = new Map([
+          ...Array.from(priceMap.entries()),
+          ...Array.from(fallbackMap.entries()).filter(([, entry]) => entry?.price),
+        ])
+      }
+    }
 
     const prices = Array.from(priceMap.entries())
       .map(([itemId, { price }]) => serializePrice(itemId, price))

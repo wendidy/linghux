@@ -6,6 +6,7 @@ process.env.STRIPE_SECRET_KEY = 'sk_test_mock_key'
 // Mock stripeProducts
 vi.mock('../stripeProducts.js', () => ({
   fetchPricesByItemIds: vi.fn(),
+  fetchPricesByItemIdsAndCurrency: vi.fn(),
   normalizeItemIds: vi.fn((ids) => {
     const arr = Array.isArray(ids) ? ids : []
     return [...new Set(arr.filter(Boolean))]
@@ -35,13 +36,14 @@ vi.mock('stripe', () => ({
 }))
 
 import handler from '../prices.js'
-import { fetchPricesByItemIds, serializePrice } from '../stripeProducts.js'
+import { fetchPricesByItemIds, fetchPricesByItemIdsAndCurrency, serializePrice } from '../stripeProducts.js'
 
 describe('Prices API Handler', () => {
   let req, res
 
   beforeEach(() => {
     vi.clearAllMocks()
+    fetchPricesByItemIdsAndCurrency.mockImplementation((...args) => fetchPricesByItemIds(...args))
 
     req = {
       method: 'POST',
@@ -170,6 +172,35 @@ describe('Prices API Handler', () => {
         expect.objectContaining({
           prices: expect.arrayContaining([
             expect.objectContaining({ id: expect.any(String) }),
+          ]),
+        })
+      )
+    })
+
+    it('should fall back to default prices when selected currency prices are missing', async () => {
+      req.body = { itemIds: ['item_1', 'item_2'], currency: 'CAD' }
+      fetchPricesByItemIdsAndCurrency.mockResolvedValueOnce(
+        new Map([
+          ['item_1', { price: null }],
+          ['item_2', { price: mockPrice('cad_price_2', 12000) }],
+        ])
+      )
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([
+          ['item_1', { price: mockPrice('usd_price_1', 10000) }],
+        ])
+      )
+      serializePrice.mockImplementation((itemId, price) => price)
+
+      await handler(req, res)
+
+      expect(fetchPricesByItemIdsAndCurrency).toHaveBeenCalledOnce()
+      expect(fetchPricesByItemIds).toHaveBeenCalledWith(expect.any(Object), ['item_1'])
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prices: expect.arrayContaining([
+            expect.objectContaining({ id: 'usd_price_1' }),
+            expect.objectContaining({ id: 'cad_price_2' }),
           ]),
         })
       )

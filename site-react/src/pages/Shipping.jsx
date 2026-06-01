@@ -15,13 +15,16 @@ export default function Shipping() {
 
           <p>Complimentary shipping is available on qualifying orders:</p>
           <ul>
-            <li>Canada — orders over CAD $550</li>
+            <li>Canada — orders over CAD $500</li>
             <li>United States — orders over USD $400</li>
           </ul>
           <p>Shipping rates are automatically applied at checkout.</p>
 
           <p>Prints and original paintings are carefully packed using archival and protective materials, originals are shipped fully insured.</p>
           <p>Most orders are prepared and shipped within 3–7 business days.</p>
+
+          <h3>Returns & Damaged Items</h3>
+          <p>All sales are final, with no refunds or returns. If your item arrives damaged, please email Wendy and we will find a way to make it right.</p>
           
           <h3>Customs & Duties</h3>
           <p>International customers are responsible for any customs duties or import taxes charged by their country.</p>

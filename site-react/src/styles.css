@@ -556,6 +556,25 @@ button:active {
   font-weight: 650;
   letter-spacing: 0.01em;
 }
+.gallery-meta .card-location {
+  display: flex;
+  align-items: flex-start;
+  /* gap: 0.45rem; */
+  /* min-height: 2.8em; */
+  margin: 0.45rem 0 0;
+  color: var(--charcoal);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  opacity: 0.78;
+}
+.gallery-meta .card-location i {
+  width: 1rem;
+  margin-top: 0.16rem;
+  color: var(--accent-main);
+  font-size: 0.78rem;
+  text-align: center;
+  flex: 0 0 auto;
+}
 .gallery-meta .meta-row {
   display: flex;
   align-items: baseline;
@@ -955,6 +974,12 @@ button:active {
 .main.style3 .gallery-div {
 	max-width: calc(55em + 10em);
 	margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 800px) {

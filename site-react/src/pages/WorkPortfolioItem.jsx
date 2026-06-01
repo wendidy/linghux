@@ -6,7 +6,7 @@ import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { PRICE_LABELS } from '../utils/stripePrices'
-import { findArtwork, isLimitedEdition, isOriginal } from '../utils/artwork'
+import { findArtwork, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -45,6 +45,8 @@ export default function WorkPortfolioItem({ category }) {
   const cartQuantity = cartItem?.quantity || 0
   const original = isOriginal(item)
   const limitedEdition = isLimitedEdition(item)
+  const openEdition = isOpenEdition(item)
+  const isPrint = limitedEdition || openEdition
   const isAlreadyInCart = original && cartItems.some((cartItem) => cartItem.id === selectedItemId)
   const isSoldOut = Boolean(availability?.soldOut)
   const hasAvailabilityInfo = !limitedEdition || (!availabilityLoading && Boolean(availability))
@@ -144,22 +146,36 @@ export default function WorkPortfolioItem({ category }) {
               })}
             </div>
           )}
-          <p className="meta-line meta-line-framed">
-            <span className="meta-main">
-              <i className="fas fa-ruler-combined entry-icon" aria-hidden="true" />
-              Framed size: {selectedVariant?.framedSize || item.framedSize}
-              <span className="info-tip" aria-label="Framing information" tabIndex={0}>
-                <i className="fas fa-info-circle" aria-hidden="true" />
-                <span className="info-bubble">
-                  Framed: This artwork is framed by hand to order. Unframed artwork size: {selectedVariant?.size || item.size}
+          {!isPrint && (
+            <p className="meta-line meta-line-framed">
+              <span className="meta-main">
+                <i className="fas fa-ruler-combined entry-icon" aria-hidden="true" />
+                Size: {selectedVariant?.size || item.size}
+                <span className="info-tip" aria-label="Framing information" tabIndex={0}>
+                  <i className="fas fa-info-circle" aria-hidden="true" />
+                  <span className="info-bubble">
+                    Framed: This artwork is framed by hand. Framed artwork size: {selectedVariant?.framedSize || item.framedSize}
+                  </span>
                 </span>
               </span>
-            </span>
-          </p>
+            </p>
+          )}
+          {item.location && (
+            <p className="meta-line meta-line-location">
+              <i className="fas fa-map-marker-alt entry-icon" aria-hidden="true" />
+              Location: {item.location}
+            </p>
+          )}
           <p className="meta-line">
             <i className="fas fa-calendar-alt entry-icon" aria-hidden="true" />
             Date: {item.date}
           </p>
+          {item.medium && (
+            <p className="meta-line">
+              <i className="fas fa-palette entry-icon" aria-hidden="true" />
+              Medium: {item.medium}
+            </p>
+          )}
           <p className="meta-line">
             <i className="fas fa-certificate entry-icon" aria-hidden="true" />
             Signed authenticity certificate
@@ -223,7 +239,7 @@ export default function WorkPortfolioItem({ category }) {
               </p>
               <p className="meta-line">Complimentary shipping is available on qualifying orders: 
                 <ul>
-                  <li>Canada — orders over CAD $550</li>
+                  <li>Canada — orders over CAD $500</li>
                   <li>United States — orders over USD $400</li>
                 </ul>
               </p>
