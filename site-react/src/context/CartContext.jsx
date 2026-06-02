@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { items as catalogItems } from '../data/portfolio'
-import { isLimitedEdition, isOriginal } from '../utils/artwork'
+import { isLimitedEdition, isOriginal, isOpenEdition, ARTWORK_CATEGORIES } from '../utils/artwork'
 
 const STORAGE_KEY = 'linghux_cart_v1'
 const CartContext = createContext(null)
@@ -15,11 +15,18 @@ function normalizeCartItem(item) {
   const quantity = isOriginal(category)
     ? 1
     : (Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1)
+  
+  // For open edition prints, generate priceId as category:size
+  const priceId = isOpenEdition(category) && size
+    ? `${category}:${size}`
+    : item.priceId || item.id
+  
   return {
     ...item,
     category,
     size,
     quantity,
+    priceId,
   }
 }
 
@@ -43,7 +50,7 @@ export function CartProvider({ children }) {
   }, [items])
 
   const itemIds = useMemo(() => {
-    const ids = items.map((item) => item.id).filter(Boolean)
+    const ids = items.map((item) => item.priceId || item.id).filter(Boolean)
     return [...new Set(ids)]
   }, [items])
 
@@ -119,7 +126,8 @@ export function CartProvider({ children }) {
 
   const subtotal = useMemo(() => {
     return items.reduce((sum, item) => {
-      const unitAmount = priceById[item.id]?.unit_amount
+      const priceKey = item.priceId || item.id
+      const unitAmount = priceById[priceKey]?.unit_amount
       if (typeof unitAmount !== 'number') return sum
       return sum + unitAmount * item.quantity
     }, 0)

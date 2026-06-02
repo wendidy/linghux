@@ -148,6 +148,126 @@ button:active {
   width: min(58rem, calc(100% - 4rem)) !important;
   max-width: 58rem;
 }
+
+.about-section > .content,
+.about-section > .content p,
+.about-section > .content ul,
+.about-section > .content ol,
+.about-section > .content li {
+  font-family: 'Spectral', Georgia, serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+  color: var(--charcoal) !important;
+}
+
+.about-section h2 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  font-size: 2.2rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.15 !important;
+  color: var(--ink) !important;
+}
+
+.about-section h3 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.2 !important;
+  color: var(--ink) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.6rem !important;
+}
+
+.about-section header {
+  margin-bottom: 1.5rem !important;
+}
+
+/* About Intro Section - Side by side layout
+.about-intro-section {
+  padding: 4rem 2rem;
+  background: var(--bg-white);
+}
+
+.about-intro-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  max-width: 85rem;
+  margin: 0 auto;
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-text header {
+  margin-bottom: 1.5rem;
+}
+
+.about-text h2 {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+}
+
+.about-text p {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--charcoal);
+  margin-bottom: 1.2rem;
+}
+
+.about-image {
+  width: 100%;
+  height: 400px;
+  background-image: url('../../site-react/public/images/background3.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.4rem;
+}
+
+@media (max-width: 1000px) {
+  .about-intro-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-image {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-intro-section {
+    padding: 2rem 1rem;
+  }
+
+  .about-intro-container {
+    gap: 1.5rem;
+  }
+
+  .about-text h2 {
+    font-size: 2rem;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+  }
+
+  .about-image {
+    height: 300px;
+  }
+} */
 .page-title {
   margin: 0 0 1rem;
   font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;

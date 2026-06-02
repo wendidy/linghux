@@ -13,6 +13,8 @@ export default async function handler(req, res) {
     const itemIds = normalizeItemIds(req.body?.itemIds)
     const currency = (req.body?.currency || 'USD').toUpperCase()
 
+    // console.log(`[/api/prices] Looking up ${itemIds.length} items in ${currency}:`, itemIds)
+
     if (itemIds.length === 0) {
       res.status(400).json({ error: 'No item IDs provided' })
       return
@@ -43,8 +45,17 @@ export default async function handler(req, res) {
       .map(([itemId, { price }]) => serializePrice(itemId, price))
       .filter(Boolean)
 
+    // console.log(`[/api/prices] Returning ${prices.length} prices`)
+    if (prices.length < itemIds.length) {
+      const missingItems = itemIds.filter(
+        (id) => !prices.some((p) => p?.item_id === id)
+      )
+      // console.log(`[/api/prices] ⚠ Missing prices for: ${missingItems.join(', ')}`)
+    }
+
     res.status(200).json({ prices })
   } catch (error) {
+    // console.error('[/api/prices] Error:', error.message)
     res.status(500).json({ error: error.message || 'Failed to fetch prices' })
   }
 }

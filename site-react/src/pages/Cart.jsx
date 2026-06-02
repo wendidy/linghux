@@ -22,7 +22,7 @@ export default function Cart() {
   const [shippingCountry, setShippingCountry] = useState(() => (currency === 'CAD' ? 'CA' : 'US'))
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
-  const itemIds = useMemo(() => items.map((item) => item.id).filter(Boolean), [items])
+  const itemIds = useMemo(() => items.map((item) => item.priceId || item.id).filter(Boolean), [items])
   const {
     availabilityById,
     loading: availabilityLoading,
@@ -30,7 +30,7 @@ export default function Cart() {
   } = useAvailability(itemIds)
 
   const priceForItem = useCallback(
-    (item) => priceById[item.id] || null,
+    (item) => priceById[item.priceId || item.id] || null,
     [priceById]
   )
 
@@ -39,7 +39,7 @@ export default function Cart() {
   }, [currency])
 
   const availabilityForItem = useCallback(
-    (item) => availabilityById[item.id] || null,
+    (item) => availabilityById[item.priceId || item.id] || null,
     [availabilityById]
   )
 
@@ -92,8 +92,10 @@ export default function Cart() {
       }
 
       const lineItems = items.map((item) => ({
-        id: item.id,
+        id: item.priceId || item.id,
         quantity: item.quantity,
+        itemId: item.id,
+        title: item.title,
       }))
 
       const res = await fetch('/api/checkout', {

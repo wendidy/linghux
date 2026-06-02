@@ -52,14 +52,31 @@ function serializePrice(itemId, price) {
 
 // itemIds can be: ["artworkId", "artworkId:category:size", ...]
 // For limited/open edition prints, expect keys like "artworkId:category:size"
+// For Stripe product lookup, extract just "category:size" for open edition prints
+function extractSearchId(itemId) {
+  // If it looks like "id:category:size", extract "category:size" for open edition prints
+  if (itemId && itemId.includes(':')) {
+    const parts = itemId.split(':')
+    if (parts.length === 3) {
+      const category = parts[1]
+      const size = parts[2]
+      // For open edition prints, search by category:size only
+      if (category === 'open-edition-prints') {
+        return `${category}:${size}`
+      }
+    }
+  }
+  return itemId
+}
+
 export async function fetchProductsByItemIds(stripe, itemIds) {
   const uniqueIds = normalizeItemIds(itemIds)
   if (!uniqueIds.length) return new Map()
   const entries = await Promise.all(
     uniqueIds.map(async (itemId) => {
-      // If id is in the form artworkId:category:size, use as is
-      // Otherwise, fallback to original id
-      const product = await findProductByName(stripe, itemId)
+      // For open edition prints, search by category:size instead of full variant ID
+      const searchId = extractSearchId(itemId)
+      const product = await findProductByName(stripe, searchId)
       return [itemId, product]
     })
   )

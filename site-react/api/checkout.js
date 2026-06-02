@@ -81,17 +81,22 @@ export default async function handler(req, res) {
       return
     }
 
+    // console.log(`[/api/checkout] Processing ${items.length} items, ${itemIds.length} unique IDs:`, itemIds)
+
     const priceMap = await fetchPricesByItemIdsAndCurrency(stripe, itemIds, currency)
 
     const lineItems = items.map((item) => {
       const entry = priceMap.get(item?.id)
       const price = entry?.price
       if (!price?.id) {
+        // console.error(`[/api/checkout] ✗ No price found for item: ${item?.id}`)
         throw new Error(`Unable to resolve Stripe ${currency} price for cart item`)
       }
+      // console.log(`[/api/checkout] ✓ Price found for ${item?.id}: ${price.id} (${price.currency} ${price.unit_amount})`)
       const quantity = Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1
       return {
-        itemId: item.id,
+        itemId: item.itemId || item.id,
+        itemTitle: item.title,
         price: price.id,
         quantity,
         productId: price.product,
@@ -137,6 +142,13 @@ export default async function handler(req, res) {
     metadata.currency = currency
     metadata.shipping_country = shippingCountry
     if (shippingRateId) metadata.shipping_rate_id = shippingRateId
+    
+    // Store item metadata (id and title for each item purchased)
+    const itemMetadata = lineItems.map((line) => ({
+      itemId: line.itemId,
+      title: line.itemTitle,
+    }))
+    metadata.items = JSON.stringify(itemMetadata)
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
