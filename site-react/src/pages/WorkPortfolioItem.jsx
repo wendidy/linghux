@@ -239,8 +239,8 @@ export default function WorkPortfolioItem({ category }) {
               </p>
               <p className="meta-line">Complimentary shipping is available on qualifying orders: 
                 <ul>
-                  <li>Canada — orders over CAD $500</li>
-                  <li>United States — orders over USD $400</li>
+                  <li>Canada — orders over CAD $300</li>
+                  <li>United States — orders over USD $250</li>
                 </ul>
               </p>
               <p className="meta-line"><Link to="/shipping">Learn more</Link></p>

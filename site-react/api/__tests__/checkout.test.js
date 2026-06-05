@@ -147,6 +147,25 @@ describe('Checkout API Handler', () => {
 
       expect(res.status).toHaveBeenCalledWith(400)
     })
+
+    it('should reject unsupported shipping countries', async () => {
+      req.body = {
+        lineItems: [{ id: 'item_1', quantity: 1 }],
+        currency: 'USD',
+        shippingCountry: 'FR',
+      }
+
+      await handler(req, res)
+
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          error: 'Shipping is only available within Canada and the United States',
+        })
+      )
+      expect(fetchPricesByItemIdsAndCurrency).not.toHaveBeenCalled()
+      expect(mockStripeInstance.checkout.sessions.create).not.toHaveBeenCalled()
+    })
   })
 
   describe('Creating checkout session', () => {
@@ -180,7 +199,7 @@ describe('Checkout API Handler', () => {
           shipping_address_collection: {
             allowed_countries: ['US'],
           },
-          shipping_options: [{ shipping_rate: 'shr_1TcEee2VIu8UkxmlUSw3XsDr' }],
+          shipping_options: [{ shipping_rate: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw' }],
         })
       )
     })
@@ -326,10 +345,11 @@ describe('Checkout API Handler', () => {
         currency: 'USD',
         shipping_country: 'US',
         shipping_rate_id: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
+        items: '[{"itemId":"item_1"}]',
       })
     })
 
-    it('should select Canada free shipping for CAD subtotals at or above 550', async () => {
+    it('should select Canada free shipping for CAD subtotals at or above 300', async () => {
       req.body = {
         lineItems: [{ id: 'item_1', quantity: 1 }],
         currency: 'CAD',
@@ -340,7 +360,7 @@ describe('Checkout API Handler', () => {
           'item_1',
           {
             product: createMockProduct('prod_1'),
-            price: { ...createMockPrice('price_1', 'prod_1'), unit_amount: 55000, currency: 'CAD' },
+            price: { ...createMockPrice('price_1', 'prod_1'), unit_amount: 30000, currency: 'CAD' },
           },
         ]])
       )
@@ -362,14 +382,20 @@ describe('Checkout API Handler', () => {
       )
     })
 
-    it('should select United States free shipping for USD subtotals at or above 400', async () => {
+    it('should select United States free shipping for USD subtotals at or above 250', async () => {
       req.body = {
-        lineItems: [{ id: 'item_1', quantity: 4 }],
+        lineItems: [{ id: 'item_1', quantity: 1 }],
         currency: 'USD',
         shippingCountry: 'US',
       }
       fetchPricesByItemIds.mockResolvedValueOnce(
-        new Map([['item_1', createPriceEntry('prod_1')]])
+        new Map([[
+          'item_1',
+          {
+            product: createMockProduct('prod_1'),
+            price: { ...createMockPrice('price_1', 'prod_1'), unit_amount: 25000, currency: 'USD' },
+          },
+        ]])
       )
       reserveInventory.mockResolvedValueOnce([])
 

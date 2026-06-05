@@ -28,7 +28,7 @@ function buildPrintVariants(item) {
   }))
 }
 
-const rawItems = [
+const originals = [
   {
     id: 'dreamLake',
     category: 'originals',
@@ -41,7 +41,7 @@ const rawItems = [
     location: 'Rocky Mountain National Park, Colorado, USA',
     image: '/images/dreamLake/dreamLake.jpg',
     images: gallery('dreamLake', ['dreamLake.jpg', 'dreamLake2.jpg']),
-    description: 'It was the first time I set foot in the Rocky Mountain National Park - the place that later became my refuge for 2 years. Sitting by the dream lake watching the clouds cover the sun and bring down the snow flakes in September, I was accompanied by many chipmunks waiting for their routine feast. It felt like a dream just like its name.'
+    description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
   },
   {
     id: 'signalHill',
@@ -55,7 +55,7 @@ const rawItems = [
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/signalHill/signalHill.jpg',
     images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
-    description: 'Life, work and relationship were taking a toll on me, so I made the decision to go on my first solo trip to the east coast of Canada. Being alone is scary, but it brings many surprisingly introspective moments to get to know yourself better. I climbed up along the side of the road to visit the old landmark of St John\'s - Signal Hill. I sat on the endless grass field, watched the many ships going in and out of the harbor, and the humpbacks floating up and down the ocean, just like what the landmark has done for over 350 years.'
+    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },
   {
     id: 'bourtonOnTheWater',
@@ -69,7 +69,7 @@ const rawItems = [
     location: 'Bourton-on-the-Water, England',
     image: '/images/bourtonOnTheWater/bourtonOnTheWater.jpg',
     images: gallery('bourtonOnTheWater', ['bourtonOnTheWater.jpg', 'bourtonOnTheWater2.jpg']),
-    description: 'It was a peaceful, sunny day during my graduation trip to England, the Coltwolds looked like a dream from centuries ago. Some sheeps grazing on the farm, and some were laying down underneath the giant trees avoiding the sun, everything was sitting still. My friend and I decided to explore separately. I chose to sit on a bench by the river and captured the history of this old town, listening to the water flowing. The most interesting encounter was a father wanted his daughter to look at me painting for 5 minutes shouting in the background, but the daughter was so unbothered and just wanted to be gone.'
+    description: 'It was a peaceful, sunny day during my graduation trip to England, the Coltwolds looked like a dream from centuries ago. Some sheeps were grazing on the farm, and some were laying down in a circle underneath the giant trees avoiding the sun. My friend and I parted ways to wander separately. I chose a bench beside the river and captured the history of this old town, listening to the water flowing. My most cherished encounter: a father urging his daughter for five whole minutes to watch me paint, while she remained entirely unmoved and longed to be anywhere else.'
   },
   {
     id: 'chateauDeVersailles',
@@ -83,7 +83,7 @@ const rawItems = [
     location: 'Chateau De Versailles, France',
     image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
     images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
-    description: 'It was a sunny and warm day, in front of the palace, many families were enjoying their picnic on the grass and many ducks were enjoying their lunch in the Grand Canal. I was greeted with a cute little girl who was curious about my painting but was too shy to ask, her mother approached me so politely. Neither of us understood each other\'s language but we shared a moment of warmth and kindness through art.'
+    description: 'The day was warm and filled with light. In front of the palace, families had spread themselves across the lawns with their picnics, and ducks claimed the Grand Canal as their own lunch spot. A little girl was very curious about the painting, but was too shy to ask — until her mother approached politely. Neither of us spoke the other\'s language, yet we shared a moment of warmth and kindness through the canvas between us.'
   },
    {
     id: 'rooseveltPark',
@@ -97,7 +97,7 @@ const rawItems = [
     location: 'Longmont, CO, USA',
     image: '/images/rooseveltPark/rooseveltPark.jpg',
     images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg', 'rooseveltPark3.jpg']),
-    description: 'It was a pleasure to be joining the Longmont Artists\' Guild for a get together and paint at the Roosevelt Park. I was most fond of the fauna beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground to paint this beautiful scene.'
+    description: 'It was a pleasure to be joining the Artists\' Guild for a get together in Roosevelt Park. I was most fond of the flora beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground and let the scene come to me.',
   },
   // {
   //   id: 'standleyPark',
@@ -123,7 +123,7 @@ const rawItems = [
     location: 'Algonquin Provincial Park, Ontario, Canada',
     image: '/images/lakeOfTwoRivers/lakeOfTwoRivers.jpg',
     images: gallery('lakeOfTwoRivers', ['lakeOfTwoRivers.jpg', 'lakeOfTwoRivers2.jpg']),
-    description: 'We found a quiet beach in the afternoon with a canoe sitting on shore by itself, unattended. With the sun going down, I was looking at it and felt a sense of loneliness. When it\'s dark, will it feel scared and alone? Or maybe I\'m overthinking, it could be having the time of its life.'
+    description: 'We happened upon a quiet beach in the late afternoon — a canoe resting on the shore, unattended, untethered. As the sun descended, I watched the small waves nudge it again and again, and felt something like loneliness settle over the scene. Would it feel abandoned when it\'s dark? Or perhaps I was the one projecting — perhaps it was entirely in its element, having the time of its life, content with the solitude I had yet to make peace with.'
   },
   {
     id: 'oxenPond',
@@ -137,7 +137,7 @@ const rawItems = [
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/oxenPond/oxenPond.jpg',
     images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond2.jpg']),
-    description: 'The sun was beaming down on the pond, I was staying too still on the bench that a group of ducks slowly swimmed up to the shore, some were diving down to eat the algae and some were resting near my feet. I captured one of them with their butt sticking out of the water, it was such an adorable scene to watch.'
+    description: 'The sun was beaming down on the pond, and I must have stilled myself enough to watch a group of ducks edge toward the shore and gather near my feet, unbothered. Some dove beneath the surface to graze on algae; others simply rested. I captured one of them with their head submerged and their butt skyward, it was such an adorable scene to watch.'
   },
   {
     id: 'pacificBeach',
@@ -151,7 +151,7 @@ const rawItems = [
     location: 'San Diego, California, USA',
     image: '/images/pacificBeach/pacificBeach.jpg',
     images: gallery('pacificBeach', ['pacificBeach.jpg', 'pacificBeach2.jpg']),
-    description: 'My friends insisted on taking me to La Jolla and Pacific Beach to get a good taste of the beach scene in San Diego. We were resting together and I sat on the corner of a beach towel, feeling very sorry for being a third wheel. I saw the deck floating amid the turqoise water and the cloudless sky, nonetheless, I was very happy to be there.'
+    description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
   {
     id: 'majorsHillPark',
@@ -165,7 +165,7 @@ const rawItems = [
     location: 'Ottawa, Ontario, Canada',
     image: '/images/majorsHillPark/majorsHillPark2.jpg',
     images: gallery('majorsHillPark', ['majorsHillPark2.jpg']),
-    description: 'In the capital city of Canada, we were able to see the majestic parliament building peeking through the trees from the Major\'s Hill Park. There were many people sitting down enjoying the view, taking in the sunlight and the breeze, and I encountered another plein air artist in the park.'
+    description: 'From Major\'s Hill Park in the heart of the capital of Canada, the Parliament Buildings emerged through the canopy — majestic and half-disclosed. People had gathered in clusters on the grass, taking in the sunlight and the breeze. I found myself in unexpected company: another plein air painter, working the same light.'
   },
   {
     id: 'tobermory',
@@ -179,141 +179,150 @@ const rawItems = [
     location: 'Tobermory, Ontario, Canada',
     image: '/images/tobermory/tobermory.jpg',
     images: gallery('tobermory', ['tobermory.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'The duck kept approaching me, convinced my watercolor palette was food. This painting is about that particular one—marching over with absolute confidence, ready for a feast.'
   },
+]
+
+const limitedEditionPrints = [
   {
     id: 'universityOfDenver',
     category: 'limited-edition-prints',
     title: 'University of Denver',
     size: ['8x10', '17x22'],
-    date: '2024-01-05',
+    date: '2024-11-15',
     location: 'Denver, Colorado, USA',
     image: '/images/universityOfDenver/universityOfDenver.jpg',
     images: gallery('universityOfDenver', ['universityOfDenver.jpg', 'universityOfDenver2.jpg']),
-    description: 'My friend and I were waiting for the concert to begin and decided to drive to Denver earlier to avoid the traffic. The University of Denver was just a compacted size, with white and red lounge chairs scattered around. The accent colors popped among the trees. I hid underneath a leafy one and made 1 red chair to be my main subject.'
+    description: 'My friend and I arrived early to Denver to slip ahead of the traffic before the concert. The University of Denver surprised me — intimate in scale, with white and red lounge chairs scattered across the grounds like punctuation among the trees. The accent colours caught the afternoon light with quiet confidence. I found shelter beneath a full-leafed canopy and let one red chair become the whole story.'
   },
+]
+
+const openEditionPrints = [
     {
     id: 'theLaughingGoat',
     category: 'open-edition-prints',
     title: 'The Laughing Goat',
     size: ['8x10', '11x17','13x19'],
-    date: '2024-01-05',
+    date: '2024-08',
     location: 'Boulder, Colorado, USA',
     image: '/images/theLaughingGoat/theLaughingGoat.jpg',
     images: gallery('theLaughingGoat', ['theLaughingGoat.jpg']),
-    description: 'My friend and I were waiting for the concert to begin and decided to drive to Denver earlier to avoid the traffic. The University of Denver was just a compacted size, with white and red lounge chairs scattered around. The accent colors popped among the trees. I hid underneath a leafy one and made 1 red chair to be my main subject.'
+    description: 'I wandered into a busy café in the heart of downtown Boulder and immediately fell in love with its warm wooden interiors and earthy tones. I settled into a corner seat, where I could take in the entire café at once. A man beside me spent the morning in meetings, becoming an unexpected companion to my painting session.' 
   },
   {
     id: 'dreamLake',
     category: 'open-edition-prints',
     title: 'Dream Lake',
-    size: ['8x10', '11x17','13x19'],
-    date: '2024-01-05',
+    size: ['8x10', '11x17','13x19', '17x22'],
+    date: '2024-09-08',
     location: 'Rocky Mountain National Park, Colorado, USA',
     image: '/images/dreamLake/dreamLake.jpg',
     images: gallery('dreamLake', ['dreamLake.jpg', 'dreamLake2.jpg']),
-    description: 'My friend and I were waiting for the concert to begin and decided to drive to Denver earlier to avoid the traffic. The University of Denver was just a compacted size, with white and red lounge chairs scattered around. The accent colors popped among the trees. I hid underneath a leafy one and made 1 red chair to be my main subject.'
+    description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
   },
   {
     id: 'dakotaRidgePark',
     category: 'open-edition-prints',
     title: 'Dakota Ridge Park',
     size: ['5x7','8x10', '11x17'],
-    date: '2023-08-09',
+    date: '2024-10-09',
     location: 'Boulder, Colorado, USA',
     image: '/images/dakotaRidgePark/dakotaRidgePark.jpg',
     images: gallery('dakotaRidgePark', ['dakotaRidgePark.jpg']),
-    description: 'How do you recognize beauty in everyday life? That\'s a question we should all ask ourselves, to appreciate the things we take for granted and feel at peace with our surroundings. What did I see in the playground in and "uneventful" day? It was a swing sets that offered joy to children (and myself) with trees that make us be able to breathe in a beautiful happy afternoon.'
+    description: 'How do you recognize beauty in everyday life? That\'s a question we should all ask ourselves, to appreciate the things we take for granted and feel at peace with our surroundings. What did I see in the playground in an "uneventful" day? A swing set that offered joy to children with trees breathing quietly overhead, in a beautiful happy afternoon.',
   },
   {
     id: 'lakeOfTwoRivers',
     category: 'open-edition-prints',
     title: 'Lake of Two Rivers',
     size: ['5x7','8x10', '11x17'],
-    date: '2024-02-20',
+    date: '2023-08-28',
     location: 'Algonquin Provincial Park, Ontario, Canada',
     image: '/images/lakeOfTwoRivers/lakeOfTwoRivers.jpg',
     images: gallery('lakeOfTwoRivers', ['lakeOfTwoRivers.jpg']),
-    description: 'During my studies in college, we didn\'t have a lot free time to do anything other than studying. Friends enjoyed each other\'s company in the cafetria and classrooms - whispering unrelated subjects that annoyed the other classmates a bit too much. We decided to do a picnic for once and went to the river bank by Columbia Lake. It was a nice get away from the busy campus life, and really enjoyed the nature as we should be.'
+    description: 'We happened upon a quiet beach in the late afternoon — a canoe resting on the shore, unattended, untethered. As the sun descended, I watched the small waves nudge it again and again, and felt something like loneliness settle over the scene. Would it feel abandoned when it\'s dark? Or perhaps I was the one projecting — perhaps it was entirely in its element, having the time of its life, content with the solitude I had yet to make peace with.'
   },
+    // description: 'During my studies in college, we didn\'t have a lot free time to do anything other than studying. Friends enjoyed each other\'s company in the cafetria and classrooms - whispering unrelated subjects that annoyed the other classmates a bit too much. We decided to do a picnic for once and went to the river bank by Columbia Lake. It was a nice get away from the busy campus life, and really enjoyed the nature as we should be.'
   {
-    id: 'petiteParis',
+    id: 'petitPalais',
     category: 'open-edition-prints',
-    title: 'Petite Paris',
+    title: 'Petit Palais',
     size: ['5x7','8x10'],
-    date: '2023-12-02',
+    date: '2024-06-03',
     location: 'Paris, France',
-    image: '/images/petiteParis/petiteParis.jpg',
-    images: gallery('petiteParis', ['petiteParis.jpg', 'petiteParis2.jpg']),
-    description: 'My friend went to Vimy to visit the memorial for his great grandfather and I wandered around Paris by myself. It was the first time I was in France, I gave myself courage to feel comfortable being with myself, and take in the scenery that I had once in my life to visit. At the Petite Paris by Louvre, I was mesmorized by the flower arrangements, so I sat behind a bench - not on the bench but behind it, and painted this.'
+    image: '/images/petitPalais/petitPalais.jpg',
+    images: gallery('petitPalais', ['petitPalais.jpg', 'petitPalais2.jpg']),
+    description: 'My friend had gone to Vimy to visit the memorial for his great-grandfather, and I was left to wander Paris alone — my first time in France. I gave myself courage to feel comfortable being with myself, and absorb what I might only ever witness once. At the Petit Palais near the Louvre, the flower arrangements stilled me completely. I sat not on the bench but behind it, and painted from there.'
   },
   {
     id: 'harbourfront',
     category: 'open-edition-prints',
     title: 'Harbourfront',
     size: ['5x7','8x10'],
-    date: '2023-07-18',
+    date: '2023',
     location: 'Toronto, Ontario, Canada',
     image: '/images/harbourfront/harbourfront.jpg',
     images: gallery('harbourfront', ['harbourfront.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'Just beside the Terry Fox Mile Zero memorial, a girl lay stretched out on the deck while I sat on a nearby bench. The statue of Terry Fox cast a quiet solemnity over the harbour — and over me. Overlooking the Atlantic, St. John\'s was where he began his cross-Canada run: a man who chose, against every limit, how to live. I found myself pondering over that for a long time.'
   },
   {
     id: 'signalHill',
     category: 'open-edition-prints',
     title: 'Signal Hill',
     size: ['8x10', '11x17','13x19'],
-    date: '2024-03-11',
+    date: '2022-07-16',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/signalHill/signalHill.jpg',
     images: gallery('signalHill', ['signalHill.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },
   {
     id: 'chateauDeVersailles',
     category: 'open-edition-prints',
     title: 'Château de Versailles',
     size: ['5x7','8x10', '11x17'],
-    date: '2023-10-01',
+    date: '2024-06-02',
     location: 'Chateau De Versailles, France',
     image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
     images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'The day was warm and filled with light. In front of the palace, families had spread themselves across the lawns with their picnics, and ducks claimed the Grand Canal as their own lunch spot. A little girl was very curious about the painting, but was too shy to ask — until her mother approached politely. Neither of us spoke the other\'s language, yet we shared a moment of warmth and kindness through the canvas between us.'
   },
   {
     id: 'peleeIsland',
     category: 'open-edition-prints',
     title: 'Pelee Island',
     size: ['5x7','8x10','11x17','17x22'],
-    date: '2024-04-01',
+    date: '2024-05-19',
     location: 'Pelee Island, Ontario, Canada',
     image: '/images/peleeIsland/peleeIsland.jpg',
     images: gallery('peleeIsland', ['peleeIsland.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'Have you ever watched a snake move through water — that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer: fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
   },
   {
     id: 'marshallLake',
     category: 'open-edition-prints',
     title: 'Marshall Lake',
     size: ['5x7','8x10'],
-    date: '2024-04-01',
+    date: '2024-11-17',
     location: 'Boulder, Colorado, USA',
     image: '/images/marshallLake/marshallLake.jpg',
     images: gallery('marshallLake', ['marshallLake.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'If you were to ask me to summarize Colorado in three colors, I would tell you: yellow, blue, with a splash of green. Vast fields of golden grass stretch beneath an open blue sky, while endless evergreens climb the mountains in the distance. I love that yellow so much—it\'s a landscape I rarely encounter in the other places I\'ve frequented. I found the perfect spot by the lake, nestled among the grass, to spend a morning reading and painting.'
   },
   {
     id: 'neckPoint',
     category: 'open-edition-prints',
     title: 'Neck Point',
     size: ['8x10', '11x17','13x19'],
-    date: '2024-04-01',
+    date: '2022-08-29',
     location: 'Nanaimo, British Columbia, Canada',
     image: '/images/neckPoint/neckPoint.jpg',
     images: gallery('neckPoint', ['neckPoint.jpg']),
-    description: 'A layered and expressive composition with tonal shifts and deliberate brush texture.'
+    description: 'If you ask me the finest place in British Columbia, I will always say Vancouver Island. Something shifts when you cross the strait from the mainland — the air loosens, the pace unravels. Water has run through so much of my work; I\'m drawn to its softness and its force in equal measure. My friends set off on the trail while I stayed behind to sit with the water, which has always been enough.'
   },
 ]
+
+const rawItem = originals + imitedEditionPrints + openEditionPrints;
 
 export const items = rawItems.map((item) => {
   const variants = buildPrintVariants(item)

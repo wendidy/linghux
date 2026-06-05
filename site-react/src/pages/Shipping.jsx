@@ -15,8 +15,8 @@ export default function Shipping() {
 
           <p>Complimentary shipping is available on qualifying orders:</p>
           <ul>
-            <li>Canada — orders over CAD $500</li>
-            <li>United States — orders over USD $400</li>
+            <li>Canada — orders over CAD $300</li>
+            <li>United States — orders over USD $250</li>
           </ul>
           <p>Shipping rates are automatically applied at checkout.</p>
 

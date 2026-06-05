@@ -7,16 +7,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const SHIPPING_RATE_RULES = {
   CA: {
     currency: 'CAD',
-    freeThreshold: 55000,
+    freeThreshold: 30000,
     freeRateId: 'shr_1TcEfb2VIu8UkxmlkxZowGRw',
     paidRateId: 'shr_1TcEfA2VIu8Ukxml9abGIJNN',
   },
   US: {
     currency: 'USD',
-    freeThreshold: 40000,
+    freeThreshold: 25000,
     freeRateId: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw',
     paidRateId: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
   },
+}
+const ALLOWED_SHIPPING_COUNTRIES = Object.freeze(Object.keys(SHIPPING_RATE_RULES))
+const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
+  CAD: 'CA',
+  USD: 'US',
 }
 
 function parseEditionCap(product) {
@@ -37,8 +42,14 @@ function getBaseUrl(req) {
 }
 
 function normalizeShippingCountry(country, currency = 'USD') {
-  if (country === 'CA' || country === 'US') return country
-  return currency === 'CAD' ? 'CA' : 'US'
+  const normalizedCountry = typeof country === 'string' ? country.trim().toUpperCase() : ''
+  if (ALLOWED_SHIPPING_COUNTRIES.includes(normalizedCountry)) return normalizedCountry
+
+  if (!normalizedCountry) {
+    return DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY[currency] || 'US'
+  }
+
+  return null
 }
 
 function shippingRateFor(country, subtotal) {
@@ -67,6 +78,12 @@ export default async function handler(req, res) {
       currency = (req.body.currency || 'USD').toUpperCase()
       shippingCountry = normalizeShippingCountry(req.body.shippingCountry, currency)
     }
+
+    if (!shippingCountry) {
+      res.status(400).json({ error: 'Shipping is only available within Canada and the United States' })
+      return
+    }
+
     currency = SHIPPING_RATE_RULES[shippingCountry]?.currency || currency
 
     if (!items.length) {
