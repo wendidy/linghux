@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
 import { reserveInventory, releaseReservations } from './inventory.js'
+import { inventoryCapFor } from './catalogInventory.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -22,13 +23,6 @@ const ALLOWED_SHIPPING_COUNTRIES = Object.freeze(Object.keys(SHIPPING_RATE_RULES
 const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
   CAD: 'CA',
   USD: 'US',
-}
-
-function parseEditionCap(product) {
-  const raw = product?.metadata?.edition_cap
-  if (raw == null) return null
-  const cap = Number.parseInt(raw, 10)
-  return Number.isInteger(cap) && cap > 0 ? cap : null
 }
 
 function getBaseUrl(req) {
@@ -114,6 +108,7 @@ export default async function handler(req, res) {
       return {
         itemId: item.itemId || item.id,
         itemTitle: item.title,
+        category: item.category,
         price: price.id,
         quantity,
         productId: price.product,
@@ -130,7 +125,7 @@ export default async function handler(req, res) {
     const requestedByProduct = new Map()
     for (const line of lineItems) {
       const product = productById.get(line.productId)
-      const cap = parseEditionCap(product)
+      const cap = inventoryCapFor(product, line)
       if (!cap) continue
       const current = requestedByProduct.get(line.productId) || {
         productId: line.productId,

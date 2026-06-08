@@ -64,6 +64,9 @@ export function CartProvider({ children }) {
     const maxQuantity = isLimitedEdition(item) && Number.isInteger(item.maxQuantity)
       ? item.maxQuantity
       : null
+    const requestedQuantity = isOriginal(item)
+      ? 1
+      : (Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1)
     const existing = items.find((existingItem) => existingItem.id === item?.id)
 
     if (isOriginal(item)) {
@@ -79,6 +82,12 @@ export function CartProvider({ children }) {
       if (existing && existing.quantity >= maxQuantity) {
         return { added: false, reason: 'limit_reached' }
       }
+      if (existing && existing.quantity + requestedQuantity > maxQuantity) {
+        return { added: false, reason: 'limit_reached' }
+      }
+      if (!existing && requestedQuantity > maxQuantity) {
+        return { added: false, reason: 'limit_reached' }
+      }
     }
 
     setItems((prev) => {
@@ -92,13 +101,13 @@ export function CartProvider({ children }) {
             ? {
                 ...p,
                 quantity: maxQuantity === null
-                  ? p.quantity + 1
-                  : Math.min(p.quantity + 1, maxQuantity),
+                  ? p.quantity + requestedQuantity
+                  : Math.min(p.quantity + requestedQuantity, maxQuantity),
               }
             : p
         )
       }
-      return [...prev, normalizeCartItem(item)]
+      return [...prev, normalizeCartItem({ ...item, quantity: requestedQuantity })]
     })
     return { added: true }
   }

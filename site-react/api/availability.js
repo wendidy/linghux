@@ -1,15 +1,9 @@
 import Stripe from 'stripe'
 import { withClient } from './db.js'
 import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
+import { inventoryCapFor } from './catalogInventory.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-function parseEditionCap(product) {
-  const raw = product?.metadata?.edition_cap
-  if (raw == null) return null
-  const cap = Number.parseInt(raw, 10)
-  return Number.isInteger(cap) && cap > 0 ? cap : null
-}
 
 async function getInventoryByProductId(productIds) {
   if (!productIds.length) return new Map()
@@ -61,7 +55,7 @@ export default async function handler(req, res) {
       }
 
       const product = productById.get(productId)
-      const cap = parseEditionCap(product)
+      const cap = inventoryCapFor(product, { id: itemId })
       if (!cap) {
         availability[itemId] = {
           status: 'unlimited',

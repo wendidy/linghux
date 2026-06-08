@@ -22,6 +22,7 @@ export default function WorkPortfolioItem({ category }) {
   const { addItem, items: cartItems } = useCart()
   const [cartNotice, setCartNotice] = useState('')
   const [shippingOpen, setShippingOpen] = useState(false)
+  const [selectedQuantity, setSelectedQuantity] = useState(1)
   const variants = useMemo(() => {
     if (!item) return []
     if (Array.isArray(item.variants) && item.variants.length > 0) return item.variants
@@ -47,22 +48,37 @@ export default function WorkPortfolioItem({ category }) {
   const limitedEdition = isLimitedEdition(item)
   const openEdition = isOpenEdition(item)
   const isPrint = limitedEdition || openEdition
+  const tracksInventory = original || limitedEdition
   const isAlreadyInCart = original && cartItems.some((cartItem) => cartItem.id === selectedItemId)
-  const isSoldOut = Boolean(availability?.soldOut)
-  const hasAvailabilityInfo = !limitedEdition || (!availabilityLoading && Boolean(availability))
+  const isSoldOut = tracksInventory && Boolean(availability?.soldOut)
+  const hasAvailabilityInfo = !tracksInventory || (!availabilityLoading && Boolean(availability))
+  const inventoryInfoMissing = tracksInventory && !availabilityLoading && !availability
+  const maxSelectableQuantity = limitedEdition &&
+    typeof availability?.available === 'number'
+      ? Math.max(availability.available - cartQuantity, 0)
+      : null
   const limitReachedInCart = limitedEdition &&
     !availabilityLoading &&
     typeof availability?.available === 'number' &&
     cartQuantity >= availability.available
   const canPurchase = Boolean(selectedItemId && priceInfo && hasAvailabilityInfo)
+  const canSelectPrintQuantity = isPrint && !isSoldOut && !limitReachedInCart
+  const canIncreaseSelectedQuantity = openEdition ||
+    (limitedEdition && (maxSelectableQuantity === null || selectedQuantity < maxSelectableQuantity))
   const buttonLabel = !selectedItemId
     ? 'Unavailable'
     : (
-        isSoldOut
-          ? 'Sold out'
-          : (limitReachedInCart
-              ? 'Limit reached'
-              : (priceInfo ? 'Add to Basket' : (priceLoading ? PRICE_LABELS.loading : PRICE_LABELS.unavailable)))
+        (priceLoading || (tracksInventory && availabilityLoading))
+          ? PRICE_LABELS.loading
+          : (isSoldOut
+              ? (original ? 'Sold' : 'Sold out')
+              : (original && isAlreadyInCart
+                  ? 'In Basket'
+                  : (limitReachedInCart
+                      ? 'Limit reached'
+                      : (inventoryInfoMissing
+                          ? 'Unavailable'
+                          : (priceInfo ? 'Add to Basket' : PRICE_LABELS.unavailable)))))
       )
 
   useEffect(() => {
@@ -75,6 +91,18 @@ export default function WorkPortfolioItem({ category }) {
     setSelectedVariantId(initialVariantId)
     setCartNotice('')
   }, [initialVariantId])
+
+  useEffect(() => {
+    setSelectedQuantity(1)
+  }, [selectedItemId])
+
+  useEffect(() => {
+    setSelectedQuantity((quantity) => {
+      const normalizedQuantity = Math.max(1, quantity)
+      if (!limitedEdition || maxSelectableQuantity === null) return normalizedQuantity
+      return Math.min(normalizedQuantity, Math.max(1, maxSelectableQuantity))
+    })
+  }, [limitedEdition, maxSelectableQuantity])
 
   if (!item) {
     return (
@@ -180,39 +208,69 @@ export default function WorkPortfolioItem({ category }) {
             <i className="fas fa-certificate entry-icon" aria-hidden="true" />
             Signed authenticity certificate
           </p>
+          {item.note && (
+            <p className="meta-line">
+              <i className="fas fa-sticky-note entry-icon" aria-hidden="true" />
+              <span>{item.note}</span>
+            </p>
+          )}
           <p className="description">{item.description}</p>
-          <button
-            type="button"
-            className="basket-button"
-            disabled={!canPurchase || isSoldOut || limitReachedInCart}
-            onClick={() => {
-              if (isSoldOut || limitReachedInCart) return
-              if (original && isAlreadyInCart) {
-                setCartNotice('This work has already been added to your cart.')
-                return
-              }
-              const result = addItem({
-                id: selectedItemId,
-                title: item.title,
-                image: item.image,
-                category: item.category,
-                size: selectedVariant?.size || item.size,
-                framedSize: selectedVariant?.framedSize || item.framedSize,
-                maxQuantity: limitedEdition ? availability?.available : undefined,
-              })
-              if (result?.added) {
-                setCartNotice('')
-              } else if (result?.reason === 'already_in_cart') {
-                setCartNotice('This work has already been added to your cart.')
-              } else if (result?.reason === 'limit_reached') {
-                setCartNotice('Maximum available quantity is already in your cart.')
-              } else if (result?.reason === 'sold_out') {
-                setCartNotice('This work is sold out.')
-              }
-            }}
-          >
-            {buttonLabel}
-          </button>
+          <div className="work-item-actions">
+            {canSelectPrintQuantity && (
+              <div className="cart-qty work-item-qty" aria-label="Select quantity">
+                <button
+                  type="button"
+                  onClick={() => setSelectedQuantity((quantity) => Math.max(1, quantity - 1))}
+                  disabled={selectedQuantity <= 1}
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <span>{selectedQuantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedQuantity((quantity) => quantity + 1)}
+                  disabled={!canIncreaseSelectedQuantity}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+            )}
+            <button
+              type="button"
+              className="basket-button"
+              disabled={!canPurchase || isSoldOut || limitReachedInCart || (original && isAlreadyInCart)}
+              onClick={() => {
+                if (isSoldOut || limitReachedInCart) return
+                if (original && isAlreadyInCart) {
+                  setCartNotice('This work has already been added to your cart.')
+                  return
+                }
+                const result = addItem({
+                  id: selectedItemId,
+                  title: item.title,
+                  image: item.image,
+                  category: item.category,
+                  size: selectedVariant?.size || item.size,
+                  framedSize: selectedVariant?.framedSize || item.framedSize,
+                  quantity: isPrint ? selectedQuantity : 1,
+                  maxQuantity: limitedEdition ? availability?.available : undefined,
+                })
+                if (result?.added) {
+                  setCartNotice('')
+                } else if (result?.reason === 'already_in_cart') {
+                  setCartNotice('This work has already been added to your cart.')
+                } else if (result?.reason === 'limit_reached') {
+                  setCartNotice('Maximum available quantity is already in your cart.')
+                } else if (result?.reason === 'sold_out') {
+                  setCartNotice('This work is sold out.')
+                }
+              }}
+            >
+              {buttonLabel}
+            </button>
+          </div>
           {limitReachedInCart && <p className="meta-line">Maximum available quantity is already in your cart.</p>}
           {cartNotice && <p className="meta-line">{cartNotice}</p>}
           {priceError && <p className="meta-line">{priceError}</p>}

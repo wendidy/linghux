@@ -456,9 +456,29 @@ button:active {
   font-size: 0.9rem;
   margin: 0.8rem 0 1.2rem;
 }
+.work-item-meta .work-item-note {
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0.35rem 0 0.8rem;
+}
+.work-item-meta .work-item-note .entry-icon {
+  flex: 0 0 auto;
+  margin-top: 0.2em;
+}
+.work-item-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
 .work-item-meta .basket-button {
   appearance: none;
-  width: 100%;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
   padding: 0.95rem 1rem;
   line-height: 1.2;
   border: 0;
@@ -477,6 +497,18 @@ button:active {
 }
 .work-item-meta .basket-button:hover {
   opacity: 0.92;
+}
+.work-item-qty {
+  align-items: stretch;
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+.work-item-qty span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  text-align: center;
 }
 .sold-out-badge {
   display: inline-block;

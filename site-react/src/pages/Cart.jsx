@@ -96,6 +96,7 @@ export default function Cart() {
         quantity: item.quantity,
         itemId: item.id,
         title: item.title,
+        category: item.category,
       }))
 
       const res = await fetch('/api/checkout', {

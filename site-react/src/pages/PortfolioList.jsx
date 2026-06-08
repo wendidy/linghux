@@ -109,7 +109,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                   <div className="product-badge">
                     <span>{badgeLabel}</span>
                     {isSoldOut && (
-                      <span className="sold-out-badge">Sold out</span>
+                      <span className="sold-out-badge">{isOriginalsPage ? 'Sold' : 'Sold out'}</span>
                     )}
                   </div>
                   <h3 className="title">{item.title}</h3>
