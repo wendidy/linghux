@@ -5,22 +5,22 @@ import { ARTWORK_CATEGORIES } from '../utils/artwork'
 const shopPanels = [
   {
     title: 'Originals',
-    image: '/images/dreamLake/dreamLake.jpg',
-    alt: 'Dream Lake original watercolor',
+    image: '/images/goreCreek/goreCreek.png',
+    alt: 'Original watercolor',
     button: 'Go Shop Originals',
     to: `/artwork/${ARTWORK_CATEGORIES.originals}`,
   },
   {
     title: 'Limited Edition Prints',
-    image: '/images/petiteParis/petiteParis.jpg',
-    alt: 'Petite Paris limited edition print',
+    image: '/images/signalHill/signalHill.jpg',
+    alt: 'Limited edition print',
     button: 'Go Shop Limited Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.limitedEditionPrints}`,
   },
   {
     title: 'Open Edition Prints',
-    image: '/images/harbourfront/harbourfront.jpg',
-    alt: 'Harbourfront open edition print',
+    image: '/images/peleeIsland/peleeIsland.jpg',
+    alt: 'Open edition print',
     button: 'Go Shop Open Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.openEditionPrints}`,
   },

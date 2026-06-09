@@ -412,17 +412,6 @@ const openEditionPrints = [
     description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },
   {
-    id: 'chateauDeVersailles',
-    category: 'open-edition-prints',
-    title: 'Château de Versailles',
-    size: ['5x7','8x10', '11x17'],
-    date: '2024-06-02',
-    location: 'Chateau De Versailles, France',
-    image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
-    images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
-    description: 'The day was warm and filled with light. In front of the palace, families had spread themselves across the lawns with their picnics, and ducks claimed the Grand Canal as their own lunch spot. A little girl was very curious about the painting, but was too shy to ask — until her mother approached politely. Neither of us spoke the other\'s language, yet we shared a moment of warmth and kindness through the canvas between us.'
-  },
-  {
     id: 'marshallLake',
     category: 'open-edition-prints',
     title: 'Marshall Lake',
