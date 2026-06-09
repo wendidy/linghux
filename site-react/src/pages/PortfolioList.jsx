@@ -4,7 +4,9 @@ import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
+import Seo from '../components/Seo'
 import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../utils/artwork'
+import { buildImageAlt } from '../utils/seo'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const navigate = useNavigate()
@@ -35,9 +37,18 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
     }
   }
 
+  const pageTitle = category
+    ? `${heading} | Buy watercolor art by Linghux`
+    : 'Artworks | Buy original watercolor paintings and prints by Linghux'
+  const pageDescription = category
+    ? `Browse ${heading.toLowerCase()} by a Canadian watercolor artist, including Newfoundland and Colorado plein air landscape paintings.`
+    : 'Shop original watercolor paintings and prints by Linghux, including Newfoundland and Colorado landscapes and Canadian plein air artwork.'
+
   return (
-    <section id="work" className="main style3">
-      <div className="gallery-div">
+    <>
+      <Seo title={pageTitle} description={pageDescription} />
+      <section id="work" className="main style3">
+        <div className="gallery-div">
         <header>
           <h2 className="page-title">{heading}</h2>
           {isOriginalsPage && (
@@ -94,7 +105,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                   <img
                     className="zoomable product-image product-image-primary"
                     src={primaryImage}
-                    alt={item.title}
+                    alt={buildImageAlt(item)}
                   />
                   {hoverImage && (
                     <img
@@ -135,5 +146,6 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         </div>
       </div>
     </section>
+    </>
   )
 }

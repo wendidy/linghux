@@ -78,7 +78,7 @@ export function useStripePrices(itemIds) {
 
     setLoading(true)
     setError('')
-    setPriceById((current) => mergeKnownPrices(ids, currency, current))
+    setPriceById(cachedPricesFor(ids, currency))
 
     fetchPricesWithRetry(ids, currency, { signal: controller.signal })
       .then((map) => {

@@ -5,8 +5,10 @@ import { useCart } from '../context/CartContext'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
+import Seo from '../components/Seo'
 import { PRICE_LABELS } from '../utils/stripePrices'
 import { findArtwork, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
+import { buildImageAlt, buildProductPageDescription } from '../utils/seo'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -114,12 +116,19 @@ export default function WorkPortfolioItem({ category }) {
     )
   }
 
+  const pageTitle = `${item.title} | Original watercolor painting for sale`
+  const pageDescription = buildProductPageDescription(item)
+  const imageAlt = buildImageAlt(item)
+  const galleryAlt = (index) => [item.title, `alternate view ${index + 1}`, item.location, item.medium].filter(Boolean).join(' — ')
+
   return (
-    <section className="work-item-page">
-      <div className="work-item-grid">
+    <>
+      <Seo title={pageTitle} description={pageDescription} image={item.image} />
+      <section className="work-item-page">
+        <div className="work-item-grid">
         <div className="work-item-visual">
           <div className="work-item-image">
-            <img src={activeImage || item.image} alt={item.title} />
+            <img src={activeImage || item.image} alt={imageAlt} />
           </div>
           {galleryImages.length > 1 && (
             <div className="work-item-gallery">
@@ -131,7 +140,7 @@ export default function WorkPortfolioItem({ category }) {
                   onClick={() => setActiveImage(src)}
                   aria-label={`Show image ${index + 1}`}
                 >
-                  <img src={src} alt={`${item.title} view ${index + 1}`} />
+                  <img src={src} alt={galleryAlt(index)} />
                 </button>
               ))}
             </div>
@@ -306,6 +315,9 @@ export default function WorkPortfolioItem({ category }) {
           </div>
         </aside>
       </div>
-    </section>
+      </section>
+    </>
   )
+
 }
+

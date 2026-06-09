@@ -181,6 +181,44 @@ The order email includes:
 * Add USD payout optimization (Wise)
 * Improve newsletter section design
 
+## 🔍 SEO Improvements and Recommendations
+
+### What changed in `site-react`
+* Added `src/components/Seo.jsx` so page titles and meta descriptions are updated dynamically in the React app.
+* Added `src/utils/seo.js` to build descriptive image alt text and product page descriptions automatically.
+* Updated `src/pages/WorkPortfolioItem.jsx` to use descriptive alt tags that include title, location, and medium when available.
+* Updated `src/pages/PortfolioList.jsx` so gallery card images use better alt text and category pages have their own metadata.
+* Updated `src/pages/Home.jsx` and `site-react/index.html` with stronger default page title and meta description.
+
+### Recommended SEO strategy
+
+1. Effective long-term choice: migrate `site-react` to Next.js.
+   * Next.js gives you server-side rendering / static generation, which is the strongest way to improve SEO for product pages.
+   * Use `next-sitemap` to generate `sitemap.xml` automatically.
+   * Use Google Search Console to verify the domain and monitor search indexing.
+   * Use Google Analytics 4 for page analytics and conversion tracking.
+
+2. Easier immediate path: keep the Vite React app and optimize content.
+   * Add dynamic meta tags with a lightweight `Seo` component.
+   * Ensure every product image alt tag includes location + medium.
+   * Add structured data later if you want product/offer rich results.
+
+### Keywords to prioritize
+
+* original watercolor painting for sale
+* plein air watercolor art
+* Canadian watercolor artist
+* original framed watercolor painting
+* buy original landscape painting
+* Newfoundland art for sale
+* Signal Hill painting
+* St John's Newfoundland watercolor
+* Canadian landscape watercolor
+* original plein air painting framed
+* small watercolor painting for sale Canada
+* one of a kind watercolor wall art
+* affordable original watercolor painting
+
 ---
 
 Testing with live stripe key:

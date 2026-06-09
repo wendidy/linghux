@@ -30,6 +30,20 @@ function buildPrintVariants(item) {
 
 const originals = [
   {
+    id: 'testOriginal',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'test',
+    size: '7.32"x9.96"',
+    framedSize: '8.86"x10.83"',
+    medium: 'Watercolor and pencil on paper',
+    date: '2022-07-16',
+    location: 'St John\'s, Newfoundland, Canada',
+    image: '/images/signalHill/signalHill.jpg',
+    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
+    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
+  },  
+  {
     id: 'signalHill',
     category: 'originals',
     type: 'Plein Air',
@@ -249,20 +263,21 @@ const limitedEditionPrints = [
     note: 'Important note: This panoramic landscape was originally painted as a continuous diptych and is faithfully reproduced in its authentic, two-panel format. Each order includes the full two-print collection, with each individual panel meeting the precise measurements listed above. The large print is approximately 46" Wide × 17" High on your wall assuming a 2" gap, while the smaller print is 22" Wide × 8" High.',
     description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
   },
+  {
+    id: 'testLimited',
+    category: 'limited-edition-prints',
+    title: 'Mount Sanitas | Set of 2 Panels',
+    size: ['8x10'],
+    date: '2024-11-15',
+    location: 'Boulder, Colorado, USA',
+    image: '/images/mountSanitas/mountSanitas4.png',
+    images: gallery('mountSanitas', ['mountSanitas4.png', 'mountSanitas2.png']),
+    note: 'Important note: This panoramic landscape was originally painted as a continuous diptych and is faithfully reproduced in its authentic, two-panel format. Each order includes the full two-print collection, with each individual panel meeting the precise measurements listed above. The large print is approximately 46" Wide × 17" High on your wall assuming a 2" gap, while the smaller print is 22" Wide × 8" High.',
+    description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
+  },
 ]
 
 const openEditionPrints = [
-    {
-    id: 'peleeIsland',
-    category: 'open-edition-prints',
-    title: 'Pelee Island',
-    size: ['5x7','8x10','11x17','17x22'],
-    date: '2024-05-19',
-    location: 'Pelee Island, Ontario, Canada',
-    image: '/images/peleeIsland/peleeIsland.jpg',
-    images: gallery('peleeIsland', ['peleeIsland.jpg']),
-    description: 'Have you ever watched a snake move through water — that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer: fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
-  },
   {
     id: 'dreamLake',
     category: 'open-edition-prints',
@@ -273,6 +288,17 @@ const openEditionPrints = [
     image: '/images/dreamLake/dreamLake.jpg',
     images: gallery('dreamLake', ['dreamLake.jpg', 'dreamLake2.jpg']),
     description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
+  },
+  {
+    id: 'peleeIsland',
+    category: 'open-edition-prints',
+    title: 'Pelee Island',
+    size: ['5x7','8x10','11x17','17x22'],
+    date: '2024-05-19',
+    location: 'Pelee Island, Ontario, Canada',
+    image: '/images/peleeIsland/peleeIsland.jpg',
+    images: gallery('peleeIsland', ['peleeIsland.jpg']),
+    description: 'Have you ever watched a snake move through water — that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer: fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
   },
   {
     id: 'waldenPonds',

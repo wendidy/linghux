@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { ARTWORK_CATEGORIES } from '../utils/artwork'
 
 const shopPanels = [
@@ -46,6 +47,10 @@ export default function Home(){
 
   return (
     <>
+      <Seo
+        title="Linghux | Original watercolor paintings and prints"
+        description="Explore original plein air watercolor artwork, Newfoundland and Colorado landscape paintings, and collectible watercolor prints by Linghux."
+      />
       <section id="home" className="main style1 dark fullscreen">
         <div className="content" aria-hidden="true" />
       </section>
