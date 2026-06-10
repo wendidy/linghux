@@ -44,6 +44,20 @@ const originals = [
     description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },  
   {
+    id: 'test3Original',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'test',
+    size: '7.32"x9.96"',
+    framedSize: '8.86"x10.83"',
+    medium: 'Watercolor and pencil on paper',
+    date: '2022-07-16',
+    location: 'St John\'s, Newfoundland, Canada',
+    image: '/images/signalHill/signalHill.jpg',
+    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
+    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
+  },  
+  {
     id: 'signalHill',
     category: 'originals',
     type: 'Plein Air',
@@ -267,7 +281,7 @@ const limitedEditionPrints = [
     id: 'testLimited2',
     category: 'limited-edition-prints',
     title: 'Mount Sanitas | Set of 2 Panels',
-    size: ['8x10'],
+    size: ['8x10', '17x22'],
     date: '2024-11-15',
     location: 'Boulder, Colorado, USA',
     image: '/images/mountSanitas/mountSanitas4.png',
