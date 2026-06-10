@@ -30,7 +30,7 @@ function buildPrintVariants(item) {
 
 const originals = [
   {
-    id: 'testOriginal',
+    id: 'test2Original',
     category: 'originals',
     type: 'Plein Air',
     title: 'test',
@@ -264,7 +264,7 @@ const limitedEditionPrints = [
     description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
   },
   {
-    id: 'testLimited',
+    id: 'testLimited2',
     category: 'limited-edition-prints',
     title: 'Mount Sanitas | Set of 2 Panels',
     size: ['8x10'],

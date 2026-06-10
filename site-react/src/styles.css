@@ -862,6 +862,22 @@ button:active {
   white-space: nowrap;
   padding-top: 0.1rem;
 }
+.cart-item-image-wrap {
+  position: relative;
+  display: inline-block;
+}
+.cart-unavailable {
+  position: absolute;
+  left: 0;
+  bottom: -1.1rem;
+  background: rgba(255, 230, 230, 0.95);
+  color: #900;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.78rem;
+  border: 1px solid rgba(153,0,0,0.12);
+  border-radius: 2px;
+  white-space: nowrap;
+}
 .cart-item-unit-price {
   color: var(--charcoal);
   font-size: 0.9rem;
@@ -878,6 +894,14 @@ button:active {
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.15em;
+}
+.cart-remove:hover,
+.cart-remove:active,
+.cart-remove:focus {
+  background: transparent;
+  color: var(--ink);
+  border-radius: 0;
+  outline: none;
 }
 .cart-list-actions {
   display: flex;

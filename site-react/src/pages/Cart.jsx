@@ -43,6 +43,14 @@ export default function Cart() {
     [availabilityById]
   )
 
+  const isItemUnavailable = (item) => {
+    const availability = availabilityForItem(item)
+    if (!availability) return false
+    if (Boolean(availability.soldOut)) return true
+    if (typeof availability.available === 'number' && item.quantity > availability.available) return true
+    return false
+  }
+
   const cartCurrency = useMemo(() => {
     const match = items.find((item) => priceForItem(item)?.currency)
     if (!match) return 'USD'
@@ -91,6 +99,11 @@ export default function Cart() {
         throw new Error(`Missing Stripe item ID for ${missing.title}`)
       }
 
+      const unavailable = items.find((item) => isItemUnavailable(item))
+      if (unavailable) {
+        throw new Error('One or more items in your cart are unavailable. Please remove unavailable items before checking out.')
+      }
+
       const lineItems = items.map((item) => ({
         id: item.priceId || item.id,
         quantity: item.quantity,
@@ -135,7 +148,12 @@ export default function Cart() {
               <div className="cart-list">
               {items.map((item) => (
                 <article className="cart-item-row" key={item.id}>
-                  <img src={item.image} alt={item.title} className="cart-item-image" />
+                  <div className="cart-item-image-wrap">
+                    <img src={item.image} alt={item.title} className="cart-item-image" />
+                    {isItemUnavailable(item) && (
+                      <p className="cart-unavailable">This item is unavailable, please remove it from your cart</p>
+                    )}
+                  </div>
                   <div className="cart-item-body">
                     <h3>{item.title}</h3>
                     {item.size && (
@@ -212,7 +230,12 @@ export default function Cart() {
                 </select>
               </label>
               <div className="cart-summary-actions">
-                <button type="button" className="checkout-primary" onClick={checkout} disabled={isCheckingOut}>
+                <button
+                  type="button"
+                  className="checkout-primary"
+                  onClick={checkout}
+                  disabled={isCheckingOut || items.some((it) => isItemUnavailable(it))}
+                >
                   {isCheckingOut ? 'Redirecting…' : 'Proceed to Secure Checkout'}
                 </button>
               </div>

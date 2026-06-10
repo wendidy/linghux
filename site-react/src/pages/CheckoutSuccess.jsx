@@ -14,7 +14,7 @@ export default function CheckoutSuccess() {
       <div className="cart-wrap">
         <h2>Payment successful</h2>
         <p>Thank you for your order.</p>
-        <Link to="/artwork" className="button">Back to artwork</Link>
+        <Link to="/artwork/originals" className="button">Back to artwork</Link>
       </div>
     </section>
   )
