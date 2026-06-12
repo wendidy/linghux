@@ -60,7 +60,15 @@
   text-decoration: underline;
 }
 
-body { font-family: 'Montserrat', sans-serif; background: var(--bg-main); color: var(--charcoal); padding-top: 0; }
+html, body { 
+  font-family: 'Montserrat', sans-serif; 
+  background: var(--bg-main); 
+  color: var(--charcoal); 
+  padding-top: 0; 
+  max-width: 100% !important;
+  overflow-x: hidden;
+}
+
 header { margin-bottom: 0; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .app-main { flex: 1; padding-bottom: 2.5rem; }
@@ -323,6 +331,55 @@ button:active {
   max-height: 100%;
   object-fit: contain;
   display: block;
+}
+.work-item-image {
+  cursor: zoom-in;
+}
+.fullscreen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.88);
+}
+.fullscreen-image-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  width: min(100%, 1200px);
+}
+.fullscreen-image-content img {
+  width: 100%;
+  max-height: 100vh;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 0.35rem;
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+.fullscreen-image-content img.is-zoomed {
+  transform: scale(1.4);
+  cursor: zoom-out;
+}
+.fullscreen-close {
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+  /* padding: 0.25rem 0.45rem; */
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+}
+.fullscreen-close:hover,
+.fullscreen-close:focus {
+  background: rgba(255, 255, 255, 0.08);
 }
 .work-item-gallery {
   display: grid;
@@ -1333,6 +1390,7 @@ button:active {
     align-items: center;
     justify-content: space-between;
     padding: 0.55rem 0.8rem;
+    min-height: 2.6rem;
     color: inherit;
     text-decoration: none;
     background: transparent;
@@ -1340,6 +1398,33 @@ button:active {
     font: inherit;
     cursor: pointer;
     text-align: left;
+  }
+  .mobile-menu li a .cart-link-label {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mobile-currency-icons {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.55rem 0.8rem;
+  }
+  .mobile-currency-button {
+    border: 1px solid var(--surface-muted);
+    border-radius: 0.35rem;
+    background: var(--bg-white);
+    color: var(--ink);
+    width: 2.4rem;
+    height: 2.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  .mobile-currency-button.is-active {
+    border-color: var(--ink);
+    background: var(--surface-soft);
   }
   .mobile-menu li a:hover,
   .mobile-artworks-trigger:hover {
@@ -1356,12 +1441,29 @@ button:active {
     padding-left: 1.6rem;
   }
   #work.main.style3 {
+    display: block;
     padding-left: 1rem;
     padding-right: 1rem;
   }
   .work-item-page {
+    display: block;
+    width: 100%;
+    max-width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+  .main.style3 {
+    display: block;
+  }
+  .main.style3 .gallery-div {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .gallery {
+    width: 100%;
+    max-width: 100%;
   }
   .work-item-image { height: clamp(18rem, 52vh, 30rem) }
   .work-item-grid { grid-template-columns: 1fr }

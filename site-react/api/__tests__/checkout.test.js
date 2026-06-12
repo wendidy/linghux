@@ -202,6 +202,11 @@ describe('Checkout API Handler', () => {
           shipping_options: [{ shipping_rate: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw' }],
         })
       )
+      expect(call.payment_intent_data).toEqual(
+        expect.objectContaining({ metadata: expect.any(Object) })
+      )
+      expect(call.cancel_url).toContain('session_id={CHECKOUT_SESSION_ID}')
+      expect(call.success_url).toContain('session_id={CHECKOUT_SESSION_ID}')
     })
 
     it('should redirect to Stripe checkout', async () => {

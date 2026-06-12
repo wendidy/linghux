@@ -21,8 +21,10 @@ export default function WorkPortfolioItem({ category }) {
     return item.image ? [item.image] : []
   }, [item])
   const [activeImage, setActiveImage] = useState('')
+  const [isFullscreenOpen, setIsFullscreenOpen] = useState(false)
+  const [isZoomed, setIsZoomed] = useState(false)
+  const [zoomOrigin, setZoomOrigin] = useState('50% 50%')
   const { addItem, items: cartItems } = useCart()
-  const [cartNotice, setCartNotice] = useState('')
   const [shippingOpen, setShippingOpen] = useState(false)
   const [selectedQuantity, setSelectedQuantity] = useState(1)
   const variants = useMemo(() => {
@@ -86,12 +88,21 @@ export default function WorkPortfolioItem({ category }) {
   useEffect(() => {
     // Reset active image when the item changes.
     if (item) setActiveImage(galleryImages[0] || '')
-    setCartNotice('')
   }, [item, galleryImages])
 
   useEffect(() => {
+    if (isFullscreenOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isFullscreenOpen])
+
+  useEffect(() => {
     setSelectedVariantId(initialVariantId)
-    setCartNotice('')
   }, [initialVariantId])
 
   useEffect(() => {
@@ -116,6 +127,12 @@ export default function WorkPortfolioItem({ category }) {
     )
   }
 
+  document.querySelectorAll('*').forEach(el => {
+  if (el.offsetWidth > document.documentElement.clientWidth) {
+    console.log('Overflowing Element:', el);
+  }
+});
+
   const pageTitle = `${item.title} | Original watercolor painting for sale`
   const pageDescription = buildProductPageDescription(item)
   const imageAlt = buildImageAlt(item)
@@ -127,7 +144,25 @@ export default function WorkPortfolioItem({ category }) {
       <section className="work-item-page">
         <div className="work-item-grid">
         <div className="work-item-visual">
-          <div className="work-item-image">
+          <div
+            className="work-item-image"
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              setIsFullscreenOpen(true)
+              setIsZoomed(false)
+              setZoomOrigin('50% 50%')
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                setIsFullscreenOpen(true)
+                setIsZoomed(false)
+                setZoomOrigin('50% 50%')
+              }
+            }}
+            aria-label="Open image in full screen"
+          >
             <img src={activeImage || item.image} alt={imageAlt} />
           </div>
           {galleryImages.length > 1 && (
@@ -251,12 +286,8 @@ export default function WorkPortfolioItem({ category }) {
               className="basket-button"
               disabled={!canPurchase || isSoldOut || limitReachedInCart || (original && isAlreadyInCart)}
               onClick={() => {
-                if (isSoldOut || limitReachedInCart) return
-                if (original && isAlreadyInCart) {
-                  setCartNotice('This work has already been added to your cart.')
-                  return
-                }
-                const result = addItem({
+                if (isSoldOut || limitReachedInCart || (original && isAlreadyInCart)) return
+                addItem({
                   id: selectedItemId,
                   title: item.title,
                   image: item.image,
@@ -266,22 +297,11 @@ export default function WorkPortfolioItem({ category }) {
                   quantity: isPrint ? selectedQuantity : 1,
                   maxQuantity: limitedEdition ? availability?.available : undefined,
                 })
-                if (result?.added) {
-                  setCartNotice('')
-                } else if (result?.reason === 'already_in_cart') {
-                  setCartNotice('This work has already been added to your cart.')
-                } else if (result?.reason === 'limit_reached') {
-                  setCartNotice('Maximum available quantity is already in your cart.')
-                } else if (result?.reason === 'sold_out') {
-                  setCartNotice('This work is sold out.')
-                }
               }}
             >
               {buttonLabel}
             </button>
           </div>
-          {limitReachedInCart && <p className="meta-line">Maximum available quantity is already in your cart.</p>}
-          {cartNotice && <p className="meta-line">{cartNotice}</p>}
           {priceError && <p className="meta-line">{priceError}</p>}
           {availabilityError && <p className="meta-line">{availabilityError}</p>}
           <div className="shipping-block">
@@ -315,6 +335,50 @@ export default function WorkPortfolioItem({ category }) {
           </div>
         </aside>
       </div>
+      {isFullscreenOpen && (
+        <div
+          className="fullscreen-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Full screen artwork preview"
+          onClick={() => {
+            setIsFullscreenOpen(false)
+            setIsZoomed(false)
+          }}
+        >
+          <div className="fullscreen-image-content" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="fullscreen-close"
+              onClick={() => {
+                setIsFullscreenOpen(false)
+                setIsZoomed(false)
+              }}
+              aria-label="Close full screen preview"
+            >
+              ×
+            </button>
+            <img
+              src={activeImage || item.image}
+              alt={imageAlt}
+              className={isZoomed ? 'is-zoomed' : ''}
+              style={{ transformOrigin: zoomOrigin }}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (isZoomed) {
+                  setIsZoomed(false)
+                  return
+                }
+                const rect = e.currentTarget.getBoundingClientRect()
+                const x = ((e.clientX - rect.left) / rect.width) * 100
+                const y = ((e.clientY - rect.top) / rect.height) * 100
+                setZoomOrigin(`${x}% ${y}%`)
+                setIsZoomed(true)
+              }}
+            />
+          </div>
+        </div>
+      )}
       </section>
     </>
   )

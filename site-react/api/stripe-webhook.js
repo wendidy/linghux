@@ -73,7 +73,7 @@ export default async function handler(req, res) {
       }
     }
 
-    if (event.type === 'checkout.session.expired') {
+    if (event.type === 'checkout.session.expired' || event.type === 'checkout.session.async_payment_failed') {
       const session = event.data.object
       const reservationIds = parseReservationIds(session.metadata)
       await releaseReservations(reservationIds)

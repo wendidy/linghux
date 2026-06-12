@@ -130,16 +130,21 @@ export default function Header(){
             <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>
             <li><NavLink to="/contact" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink></li>
             <li>
-              <div className="mobile-currency-selector">
-                <label htmlFor="mobile-currency-select">Currency: </label>
-                <select
-                  id="mobile-currency-select"
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
+              <div className="mobile-currency-icons">
+                <button
+                  type="button"
+                  className={`mobile-currency-button${currency === 'USD' ? ' is-active' : ''}`}
+                  onClick={() => setCurrency('USD')}
                 >
-                  <option value="USD">USD</option>
-                  <option value="CAD">CAD</option>
-                </select>
+                  🇺🇸
+                </button>
+                <button
+                  type="button"
+                  className={`mobile-currency-button${currency === 'CAD' ? ' is-active' : ''}`}
+                  onClick={() => setCurrency('CAD')}
+                >
+                  🇨🇦
+                </button>
               </div>
             </li>
             <li>

@@ -87,6 +87,26 @@ export default function Cart() {
     return item.quantity < availability.available
   }
 
+  const resolveCheckoutErrorMessage = (message) => {
+    if (!message || typeof message !== 'string') return 'Unable to start checkout. Please refresh and try again.'
+    if (/Insufficient inventory/i.test(message)) {
+      return 'Some items are no longer available. Please refresh the page and remove unavailable items from your cart before checking out.'
+    }
+    if (/Unable to resolve Stripe .* price/i.test(message)) {
+      return 'A price could not be resolved for one or more items. Refresh the page or remove the affected item from your cart.'
+    }
+    if (/Shipping is only available within Canada and the United States/i.test(message)) {
+      return 'Shipping is available only to Canada and the United States. Choose a supported shipping country.'
+    }
+    if (/Cart is empty/i.test(message)) {
+      return 'Your cart is empty. Add items before checking out.'
+    }
+    if (/No item IDs provided/i.test(message)) {
+      return 'One or more items in your cart are invalid. Please refresh the page and remove the affected items.'
+    }
+    return message
+  }
+
   const checkout = async () => {
     setError('')
     setIsCheckingOut(true)
@@ -119,13 +139,14 @@ export default function Cart() {
       })
 
       if (!res.ok) {
-        throw new Error('Unable to start checkout')
+        const payload = await res.json().catch(() => ({}))
+        throw new Error(resolveCheckoutErrorMessage(payload?.error || 'Unable to start checkout'))
       }
 
       const data = await res.json()
       window.location.href = data.url
     } catch (e) {
-      setError(e.message || 'Checkout failed')
+      setError(resolveCheckoutErrorMessage(e.message))
       setIsCheckingOut(false)
     }
   }

@@ -167,8 +167,8 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems.map(({ price, quantity }) => ({ price, quantity })),
-      success_url: `${baseUrl}/success`,
-      cancel_url: `${baseUrl}/cancel`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
       billing_address_collection: 'required',
       phone_number_collection: {
         enabled: true,
@@ -177,6 +177,9 @@ export default async function handler(req, res) {
         allowed_countries: [shippingCountry],
       },
       shipping_options: shippingRateId ? [{ shipping_rate: shippingRateId }] : undefined,
+      payment_intent_data: {
+        metadata,
+      },
       metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     })
 
