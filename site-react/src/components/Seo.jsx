@@ -13,13 +13,20 @@ function updateMeta(attribute, name, content) {
   element.setAttribute('content', content)
 }
 
-export default function Seo({ title, description, url, image }) {
+export default function Seo({ title, description, url, image, keywords }) {
   useEffect(() => {
     const pageTitle = title || DEFAULT_SEO.title
     const pageDescription = description || DEFAULT_SEO.description
+    const pageKeywords = typeof keywords === 'string'
+      ? keywords
+      : Array.isArray(keywords)
+        ? keywords.join(', ')
+        : DEFAULT_SEO.keywords
 
     document.title = pageTitle
     updateMeta('name', 'description', pageDescription)
+    updateMeta('name', 'keywords', pageKeywords)
+    updateMeta('property', 'og:site_name', 'linghux')
     updateMeta('property', 'og:title', pageTitle)
     updateMeta('property', 'og:description', pageDescription)
     updateMeta('property', 'og:type', 'website')
@@ -28,7 +35,7 @@ export default function Seo({ title, description, url, image }) {
     updateMeta('name', 'twitter:card', image ? 'summary_large_image' : 'summary')
     updateMeta('name', 'twitter:title', pageTitle)
     updateMeta('name', 'twitter:description', pageDescription)
-  }, [title, description, url, image])
+  }, [title, description, url, image, keywords])
 
   return null
 }

@@ -1,7 +1,9 @@
 export const DEFAULT_SEO = {
-  title: 'Linghux | Original watercolor paintings for sale',
+  title: 'linghux | Original watercolor paintings for sale',
   description:
     'Original plein air watercolor art for sale by a Canadian artist, including Newfoundland and Colorado landscape watercolor paintings, original framed art, and affordable watercolor prints.',
+  keywords:
+    'original watercolor paintings, watercolor prints, shop originals, shop limited edition prints, shop open edition prints, about, Canadian watercolor artist',
 }
 
 export function buildImageAlt(item) {

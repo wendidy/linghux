@@ -347,17 +347,6 @@ export default function WorkPortfolioItem({ category }) {
           }}
         >
           <div className="fullscreen-image-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="fullscreen-close"
-              onClick={() => {
-                setIsFullscreenOpen(false)
-                setIsZoomed(false)
-              }}
-              aria-label="Close full screen preview"
-            >
-              ×
-            </button>
             <img
               src={activeImage || item.image}
               alt={imageAlt}

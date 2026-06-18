@@ -1,4 +1,4 @@
-# Linghux Website Setup
+# linghux Website Setup
 
 ## Domain
 
@@ -137,7 +137,7 @@ The order email includes:
 ## 📬 Newsletter (Beehiiv)
 
 * Platform: Beehiiv
-* Publication: Linghux
+* Publication: linghux
 
 ### Domains
 

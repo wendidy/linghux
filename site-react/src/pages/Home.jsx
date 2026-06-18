@@ -48,8 +48,9 @@ export default function Home(){
   return (
     <>
       <Seo
-        title="Linghux | Original watercolor paintings and prints"
-        description="Explore original plein air watercolor artwork, Newfoundland and Colorado landscape paintings, and collectible watercolor prints by Linghux."
+        title="linghux | Original watercolor paintings and prints"
+        description="Explore original plein air watercolor artwork, Newfoundland and Colorado landscape paintings, and collectible watercolor prints by linghux."
+        keywords="shop originals, shop limited edition prints, shop open edition prints, about linghux, original watercolor paintings, watercolor prints"
       />
       <section id="home" className="main style1 dark fullscreen">
         <div className="content" aria-hidden="true" />
@@ -57,6 +58,7 @@ export default function Home(){
 
       <section className="home-intro-section">
         <div className="home-intro-copy">
+          <h1>Shop Originals, Limited Edition Prints, and Open Edition Prints</h1>
           <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
           <p>Tell me, where did the world speak to you most dearly?</p>
         </div>

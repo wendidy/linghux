@@ -38,15 +38,18 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   }
 
   const pageTitle = category
-    ? `${heading} | Buy watercolor art by Linghux`
-    : 'Artworks | Buy original watercolor paintings and prints by Linghux'
+    ? `${heading} | Buy watercolor art by linghux`
+    : 'Artworks | Buy original watercolor paintings and prints by linghux'
   const pageDescription = category
     ? `Browse ${heading.toLowerCase()} by a Canadian watercolor artist, including Newfoundland and Colorado plein air landscape paintings.`
-    : 'Shop original watercolor paintings and prints by Linghux, including Newfoundland and Colorado landscapes and Canadian plein air artwork.'
+    : 'Shop original watercolor paintings and prints by linghux, including Newfoundland and Colorado landscapes and Canadian plein air artwork.'
+  const seoKeywords = category
+    ? `${heading.toLowerCase()}, shop ${heading.toLowerCase()}, watercolor art, original watercolor paintings, watercolor prints`
+    : 'shop originals, shop limited edition prints, shop open edition prints, watercolor paintings, watercolor prints, Canadian watercolor artist'
 
   return (
     <>
-      <Seo title={pageTitle} description={pageDescription} />
+      <Seo title={pageTitle} description={pageDescription} keywords={seoKeywords} />
       <section id="work" className="main style3">
         <div className="gallery-div">
         <header>

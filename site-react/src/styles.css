@@ -310,22 +310,7 @@ button:active {
   transform: scale(1.4);
   cursor: zoom-out;
 }
-.fullscreen-close {
-  position: absolute;
-  top: 0rem;
-  right: 0rem;
-  /* padding: 0.25rem 0.45rem; */
-  border: none;
-  background: transparent;
-  color: white;
-  cursor: pointer;
-  font-size: 2rem;
-  line-height: 1;
-}
-.fullscreen-close:hover,
-.fullscreen-close:focus {
-  background: rgba(255, 255, 255, 0.08);
-}
+
 .work-item-gallery {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

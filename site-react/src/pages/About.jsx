@@ -1,6 +1,13 @@
+import Seo from '../components/Seo'
+
 export default function About(){
   return (
     <>
+      <Seo
+        title="About linghux | Watercolor artist and prints"
+        description="Learn about Wendy Zhang, a Canadian watercolor artist creating originals, limited edition prints, and open edition prints rooted in Newfoundland and Colorado landscapes."
+        keywords="about, watercolor artist, shop originals, shop limited edition prints, shop open edition prints, Canadian painter"
+      />
       <section>
         <div className="content box style2">
           <div className="about-grid">
@@ -9,7 +16,7 @@ export default function About(){
             </div>
             <div className="about-text">
               <header>
-                <h2>About</h2>
+                <h1>About</h1>
               </header>
               <p>Wendy Zhang’s work is shaped by a life lived across three countries and varied landscapes. Moving between cultures taught her that what endures beyond language, geography, or circumstance is a single, unbroken thread — woven between people, and the earth that holds them.  In unfamiliar places, she found herself drawn to the quiet exchanges and shared moments that give a place its meaning, and to the way the natural world carries its own kind of memory.</p>
               <p>Watercolor became her way of honoring those encounters. Using both her camera and her brushes, Wendy translates fleeting experiences into gentle, lasting forms—allowing each painting to serve as a bridge: between artist and viewer, between memory and presence, between a moment once lived and a moment newly felt. Through this process, she seeks to preserve what travel revealed to be essential: the invisible connection that bind us to one another, and to the living world we move through.</p>
