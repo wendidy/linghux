@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
-import { reserveInventory, releaseReservations } from './inventory.js'
+import { reserveInventory, releaseReservations, reservationExpiresAt } from './inventory.js'
 import { inventoryCapFor } from './catalogInventory.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -140,9 +140,10 @@ export default async function handler(req, res) {
     }
 
     const reservationRequests = Array.from(requestedByProduct.values())
+    const checkoutExpiresAt = reservationExpiresAt()
 
     if (reservationRequests.length > 0) {
-      const reservations = await reserveInventory(reservationRequests)
+      const reservations = await reserveInventory(reservationRequests, { expiresAt: checkoutExpiresAt })
       reservationIds = reservations.map((reservation) => reservation.id)
     }
 
@@ -169,6 +170,7 @@ export default async function handler(req, res) {
       line_items: lineItems.map(({ price, quantity }) => ({ price, quantity })),
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
+      expires_at: Math.floor(checkoutExpiresAt.getTime() / 1000),
       billing_address_collection: 'required',
       phone_number_collection: {
         enabled: true,
@@ -183,7 +185,10 @@ export default async function handler(req, res) {
       metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     })
 
-    res.status(200).json({ url: session.url })
+    res.status(200).json({
+      url: session.url,
+      sessionId: session.id,
+    })
   } catch (error) {
     if (reservationIds.length > 0) {
       try {

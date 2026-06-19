@@ -12,7 +12,7 @@ export default function About(){
         <div className="content box style2">
           <div className="about-grid">
             <div className="about-photo">
-              <img src="/images/about.jpg" alt="Wendy Zhang painting" />
+              <img loading="lazy" src="/images/about.jpg" alt="Wendy Zhang painting" />
             </div>
             <div className="about-text">
               <header>
@@ -39,7 +39,7 @@ export default function About(){
               </ul>
             </div>
             <div className="about-photo">
-              <img src="/images/background2.png" alt="Wendy Zhang studio" />
+              <img loading="lazy" src="/images/background2.png" alt="Wendy Zhang studio" />
             </div>
           </div>
         </div>

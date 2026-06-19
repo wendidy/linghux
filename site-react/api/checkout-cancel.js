@@ -13,6 +13,25 @@ function parseReservationIds(metadata) {
   }
 }
 
+async function reservationIdsForSession(session) {
+  let reservationIds = parseReservationIds(session.metadata)
+  if (reservationIds.length || !session.payment_intent) return reservationIds
+
+  try {
+    const paymentIntentId = typeof session.payment_intent === 'string'
+      ? session.payment_intent
+      : session.payment_intent?.id
+    if (!paymentIntentId) return reservationIds
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+    reservationIds = parseReservationIds(paymentIntent.metadata)
+  } catch {
+    // Keep cancellation best-effort; session metadata is the primary source.
+  }
+
+  return reservationIds
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).send('Method not allowed')
@@ -37,19 +56,23 @@ export default async function handler(req, res) {
       return
     }
 
-    if (session.payment_status === 'paid') {
+    if (session.payment_status === 'paid' || session.status === 'complete') {
       res.status(400).json({ error: 'Checkout session is already paid and cannot be cancelled' })
       return
     }
 
-    const reservationIds = parseReservationIds(session.metadata)
+    const reservationIds = await reservationIdsForSession(session)
+    if (session.status === 'open') {
+      await stripe.checkout.sessions.expire(session.id)
+    }
+
     if (reservationIds.length === 0) {
-      res.status(200).json({ released: false, message: 'No reserved items found for this checkout session.' })
+      res.status(200).json({ released: false, expired: session.status === 'open', message: 'No reserved items found for this checkout session.' })
       return
     }
 
     await releaseReservations(reservationIds)
-    res.status(200).json({ released: true, message: 'Canceled checkout reservation released.' })
+    res.status(200).json({ released: true, expired: session.status === 'open', message: 'Canceled checkout reservation released.' })
   } catch (error) {
     res.status(500).json({ error: error.message || 'Failed to release reserved checkout items' })
   }

@@ -27,6 +27,10 @@ function parseReservationIds(metadata) {
   }
 }
 
+function isPaidSession(session) {
+  return session?.payment_status === 'paid' || session?.payment_status === 'no_payment_required'
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).send('Method not allowed')
@@ -50,9 +54,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    if (event.type === 'checkout.session.completed') {
+    if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
       const session = event.data.object
-      const reservationIds = parseReservationIds(session.metadata)
+      if (event.type === 'checkout.session.completed' && session.payment_status && !isPaidSession(session)) {
+        res.status(200).json({ received: true })
+        return
+      }
+
+      let reservationIds = parseReservationIds(session.metadata)
+      // Fallback: some setups attach metadata to the PaymentIntent instead
+      if (!reservationIds.length && session.payment_intent) {
+        try {
+          const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id
+          if (paymentIntentId) {
+            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+            reservationIds = parseReservationIds(paymentIntent.metadata)
+          }
+        } catch (err) {
+          // ignore retrieval errors and proceed with whatever we have
+        }
+      }
       await finalizeReservations(reservationIds)
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
         limit: 100,
@@ -75,7 +96,18 @@ export default async function handler(req, res) {
 
     if (event.type === 'checkout.session.expired' || event.type === 'checkout.session.async_payment_failed') {
       const session = event.data.object
-      const reservationIds = parseReservationIds(session.metadata)
+      let reservationIds = parseReservationIds(session.metadata)
+      if (!reservationIds.length && session.payment_intent) {
+        try {
+          const paymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id
+          if (paymentIntentId) {
+            const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+            reservationIds = parseReservationIds(paymentIntent.metadata)
+          }
+        } catch (err) {
+          // ignore
+        }
+      }
       await releaseReservations(reservationIds)
     }
 

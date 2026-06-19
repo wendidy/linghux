@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { clearPendingCheckoutSession } from '../utils/pendingCheckoutSession'
 
 export default function CheckoutCancel() {
   const [searchParams] = useSearchParams()
@@ -23,6 +24,7 @@ export default function CheckoutCancel() {
         if (!res.ok) {
           throw new Error(payload?.error || 'Unable to release the reservation')
         }
+        clearPendingCheckoutSession(sessionId)
         setReleaseMessage(payload?.message || 'Reserved inventory has been released.')
       })
       .catch((error) => {

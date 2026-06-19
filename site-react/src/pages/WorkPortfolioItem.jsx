@@ -141,6 +141,24 @@ export default function WorkPortfolioItem({ category }) {
   return (
     <>
       <Seo title={pageTitle} description={pageDescription} image={item.image} />
+      {/* Product structured data for rich results */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: item.title,
+          image: galleryImages.map((src) => (typeof window !== 'undefined' ? new URL(src, window.location.origin).href : src)),
+          description: pageDescription,
+          sku: item.id,
+          offers: (priceInfo && typeof priceInfo.unit_amount === 'number') ? {
+            '@type': 'Offer',
+            priceCurrency: priceInfo.currency ? priceInfo.currency.toUpperCase() : 'USD',
+            price: (priceInfo.unit_amount / 100).toFixed(2),
+            availability: availability?.soldOut ? 'http://schema.org/SoldOut' : 'http://schema.org/InStock',
+            url: (typeof window !== 'undefined') ? window.location.href : ''
+          } : undefined,
+        })}
+      </script>
       <section className="work-item-page">
         <div className="work-item-grid">
         <div className="work-item-visual">
@@ -163,7 +181,7 @@ export default function WorkPortfolioItem({ category }) {
             }}
             aria-label="Open image in full screen"
           >
-            <img src={activeImage || item.image} alt={imageAlt} />
+            <img loading="lazy" src={activeImage || item.image} alt={imageAlt} />
           </div>
           {galleryImages.length > 1 && (
             <div className="work-item-gallery">
@@ -175,7 +193,7 @@ export default function WorkPortfolioItem({ category }) {
                   onClick={() => setActiveImage(src)}
                   aria-label={`Show image ${index + 1}`}
                 >
-                  <img src={src} alt={galleryAlt(index)} />
+                  <img loading="lazy" src={src} alt={galleryAlt(index)} />
                 </button>
               ))}
             </div>

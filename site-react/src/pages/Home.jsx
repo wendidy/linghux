@@ -5,13 +5,6 @@ import { ARTWORK_CATEGORIES } from '../utils/artwork'
 
 const shopPanels = [
   {
-    title: 'Originals',
-    image: '/images/goreCreek/goreCreek.png',
-    alt: 'Original watercolor',
-    button: 'Go Shop Originals',
-    to: `/artwork/${ARTWORK_CATEGORIES.originals}`,
-  },
-  {
     title: 'Limited Edition Prints',
     image: '/images/signalHill/signalHill.jpg',
     alt: 'Limited edition print',
@@ -24,6 +17,13 @@ const shopPanels = [
     alt: 'Open edition print',
     button: 'Go Shop Open Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.openEditionPrints}`,
+  },
+  {
+    title: 'Originals',
+    image: '/images/goreCreek/goreCreek.png',
+    alt: 'Original watercolor',
+    button: 'Go Shop Originals',
+    to: `/artwork/${ARTWORK_CATEGORIES.originals}`,
   },
 ]
 
@@ -69,7 +69,7 @@ export default function Home(){
           {shopPanels.map((panel) => (
             <Link to={panel.to} className="shop-panel-link" key={panel.to}>
               <article className="shop-panel">
-                <img src={panel.image} alt={panel.alt} />
+                <img loading="lazy" src={panel.image} alt={panel.alt} />
                 <div className="shop-panel-body">
                   <h2>{panel.title}</h2>
                   <button className="button shop-panel-button" type="button">

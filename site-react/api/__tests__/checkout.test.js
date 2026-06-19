@@ -36,12 +36,13 @@ vi.mock('../stripeProducts.js', () => ({
 
 vi.mock('../inventory.js', () => ({
   reserveInventory: vi.fn(),
+  releaseReservations: vi.fn(),
+  reservationExpiresAt: vi.fn(() => new Date('2030-01-01T00:31:00.000Z')),
 }))
 
 import handler from '../checkout.js'
-import Stripe from 'stripe'
-import { fetchPricesByItemIds, fetchPricesByItemIdsAndCurrency, normalizeItemIds } from '../stripeProducts.js'
-import { reserveInventory } from '../inventory.js'
+import { fetchPricesByItemIds, fetchPricesByItemIdsAndCurrency } from '../stripeProducts.js'
+import { reserveInventory, releaseReservations, reservationExpiresAt } from '../inventory.js'
 
 describe('Checkout API Handler', () => {
   let req, res
@@ -55,6 +56,8 @@ describe('Checkout API Handler', () => {
     mockStripeInstance.checkout.sessions.create.mockReset()
     mockStripeInstance.products.retrieve.mockReset()
     reserveInventory.mockReset()
+    releaseReservations.mockReset()
+    reservationExpiresAt.mockClear()
     fetchPricesByItemIds.mockReset()
     fetchPricesByItemIdsAndCurrency.mockReset()
     fetchPricesByItemIdsAndCurrency.mockImplementation((...args) => fetchPricesByItemIds(...args))
@@ -190,6 +193,7 @@ describe('Checkout API Handler', () => {
         expect.objectContaining({
           line_items: expect.any(Array),
           mode: 'payment',
+          expires_at: expect.any(Number),
           success_url: expect.stringContaining('/success'),
           cancel_url: expect.stringContaining('/cancel'),
           billing_address_collection: 'required',
@@ -222,6 +226,7 @@ describe('Checkout API Handler', () => {
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           url: expect.stringContaining('https://checkout.stripe.com/pay'),
+          sessionId: 'cs_test_123',
         })
       )
     })
@@ -311,7 +316,8 @@ describe('Checkout API Handler', () => {
             quantity: 2,
             cap: 100,
           }),
-        ])
+        ]),
+        { expiresAt: new Date('2030-01-01T00:31:00.000Z') }
       )
     })
 
@@ -349,7 +355,7 @@ describe('Checkout API Handler', () => {
         reservation_ids: '["res_123"]',
         currency: 'USD',
         shipping_country: 'US',
-        shipping_rate_id: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
+        shipping_rate_id: 'shr_1TgZ2d2VIu8UkxmlKM89ukTI',
         items: '[{"itemId":"item_1"}]',
       })
     })
@@ -521,6 +527,23 @@ describe('Checkout API Handler', () => {
           error: 'Insufficient inventory for limited edition',
         })
       )
+    })
+
+    it('should release reserved inventory when Stripe session creation fails', async () => {
+      req.body = [{ id: 'item_1', quantity: 1 }]
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([['item_1', { product: createMockProduct('prod_1', 10), price: createMockPrice() }]])
+      )
+      mockStripeInstance.products.retrieve.mockResolvedValueOnce(createMockProduct('prod_1', 10))
+      reserveInventory.mockResolvedValueOnce([
+        { id: 'res_1', productId: 'prod_1', quantity: 1 },
+      ])
+      mockStripeInstance.checkout.sessions.create.mockRejectedValueOnce(new Error('Stripe session failed'))
+
+      await handler(req, res)
+
+      expect(releaseReservations).toHaveBeenCalledWith(['res_1'])
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

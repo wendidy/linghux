@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { reserveInventory, finalizeReservations, releaseReservations } from '../inventory.js'
+import { reserveInventory, finalizeReservations, releaseReservations, cleanupExpiredReservations } from '../inventory.js'
 
 // Mock db.js
 vi.mock('../db.js', () => ({
@@ -98,14 +98,12 @@ describe('Inventory Management', () => {
       expect(reservations[0].productId).toBe('prod_1')
     })
 
-    it('should handle float quantities', async () => {
-      // parseInt converts 2.5 to 2, so this is actually valid
+    it('should reject float quantities', async () => {
       const reservations = await reserveInventory([
         { productId: 'prod_1', quantity: 2.5, cap: 10 },
       ])
 
-      expect(reservations).toHaveLength(1)
-      expect(reservations[0].quantity).toBe(2) // parseInt rounds down
+      expect(reservations).toHaveLength(0)
     })
 
     it('should skip string quantities', async () => {
@@ -188,6 +186,39 @@ describe('Inventory Management', () => {
 
       expect(withClient).toHaveBeenCalledOnce()
     })
+
+    it('should finalize expired reservations without subtracting reserved twice', async () => {
+      const inventoryUpdateParams = []
+      const { withClient: mockWithClient } = await import('../db.js')
+      mockWithClient.mockImplementationOnce(async (callback) => {
+        const mockClient = {
+          query: vi.fn(async (sql, params) => {
+            if (sql.includes('WITH target')) {
+              return {
+                rows: [
+                  {
+                    product_id: 'prod_1',
+                    quantity: 2,
+                    previous_status: 'expired',
+                  },
+                ],
+              }
+            }
+            if (sql.includes('UPDATE inventory AS i')) {
+              inventoryUpdateParams.push(params)
+            }
+            return { rows: [] }
+          }),
+        }
+        return callback(mockClient)
+      })
+
+      await finalizeReservations(['res_1'])
+
+      expect(inventoryUpdateParams[0][0]).toEqual(['prod_1'])
+      expect(inventoryUpdateParams[0][1]).toEqual([2])
+      expect(inventoryUpdateParams[0][2]).toEqual([0])
+    })
   })
 
   describe('releaseReservations', () => {
@@ -213,6 +244,40 @@ describe('Inventory Management', () => {
       await releaseReservations(['res_1', 'res_1', 'res_2'])
 
       expect(withClient).toHaveBeenCalledOnce()
+    })
+  })
+
+  describe('cleanupExpiredReservations', () => {
+    it('should expire stale holds and release reserved counts', async () => {
+      const inventoryUpdateParams = []
+      const { withClient: mockWithClient } = await import('../db.js')
+      mockWithClient.mockImplementationOnce(async (callback) => {
+        const mockClient = {
+          query: vi.fn(async (sql, params) => {
+            if (sql.includes('UPDATE reservations')) {
+              expect(params[0]).toBeGreaterThanOrEqual(31)
+              return {
+                rows: [
+                  {
+                    product_id: 'prod_1',
+                    quantity: 1,
+                  },
+                ],
+              }
+            }
+            if (sql.includes('UPDATE inventory AS i')) {
+              inventoryUpdateParams.push(params)
+            }
+            return { rows: [] }
+          }),
+        }
+        return callback(mockClient)
+      })
+
+      const released = await cleanupExpiredReservations()
+
+      expect(released).toBe(1)
+      expect(inventoryUpdateParams[0]).toEqual([['prod_1'], [1]])
     })
   })
 })

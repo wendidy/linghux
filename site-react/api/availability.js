@@ -2,6 +2,7 @@ import Stripe from 'stripe'
 import { withClient } from './db.js'
 import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
 import { inventoryCapFor } from './catalogInventory.js'
+import { cleanupExpiredReservations } from './inventory.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
     ]
     const products = await Promise.all(productIds.map((id) => stripe.products.retrieve(id)))
     const productById = new Map(products.map((product) => [product.id, product]))
+    await cleanupExpiredReservations()
     const inventoryByProductId = await getInventoryByProductId(productIds)
 
     const availability = {}

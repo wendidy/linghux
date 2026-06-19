@@ -16,6 +16,9 @@ const { mockStripeInstance } = vi.hoisted(() => {
           listLineItems: vi.fn(),
         },
       },
+      paymentIntents: {
+        retrieve: vi.fn(),
+      },
     },
   }
 })
@@ -41,7 +44,6 @@ vi.mock('../orderNotifications.js', () => ({
 }))
 
 import handler from '../stripe-webhook.js'
-import Stripe from 'stripe'
 import { finalizeReservations, releaseReservations } from '../inventory.js'
 import {
   upsertCompletedOrder,
@@ -60,6 +62,17 @@ describe('Stripe Webhook Handler', () => {
     mockStripeInstance.webhooks.constructEvent.mockReturnValue({})
     mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValue({
       data: [],
+    })
+    mockStripeInstance.paymentIntents = {
+      retrieve: vi.fn(),
+    }
+    upsertCompletedOrder.mockResolvedValue({
+      id: 'cs_test_default',
+      notifiedAt: '2024-01-01T00:00:00Z',
+    })
+    sendOrderNotification.mockResolvedValue({
+      enabled: false,
+      sent: false,
     })
 
     req = {
@@ -206,6 +219,72 @@ describe('Stripe Webhook Handler', () => {
       expect(finalizeReservations).toHaveBeenCalledWith(['res_1', 'res_2'])
     })
 
+    it('should fallback to payment intent metadata when session metadata missing', async () => {
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'checkout.session.completed',
+        data: {
+          object: {
+            id: 'cs_test_789',
+            payment_intent: 'pi_123',
+          },
+        },
+      })
+
+      mockStripeInstance.paymentIntents = {
+        retrieve: vi.fn().mockResolvedValue({ metadata: { reservation_ids: '["res_a"]' } }),
+      }
+
+      mockStripeInstance.checkout.sessions.listLineItems.mockResolvedValueOnce({ data: [] })
+
+      await handler(req, res)
+
+      expect(mockStripeInstance.paymentIntents.retrieve).toHaveBeenCalledWith('pi_123')
+      expect(finalizeReservations).toHaveBeenCalledWith(['res_a'])
+    })
+
+    it('should defer unpaid completed sessions for async payment methods', async () => {
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'checkout.session.completed',
+        data: {
+          object: {
+            id: 'cs_test_async',
+            payment_status: 'unpaid',
+            metadata: {
+              reservation_ids: '["res_async"]',
+            },
+          },
+        },
+      })
+
+      await handler(req, res)
+
+      expect(finalizeReservations).not.toHaveBeenCalled()
+      expect(mockStripeInstance.checkout.sessions.listLineItems).not.toHaveBeenCalled()
+      expect(upsertCompletedOrder).not.toHaveBeenCalled()
+      expect(res.status).toHaveBeenCalledWith(200)
+    })
+
+    it('should finalize reservations when async payment succeeds', async () => {
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'checkout.session.async_payment_succeeded',
+        data: {
+          object: {
+            id: 'cs_test_async',
+            payment_status: 'paid',
+            metadata: {
+              reservation_ids: '["res_async"]',
+            },
+          },
+        },
+      })
+
+      await handler(req, res)
+
+      expect(finalizeReservations).toHaveBeenCalledWith(['res_async'])
+      expect(upsertCompletedOrder).toHaveBeenCalledOnce()
+      expect(res.status).toHaveBeenCalledWith(200)
+    })
+
     it('should handle invalid JSON in reservation_ids', async () => {
       mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
         type: 'checkout.session.completed',
@@ -345,6 +424,28 @@ describe('Stripe Webhook Handler', () => {
       await handler(req, res)
 
       expect(releaseReservations).toHaveBeenCalledWith([])
+    })
+
+    it('should fallback to payment intent metadata when expired session metadata is missing', async () => {
+      mockStripeInstance.webhooks.constructEvent.mockReturnValueOnce({
+        type: 'checkout.session.expired',
+        data: {
+          object: {
+            id: 'cs_test_456',
+            payment_intent: 'pi_456',
+          },
+        },
+      })
+      mockStripeInstance.paymentIntents.retrieve.mockResolvedValueOnce({
+        metadata: {
+          reservation_ids: '["res_expired"]',
+        },
+      })
+
+      await handler(req, res)
+
+      expect(mockStripeInstance.paymentIntents.retrieve).toHaveBeenCalledWith('pi_456')
+      expect(releaseReservations).toHaveBeenCalledWith(['res_expired'])
     })
   })
 

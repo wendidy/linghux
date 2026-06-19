@@ -6,6 +6,11 @@ import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
 import { getEditionLabel, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
+import {
+  clearPendingCheckoutSession,
+  readPendingCheckoutSession,
+  rememberPendingCheckoutSession,
+} from '../utils/pendingCheckoutSession'
 
 export default function Cart() {
   const {
@@ -37,6 +42,32 @@ export default function Cart() {
   useEffect(() => {
     setShippingCountry(currency === 'CAD' ? 'CA' : 'US')
   }, [currency])
+
+  useEffect(() => {
+    const pending = readPendingCheckoutSession()
+    if (!pending?.sessionId) return undefined
+
+    const controller = new AbortController()
+    fetch('/api/checkout-cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: pending.sessionId }),
+      signal: controller.signal,
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const payload = await res.json().catch(() => ({}))
+          throw new Error(payload?.error || 'Unable to release the previous checkout reservation')
+        }
+        clearPendingCheckoutSession(pending.sessionId)
+      })
+      .catch((err) => {
+        if (err?.name === 'AbortError') return
+        setError('Your previous checkout was not completed. Its reserved items will be released automatically soon.')
+      })
+
+    return () => controller.abort()
+  }, [])
 
   const availabilityForItem = useCallback(
     (item) => availabilityById[item.priceId || item.id] || null,
@@ -144,6 +175,7 @@ export default function Cart() {
       }
 
       const data = await res.json()
+      rememberPendingCheckoutSession(data.sessionId)
       window.location.href = data.url
     } catch (e) {
       setError(resolveCheckoutErrorMessage(e.message))

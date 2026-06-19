@@ -44,7 +44,7 @@ const originals = [
     description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },  
   {
-    id: 'test3Original',
+    id: 'test5Original',
     category: 'originals',
     type: 'Plein Air',
     title: 'test',
@@ -254,17 +254,6 @@ const originals = [
 ]
 
 const limitedEditionPrints = [
-  // {
-  //   id: 'universityOfDenver',
-  //   category: 'limited-edition-prints',
-  //   title: 'University of Denver',
-  //   size: ['8x10', '17x22'],
-  //   date: '2024-11-15',
-  //   location: 'Denver, Colorado, USA',
-  //   image: '/images/universityOfDenver/universityOfDenver.jpg',
-  //   images: gallery('universityOfDenver', ['universityOfDenver.jpg', 'universityOfDenver2.jpg']),
-  //   description: 'My friend and I arrived early to Denver to slip ahead of the traffic before the concert. The University of Denver surprised me — intimate in scale, with white and red lounge chairs scattered across the grounds like punctuation among the trees. The accent colours caught the afternoon light with quiet confidence. I found shelter beneath a full-leafed canopy and let one red chair become the whole story.'
-  // },
   {
     id: 'mountSanitas',
     category: 'limited-edition-prints',
@@ -278,7 +267,7 @@ const limitedEditionPrints = [
     description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
   },
   {
-    id: 'testLimited2',
+    id: 'testLimited3',
     category: 'limited-edition-prints',
     title: 'Mount Sanitas | Set of 2 Panels',
     size: ['8x10', '17x22'],
@@ -313,6 +302,17 @@ const openEditionPrints = [
     image: '/images/peleeIsland/peleeIsland.jpg',
     images: gallery('peleeIsland', ['peleeIsland.jpg']),
     description: 'Have you ever watched a snake move through water — that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer: fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
+  },
+  {
+    id: 'universityOfDenver',
+    category: 'open-edition-prints',
+    title: 'University of Denver',
+    size: ['8x10', '13x19','17x22'],
+    date: '2024-11-15',
+    location: 'Denver, Colorado, USA',
+    image: '/images/universityOfDenver/universityOfDenver.jpg',
+    images: gallery('universityOfDenver', ['universityOfDenver.jpg', 'universityOfDenver2.jpg']),
+    description: 'My friend and I arrived early to Denver to slip ahead of the traffic before the concert. The University of Denver surprised me — intimate in scale, with white and red lounge chairs scattered across the grounds like punctuation among the trees. The accent colours caught the afternoon light with quiet confidence. I found shelter beneath a full-leafed canopy and let one red chair become the whole story.'
   },
   {
     id: 'waldenPonds',

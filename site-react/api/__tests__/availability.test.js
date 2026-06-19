@@ -34,7 +34,6 @@ vi.mock('../db.js', () => ({
 import handler from '../availability.js'
 import { fetchPricesByItemIds, normalizeItemIds } from '../stripeProducts.js'
 import { withClient } from '../db.js'
-import Stripe from 'stripe'
 
 describe('Availability API Handler', () => {
   let req, res

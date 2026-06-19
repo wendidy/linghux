@@ -45,12 +45,22 @@ async function ensureSchema(client) {
       product_id TEXT NOT NULL REFERENCES inventory(product_id) ON DELETE CASCADE,
       quantity INTEGER NOT NULL,
       status TEXT NOT NULL,
+      expires_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `)
   await client.query(`
+    ALTER TABLE reservations
+    ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ;
+  `)
+  await client.query(`
     CREATE INDEX IF NOT EXISTS reservations_status_idx
     ON reservations(status);
+  `)
+  await client.query(`
+    CREATE INDEX IF NOT EXISTS reservations_expires_at_idx
+    ON reservations(expires_at)
+    WHERE status = 'reserved';
   `)
   await client.query(`
     CREATE TABLE IF NOT EXISTS orders (

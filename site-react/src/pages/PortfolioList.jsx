@@ -106,12 +106,14 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                   onMouseLeave={() => setHoveredItemId('')}
                 >
                   <img
+                    loading="lazy"
                     className="zoomable product-image product-image-primary"
                     src={primaryImage}
                     alt={buildImageAlt(item)}
                   />
                   {hoverImage && (
                     <img
+                      loading="lazy"
                       className="zoomable product-image product-image-hover"
                       src={hoverImage}
                       alt=""
