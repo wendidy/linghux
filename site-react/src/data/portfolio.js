@@ -28,35 +28,7 @@ function buildPrintVariants(item) {
   }))
 }
 
-const originals = [
-  {
-    id: 'test2Original',
-    category: 'originals',
-    type: 'Plein Air',
-    title: 'test',
-    size: '7.32"x9.96"',
-    framedSize: '8.86"x10.83"',
-    medium: 'Watercolor and pencil on paper',
-    date: '2022-07-16',
-    location: 'St John\'s, Newfoundland, Canada',
-    image: '/images/signalHill/signalHill.jpg',
-    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
-    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
-  },  
-  {
-    id: 'test5Original',
-    category: 'originals',
-    type: 'Plein Air',
-    title: 'test',
-    size: '7.32"x9.96"',
-    framedSize: '8.86"x10.83"',
-    medium: 'Watercolor and pencil on paper',
-    date: '2022-07-16',
-    location: 'St John\'s, Newfoundland, Canada',
-    image: '/images/signalHill/signalHill.jpg',
-    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
-    description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
-  },  
+const originals = [ 
   {
     id: 'signalHill',
     category: 'originals',
@@ -256,18 +228,6 @@ const originals = [
 const limitedEditionPrints = [
   {
     id: 'mountSanitas',
-    category: 'limited-edition-prints',
-    title: 'Mount Sanitas | Set of 2 Panels',
-    size: ['8x10', '17x22'],
-    date: '2024-11-15',
-    location: 'Boulder, Colorado, USA',
-    image: '/images/mountSanitas/mountSanitas4.png',
-    images: gallery('mountSanitas', ['mountSanitas4.png', 'mountSanitas2.png']),
-    note: 'Important note: This panoramic landscape was originally painted as a continuous diptych and is faithfully reproduced in its authentic, two-panel format. Each order includes the full two-print collection, with each individual panel meeting the precise measurements listed above. The large print is approximately 46" Wide × 17" High on your wall assuming a 2" gap, while the smaller print is 22" Wide × 8" High.',
-    description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
-  },
-  {
-    id: 'testLimited3',
     category: 'limited-edition-prints',
     title: 'Mount Sanitas | Set of 2 Panels',
     size: ['8x10', '17x22'],

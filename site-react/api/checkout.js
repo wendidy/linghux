@@ -18,15 +18,15 @@ const SHIPPING_RATE_RULES = {
     currency: 'CAD',
     freeThreshold: 30000,
     freeRateId: 'shr_1TcEfb2VIu8UkxmlkxZowGRw',
-    paidRateId: 'shr_1TgZ262VIu8UkxmlOSPsiF6x',
-    // paidRateId: 'shr_1TcEfA2VIu8Ukxml9abGIJNN',
+    // paidRateId: 'shr_1TgZ262VIu8UkxmlOSPsiF6x',
+    paidRateId: 'shr_1TcEfA2VIu8Ukxml9abGIJNN',
   },
   US: {
     currency: 'USD',
     freeThreshold: 25000,
     freeRateId: 'shr_1TcEfq2VIu8UkxmlOZkXPLlw',
-    paidRateId: 'shr_1TgZ2d2VIu8UkxmlKM89ukTI',
-    // paidRateId: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
+    // paidRateId: 'shr_1TgZ2d2VIu8UkxmlKM89ukTI',
+    paidRateId: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
   },
 }
 const ALLOWED_SHIPPING_COUNTRIES = Object.freeze(Object.keys(SHIPPING_RATE_RULES))
