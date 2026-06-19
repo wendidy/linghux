@@ -6,13 +6,23 @@ import {
   upsertCompletedOrder,
 } from './orders.js'
 import { sendOrderNotification } from './orderNotifications.js'
+import { withApiSecurity } from './security.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const MAX_WEBHOOK_BODY_BYTES = 1024 * 1024
 
 async function readRawBody(req) {
   const chunks = []
+  let totalBytes = 0
   for await (const chunk of req) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
+    totalBytes += buffer.length
+    if (totalBytes > MAX_WEBHOOK_BODY_BYTES) {
+      const error = new Error('Webhook payload is too large')
+      error.statusCode = 413
+      throw error
+    }
+    chunks.push(buffer)
   }
   return Buffer.concat(chunks)
 }
@@ -31,12 +41,7 @@ function isPaidSession(session) {
   return session?.payment_status === 'paid' || session?.payment_status === 'no_payment_required'
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).send('Method not allowed')
-    return
-  }
-
+async function stripeWebhookHandler(req, res) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
   if (!webhookSecret) {
     res.status(500).json({ error: 'STRIPE_WEBHOOK_SECRET is not set' })
@@ -49,7 +54,7 @@ export default async function handler(req, res) {
     const signature = req.headers['stripe-signature']
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret)
   } catch (error) {
-    res.status(400).json({ error: `Webhook Error: ${error.message}` })
+    res.status(error.statusCode || 400).json({ error: `Webhook Error: ${error.message}` })
     return
   }
 
@@ -123,3 +128,8 @@ export default async function handler(req, res) {
 
   res.status(200).json({ received: true })
 }
+
+export default withApiSecurity(stripeWebhookHandler, {
+  checkOrigin: false,
+  requireJson: false,
+})

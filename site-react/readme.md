@@ -19,6 +19,10 @@
 Main site hosted on **Vercel**. Secrets and env vars are stored on vercel.
 If new env vars are introduced, do **vercel link** under linghux-blog
 
+Security hardening checklist:
+
+* `SECURITY_HARDENING.md` contains the recommended Vercel Firewall/WAF, CDN rate limiting, and bot protection rules for this project.
+
 ___
 
 ## 💳 Payments

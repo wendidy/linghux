@@ -127,12 +127,6 @@ export default function WorkPortfolioItem({ category }) {
     )
   }
 
-  document.querySelectorAll('*').forEach(el => {
-  if (el.offsetWidth > document.documentElement.clientWidth) {
-    console.log('Overflowing Element:', el);
-  }
-});
-
   const pageTitle = `${item.title} | Original watercolor painting for sale`
   const pageDescription = buildProductPageDescription(item)
   const imageAlt = buildImageAlt(item)
@@ -391,4 +385,3 @@ export default function WorkPortfolioItem({ category }) {
   )
 
 }
-

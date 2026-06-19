@@ -3,6 +3,7 @@ import { withClient } from './db.js'
 import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
 import { inventoryCapFor } from './catalogInventory.js'
 import { cleanupExpiredReservations } from './inventory.js'
+import { MAX_ITEM_IDS, invalidItemIds, withApiSecurity } from './security.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -19,14 +20,20 @@ async function getInventoryByProductId(productIds) {
   })
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).send('Method not allowed')
-    return
-  }
-
+async function availabilityHandler(req, res) {
   try {
-    const itemIds = normalizeItemIds(req.body?.itemIds)
+    const rawItemIds = Array.isArray(req.body?.itemIds) ? req.body.itemIds : []
+    if (rawItemIds.length > MAX_ITEM_IDS) {
+      res.status(400).json({ error: `Too many item IDs. Maximum is ${MAX_ITEM_IDS}.` })
+      return
+    }
+
+    if (invalidItemIds(rawItemIds).length > 0) {
+      res.status(400).json({ error: 'One or more item IDs are invalid' })
+      return
+    }
+
+    const itemIds = normalizeItemIds(rawItemIds)
     if (!itemIds.length) {
       res.status(400).json({ error: 'No item IDs provided' })
       return
@@ -88,3 +95,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: error.message || 'Failed to fetch availability' })
   }
 }
+
+export default withApiSecurity(availabilityHandler, {
+  rateLimit: { key: 'availability', max: 120 },
+})

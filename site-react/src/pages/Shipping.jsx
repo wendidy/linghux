@@ -2,7 +2,7 @@ export default function Shipping() {
   return (
     <>
       <section id="shipping" className="main style2 about-section">
-        <div className="content box style2">
+        <div className="box style2">
           <header>
             <h2>Shipping & Delivery</h2>
           </header>
@@ -24,7 +24,7 @@ export default function Shipping() {
           <p>Most orders are prepared and shipped within 3–7 business days.</p>
 
           <h3>Returns & Damaged Items</h3>
-          <p>All sales are final, with no refunds or returns. If your item arrives damaged, please email Wendy and we will find a way to make it right.</p>
+          <p>All sales are final, with no refunds or returns. If your item arrives damaged, please contact Wendy at <a href="mailto:linghuxiaolhx@gmail.com">linghuxiaolhx@gmail.com</a> and we will find a way to make it right.</p>
           
           <h3>Customs & Duties</h3>
           <p>International customers are responsible for any customs duties or import taxes charged by their country.</p>

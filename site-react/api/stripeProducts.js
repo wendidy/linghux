@@ -1,6 +1,14 @@
-function normalizeItemIds(itemIds) {
+import { MAX_ITEM_IDS, MAX_ITEM_ID_LENGTH, invalidItemIds, isValidItemId } from './security.js'
+
+function normalizeItemIds(itemIds, { maxItems = MAX_ITEM_IDS } = {}) {
   const input = Array.isArray(itemIds) ? itemIds : []
-  return [...new Set(input.filter(Boolean))]
+  return [
+    ...new Set(
+      input
+        .filter(isValidItemId)
+        .map((itemId) => itemId.trim())
+    ),
+  ].slice(0, maxItems)
 }
 
 function escapeSearchValue(value) {
@@ -119,4 +127,11 @@ async function resolvePriceForProductAndCurrency(stripe, product, currency = 'US
   return prices?.data?.[0] || null
 }
 
-export { normalizeItemIds, serializePrice }
+export {
+  MAX_ITEM_IDS,
+  MAX_ITEM_ID_LENGTH,
+  invalidItemIds,
+  isValidItemId,
+  normalizeItemIds,
+  serializePrice,
+}

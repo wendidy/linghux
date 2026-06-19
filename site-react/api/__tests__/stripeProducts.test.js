@@ -76,16 +76,11 @@ describe('Stripe Products', () => {
       expect(mockStripe.products.search).toHaveBeenCalledOnce()
     })
 
-    it('should escape search values', async () => {
-      mockStripe.products.search.mockResolvedValueOnce({
-        data: [],
-      })
+    it('should filter unsafe item IDs before searching Stripe', async () => {
+      const result = await fetchPricesByItemIds(mockStripe, ['item"with"quotes', 'item\\with\\backslash'])
 
-      await fetchPricesByItemIds(mockStripe, ['item"with"quotes', 'item\\with\\backslash'])
-
-      const calls = mockStripe.products.search.mock.calls
-      expect(calls[0][0].query).toContain('item\\"with\\"quotes')
-      expect(calls[1][0].query).toContain('item\\\\with\\\\backslash')
+      expect(result.size).toBe(0)
+      expect(mockStripe.products.search).not.toHaveBeenCalled()
     })
 
     it('should handle products not found', async () => {

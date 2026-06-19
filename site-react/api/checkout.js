@@ -2,6 +2,14 @@ import Stripe from 'stripe'
 import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
 import { reserveInventory, releaseReservations, reservationExpiresAt } from './inventory.js'
 import { inventoryCapFor } from './catalogInventory.js'
+import {
+  MAX_ITEM_IDS,
+  MAX_LINE_ITEM_QUANTITY,
+  invalidItemIds,
+  isValidItemId,
+  normalizeCurrency,
+  withApiSecurity,
+} from './security.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -26,6 +34,7 @@ const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
   CAD: 'CA',
   USD: 'US',
 }
+const METADATA_TEXT_MAX_LENGTH = 120
 
 function getBaseUrl(req) {
   if (process.env.SITE_URL) {
@@ -54,12 +63,29 @@ function shippingRateFor(country, subtotal) {
   return subtotal >= rule.freeThreshold ? rule.freeRateId : rule.paidRateId
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).send('Method not allowed')
-    return
-  }
+function cleanMetadataText(value) {
+  if (typeof value !== 'string') return undefined
+  const cleaned = value
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .replace(/[<>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return cleaned ? cleaned.slice(0, METADATA_TEXT_MAX_LENGTH) : undefined
+}
 
+function quantityFor(item) {
+  if (item?.quantity == null) return 1
+  if (
+    Number.isInteger(item.quantity) &&
+    item.quantity > 0 &&
+    item.quantity <= MAX_LINE_ITEM_QUANTITY
+  ) {
+    return item.quantity
+  }
+  return null
+}
+
+async function checkoutHandler(req, res) {
   let reservationIds = []
   try {
     // Handle both old format (array) and new format ({ lineItems, currency })
@@ -70,8 +96,12 @@ export default async function handler(req, res) {
     if (Array.isArray(req.body)) {
       items = req.body
     } else if (req.body && typeof req.body === 'object') {
-      items = req.body.lineItems || []
-      currency = (req.body.currency || 'USD').toUpperCase()
+      items = Array.isArray(req.body.lineItems) ? req.body.lineItems : []
+      currency = normalizeCurrency(req.body.currency || 'USD')
+      if (!currency) {
+        res.status(400).json({ error: 'Unsupported currency' })
+        return
+      }
       shippingCountry = normalizeShippingCountry(req.body.shippingCountry, currency)
     }
 
@@ -84,6 +114,27 @@ export default async function handler(req, res) {
 
     if (!items.length) {
       res.status(400).json({ error: 'Cart is empty' })
+      return
+    }
+
+    if (items.length > MAX_ITEM_IDS) {
+      res.status(400).json({ error: `Too many line items. Maximum is ${MAX_ITEM_IDS}.` })
+      return
+    }
+
+    const rawItemIds = items.map((item) => item?.id)
+    if (invalidItemIds(rawItemIds).length > 0) {
+      res.status(400).json({ error: 'One or more item IDs are invalid' })
+      return
+    }
+
+    if (items.some((item) => item?.itemId && !isValidItemId(item.itemId))) {
+      res.status(400).json({ error: 'One or more item IDs are invalid' })
+      return
+    }
+
+    if (items.some((item) => quantityFor(item) === null)) {
+      res.status(400).json({ error: `Quantity must be between 1 and ${MAX_LINE_ITEM_QUANTITY}` })
       return
     }
 
@@ -106,11 +157,12 @@ export default async function handler(req, res) {
         throw new Error(`Unable to resolve Stripe ${currency} price for cart item`)
       }
       // console.log(`[/api/checkout] ✓ Price found for ${item?.id}: ${price.id} (${price.currency} ${price.unit_amount})`)
-      const quantity = Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1
+      const quantity = quantityFor(item)
+      const metadataItemId = isValidItemId(item.itemId) ? item.itemId.trim() : item.id
       return {
-        itemId: item.itemId || item.id,
-        itemTitle: item.title,
-        category: item.category,
+        itemId: metadataItemId,
+        itemTitle: cleanMetadataText(item.title),
+        category: cleanMetadataText(item.category),
         price: price.id,
         quantity,
         productId: price.product,
@@ -200,3 +252,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: error.message || 'Checkout failed' })
   }
 }
+
+export default withApiSecurity(checkoutHandler, {
+  rateLimit: { key: 'checkout', max: 20 },
+})

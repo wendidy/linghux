@@ -233,8 +233,8 @@ const originals = [
     medium: 'Watercolor and pencil on paper',
     date: '2023-08-27',
     location: 'Ottawa, Ontario, Canada',
-    image: '/images/majorsHillPark/majorsHillPark2.jpg',
-    images: gallery('majorsHillPark', ['majorsHillPark2.jpg']),
+    image: '/images/majorsHillPark/majorsHillPark.jpg',
+    images: gallery('majorsHillPark', ['majorsHillPark.jpg', 'majorsHillPark2.jpg']),
     description: 'From Major\'s Hill Park in the heart of the capital of Canada, the Parliament Buildings emerged through the canopy — majestic and half-disclosed. People had gathered in clusters on the grass, taking in the sunlight and the breeze. I found myself in unexpected company: another plein air painter, working the same light.'
   },
   {

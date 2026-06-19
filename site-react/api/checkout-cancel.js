@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { releaseReservations } from './inventory.js'
+import { isValidStripeCheckoutSessionId, withApiSecurity } from './security.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -32,19 +33,14 @@ async function reservationIdsForSession(session) {
   return reservationIds
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).send('Method not allowed')
-    return
-  }
-
+async function checkoutCancelHandler(req, res) {
   if (!process.env.STRIPE_SECRET_KEY) {
     res.status(500).json({ error: 'STRIPE_SECRET_KEY is not set' })
     return
   }
 
   const { sessionId } = req.body || {}
-  if (!sessionId || typeof sessionId !== 'string') {
+  if (!isValidStripeCheckoutSessionId(sessionId)) {
     res.status(400).json({ error: 'Missing or invalid sessionId' })
     return
   }
@@ -77,3 +73,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: error.message || 'Failed to release reserved checkout items' })
   }
 }
+
+export default withApiSecurity(checkoutCancelHandler, {
+  rateLimit: { key: 'checkout-cancel', max: 30 },
+})

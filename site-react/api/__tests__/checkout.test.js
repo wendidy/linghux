@@ -272,27 +272,21 @@ describe('Checkout API Handler', () => {
       expect(call.line_items[0].quantity).toBe(1)
     })
 
-    it('should handle invalid quantities', async () => {
+    it('should reject invalid quantities', async () => {
       req.body = [
         { id: 'item_1', quantity: 0 },
         { id: 'item_2', quantity: -5 },
         { id: 'item_3', quantity: 'invalid' },
       ]
 
-      fetchPricesByItemIds.mockResolvedValueOnce(
-        new Map([
-          ['item_1', createPriceEntry('prod_1')],
-          ['item_2', createPriceEntry('prod_2')],
-          ['item_3', createPriceEntry('prod_3')],
-        ])
-      )
-      reserveInventory.mockResolvedValueOnce([])
-
       await handler(req, res)
 
-      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
-      // All should default to 1
-      expect(call.line_items.every((li) => li.quantity === 1)).toBe(true)
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({ error: 'Quantity must be between 1 and 10' })
+      )
+      expect(fetchPricesByItemIdsAndCurrency).not.toHaveBeenCalled()
+      expect(mockStripeInstance.checkout.sessions.create).not.toHaveBeenCalled()
     })
   })
 
@@ -506,7 +500,7 @@ describe('Checkout API Handler', () => {
     })
 
     it('should catch and report errors from reserveInventory', async () => {
-      req.body = [{ id: 'item_1', quantity: 100 }]
+      req.body = [{ id: 'item_1', quantity: 10 }]
       fetchPricesByItemIds.mockResolvedValueOnce(
         new Map([['item_1', { product: createMockProduct('prod_1', 10), price: createMockPrice() }]])
       )
