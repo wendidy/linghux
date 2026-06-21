@@ -87,10 +87,9 @@ export default function Home(){
 
       <section className="home-intro-section">
         <div className="home-intro-copy">
-          <h1>linghux watercolor art by Wendy Zhang</h1>
-          <p>Shop original watercolor paintings, limited edition prints, and open edition prints by the Canadian artist behind linghux.</p>
-          <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
-          <p>Tell me, where did the world speak to you most dearly?</p>
+          <p>linghux watercolor by Wendy Zhang</p>
+          <p>"I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
+          <p>Tell me, where did the world speak to you most dearly?"</p>
         </div>
       </section>
 
