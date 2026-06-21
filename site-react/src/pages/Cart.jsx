@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext'
 import { useCurrency } from '../context/CurrencyContext'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
+import Seo from '../components/Seo'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
 import { getEditionLabel, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
 import {
@@ -184,7 +185,13 @@ export default function Cart() {
   }
 
   return (
-    <section className="cart-page">
+    <>
+      <Seo
+        title="Your basket | linghux"
+        description="Review artwork in your linghux basket before secure checkout."
+        robots="noindex, follow"
+      />
+      <section className="cart-page">
       <div className="cart-wrap">
         <header>
           <h2>Your Basket</h2>
@@ -303,6 +310,7 @@ export default function Cart() {
           </div>
         )}
       </div>
-    </section>
+      </section>
+    </>
   )
 }

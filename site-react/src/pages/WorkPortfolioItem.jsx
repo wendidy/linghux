@@ -7,8 +7,14 @@ import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import Seo from '../components/Seo'
 import { PRICE_LABELS } from '../utils/stripePrices'
-import { findArtwork, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
-import { buildImageAlt, buildProductPageDescription } from '../utils/seo'
+import { findArtwork, getArtworkPath, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
+import {
+  buildBreadcrumbJsonLd,
+  buildImageAlt,
+  buildProductJsonLd,
+  buildProductPageDescription,
+  SITE_NAME,
+} from '../utils/seo'
 
 export default function WorkPortfolioItem({ category }) {
   const { workId } = useParams()
@@ -127,32 +133,49 @@ export default function WorkPortfolioItem({ category }) {
     )
   }
 
-  const pageTitle = `${item.title} | Original watercolor painting for sale`
+  const collectionLabel = original
+    ? 'Originals'
+    : limitedEdition
+      ? 'Limited Edition Prints'
+      : 'Open Edition Prints'
+  const productKind = original
+    ? 'original watercolor painting'
+    : limitedEdition
+      ? 'limited edition watercolor print'
+      : 'open edition watercolor print'
+  const canonicalPath = getArtworkPath(item.slug || item.id, item.category)
+  const pageTitle = `${item.title} | ${productKind} by Wendy Zhang | ${SITE_NAME}`
   const pageDescription = buildProductPageDescription(item)
   const imageAlt = buildImageAlt(item)
   const galleryAlt = (index) => [item.title, `alternate view ${index + 1}`, item.location, item.medium].filter(Boolean).join(' — ')
+  const jsonLd = [
+    buildProductJsonLd({
+      item,
+      url: canonicalPath,
+      images: galleryImages,
+      description: pageDescription,
+      priceInfo,
+      availability,
+      selectedVariant,
+    }),
+    buildBreadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: 'Artwork', url: '/artwork' },
+      { name: collectionLabel, url: `/artwork/${item.category}` },
+      { name: item.title, url: canonicalPath },
+    ]),
+  ]
 
   return (
     <>
-      <Seo title={pageTitle} description={pageDescription} image={item.image} />
-      {/* Product structured data for rich results */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Product',
-          name: item.title,
-          image: galleryImages.map((src) => (typeof window !== 'undefined' ? new URL(src, window.location.origin).href : src)),
-          description: pageDescription,
-          sku: item.id,
-          offers: (priceInfo && typeof priceInfo.unit_amount === 'number') ? {
-            '@type': 'Offer',
-            priceCurrency: priceInfo.currency ? priceInfo.currency.toUpperCase() : 'USD',
-            price: (priceInfo.unit_amount / 100).toFixed(2),
-            availability: availability?.soldOut ? 'http://schema.org/SoldOut' : 'http://schema.org/InStock',
-            url: (typeof window !== 'undefined') ? window.location.href : ''
-          } : undefined,
-        })}
-      </script>
+      <Seo
+        title={pageTitle}
+        description={pageDescription}
+        url={canonicalPath}
+        image={galleryImages[0] || item.image}
+        type="product"
+        jsonLd={jsonLd}
+      />
       <section className="work-item-page">
         <div className="work-item-grid">
         <div className="work-item-visual">

@@ -2,32 +2,59 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import { ARTWORK_CATEGORIES } from '../utils/artwork'
+import {
+  ARTIST_NAME,
+  ARTIST_SCHEMA_ID,
+  buildBreadcrumbJsonLd,
+  ORGANIZATION_SCHEMA_ID,
+  SITE_NAME,
+  SITE_URL,
+  WEBSITE_SCHEMA_ID,
+} from '../utils/seo'
 
 const shopPanels = [
   {
     title: 'Limited Edition Prints',
     image: '/images/signalHill/signalHill.jpg',
-    alt: 'Limited edition print',
-    button: 'Go Shop Limited Edition Prints',
+    alt: `Limited edition watercolor print by ${ARTIST_NAME}`,
+    button: 'Shop Limited Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.limitedEditionPrints}`,
   },
   {
     title: 'Open Edition Prints',
     image: '/images/peleeIsland/peleeIsland.jpg',
-    alt: 'Open edition print',
-    button: 'Go Shop Open Edition Prints',
+    alt: `Open edition watercolor print by ${ARTIST_NAME}`,
+    button: 'Shop Open Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.openEditionPrints}`,
   },
   {
     title: 'Originals',
     image: '/images/goreCreek/goreCreek.png',
-    alt: 'Original watercolor',
-    button: 'Go Shop Originals',
+    alt: `Original watercolor painting by ${ARTIST_NAME}`,
+    button: 'Shop Originals',
     to: `/artwork/${ARTWORK_CATEGORIES.originals}`,
   },
 ]
 
 export default function Home(){
+  const pageTitle = `${SITE_NAME} watercolor art by ${ARTIST_NAME} | Originals and prints`
+  const pageDescription = `Shop original watercolor paintings and archival prints by ${ARTIST_NAME}, the Canadian artist behind ${SITE_NAME}, including Newfoundland and Colorado plein air landscapes.`
+  const pageUrl = `${SITE_URL}/`
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      '@id': `${pageUrl}#webpage`,
+      name: pageTitle,
+      description: pageDescription,
+      url: pageUrl,
+      isPartOf: { '@id': WEBSITE_SCHEMA_ID },
+      about: { '@id': ARTIST_SCHEMA_ID },
+      mainEntity: { '@id': ORGANIZATION_SCHEMA_ID },
+    },
+    buildBreadcrumbJsonLd([{ name: 'Home', url: '/' }]),
+  ]
+
   useEffect(() => {
     const existing = document.querySelector('script[data-beehiiv-embed]')
     if (existing) {
@@ -48,9 +75,11 @@ export default function Home(){
   return (
     <>
       <Seo
-        title="linghux | Original watercolor paintings and prints"
-        description="Explore original plein air watercolor artwork, Newfoundland and Colorado landscape paintings, and collectible watercolor prints by linghux."
-        keywords="shop originals, shop limited edition prints, shop open edition prints, about linghux, original watercolor paintings, watercolor prints"
+        title={pageTitle}
+        description={pageDescription}
+        url={pageUrl}
+        keywords="linghux art, Wendy Zhang artist, shop original watercolor paintings, limited edition watercolor prints, open edition watercolor prints, Canadian watercolor artist"
+        jsonLd={jsonLd}
       />
       <section id="home" className="main style1 dark fullscreen">
         <div className="content" aria-hidden="true" />
@@ -58,7 +87,8 @@ export default function Home(){
 
       <section className="home-intro-section">
         <div className="home-intro-copy">
-          <h1>Shop Originals, Limited Edition Prints, and Open Edition Prints</h1>
+          <h1>linghux watercolor art by Wendy Zhang</h1>
+          <p>Shop original watercolor paintings, limited edition prints, and open edition prints by the Canadian artist behind linghux.</p>
           <p>I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
           <p>Tell me, where did the world speak to you most dearly?</p>
         </div>

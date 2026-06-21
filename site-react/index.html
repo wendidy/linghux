@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4R7CLEFE2S"></script>
@@ -13,34 +13,103 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com">
-    <!-- Website structured data (update url/name if different) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Website and artist structured data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "linghux",
-        "url": "https://shop.linghux.com",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://shop.linghux.com/search?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "linghux",
-        "url": "https://shop.linghux.com",
-        "logo": "https://shop.linghux.com/public/logo.png"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://shop.linghux.com/#website",
+            "name": "linghux",
+            "alternateName": ["linghux art", "linghux watercolor art"],
+            "url": "https://shop.linghux.com/",
+            "publisher": {
+              "@id": "https://shop.linghux.com/#organization"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "OnlineStore",
+            "@id": "https://shop.linghux.com/#organization",
+            "name": "linghux",
+            "url": "https://shop.linghux.com/",
+            "logo": "https://shop.linghux.com/logo.png",
+            "image": "https://shop.linghux.com/logo.png",
+            "description": "Original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux.",
+            "founder": {
+              "@id": "https://shop.linghux.com/about#wendy-zhang"
+            },
+            "areaServed": [
+              { "@type": "Country", "name": "Canada" },
+              { "@type": "Country", "name": "United States" }
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "email": "linghuxiaolhx@gmail.com",
+              "contactType": "customer support"
+            },
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Watercolor artwork collections",
+              "itemListElement": [
+                {
+                  "@type": "OfferCatalog",
+                  "name": "Original watercolor paintings",
+                  "url": "https://shop.linghux.com/artwork/originals"
+                },
+                {
+                  "@type": "OfferCatalog",
+                  "name": "Limited edition watercolor prints",
+                  "url": "https://shop.linghux.com/artwork/limited-edition-prints"
+                },
+                {
+                  "@type": "OfferCatalog",
+                  "name": "Open edition watercolor prints",
+                  "url": "https://shop.linghux.com/artwork/open-edition-prints"
+                }
+              ]
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://shop.linghux.com/about#wendy-zhang",
+            "name": "Wendy Zhang",
+            "alternateName": "linghux",
+            "url": "https://shop.linghux.com/about",
+            "jobTitle": "Watercolor artist",
+            "worksFor": {
+              "@id": "https://shop.linghux.com/#organization"
+            },
+            "knowsAbout": [
+              "watercolor painting",
+              "plein air painting",
+              "landscape painting",
+              "Newfoundland landscape art",
+              "Colorado landscape art",
+              "archival art prints"
+            ]
+          }
+        ]
       }
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Original watercolor paintings and prints for sale by a Canadian plein air artist, including Newfoundland landscape watercolor art." />
-    <title>linghux | Original watercolor paintings</title>
-    <link rel="icon" type="image/png" href="./public/logo.png" />
+    <meta name="description" content="Shop original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux, including Newfoundland and Colorado plein air landscapes." />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:site_name" content="linghux" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="linghux watercolor art by Wendy Zhang" />
+    <meta property="og:description" content="Original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux." />
+    <meta property="og:url" content="https://shop.linghux.com/" />
+    <meta property="og:image" content="https://shop.linghux.com/images/signalHill/signalHill.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="linghux watercolor art by Wendy Zhang" />
+    <meta name="twitter:description" content="Original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux." />
+    <meta name="twitter:image" content="https://shop.linghux.com/images/signalHill/signalHill.jpg" />
+    <title>linghux watercolor art by Wendy Zhang | Original paintings and prints</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
   </head>
   <body>
     <div id="root"></div>

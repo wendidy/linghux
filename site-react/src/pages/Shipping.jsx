@@ -1,6 +1,24 @@
+import Seo from '../components/Seo'
+import { buildBreadcrumbJsonLd, SITE_URL } from '../utils/seo'
+
 export default function Shipping() {
+  const pageTitle = 'Shipping and delivery | linghux watercolor art'
+  const pageDescription = 'Shipping details for linghux original watercolor paintings and prints by Wendy Zhang, including tracked delivery in Canada and the United States.'
+  const pageUrl = `${SITE_URL}/shipping`
+  const jsonLd = buildBreadcrumbJsonLd([
+    { name: 'Home', url: '/' },
+    { name: 'Shipping and delivery', url: '/shipping' },
+  ])
+
   return (
     <>
+      <Seo
+        title={pageTitle}
+        description={pageDescription}
+        url={pageUrl}
+        keywords="linghux shipping, watercolor art shipping, Wendy Zhang art shipping, Canada art shipping, United States art shipping"
+        jsonLd={jsonLd}
+      />
       <section id="shipping" className="main style2 about-section">
         <div className="box style2">
           <header>

@@ -6,7 +6,7 @@ import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import Seo from '../components/Seo'
 import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../utils/artwork'
-import { buildImageAlt } from '../utils/seo'
+import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildImageAlt, SITE_NAME } from '../utils/seo'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
   const navigate = useNavigate()
@@ -38,18 +38,35 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   }
 
   const pageTitle = category
-    ? `${heading} | Buy watercolor art by linghux`
-    : 'Artworks | Buy original watercolor paintings and prints by linghux'
+    ? `${heading} by Wendy Zhang | ${SITE_NAME} watercolor art`
+    : `Artwork by Wendy Zhang | ${SITE_NAME} watercolor paintings and prints`
   const pageDescription = category
-    ? `Browse ${heading.toLowerCase()} by a Canadian watercolor artist, including Newfoundland and Colorado plein air landscape paintings.`
-    : 'Shop original watercolor paintings and prints by linghux, including Newfoundland and Colorado landscapes and Canadian plein air artwork.'
+    ? `Browse ${heading.toLowerCase()} by Wendy Zhang, the Canadian watercolor artist behind ${SITE_NAME}, including Newfoundland and Colorado plein air landscape paintings.`
+    : `Shop original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind ${SITE_NAME}, including Newfoundland and Colorado landscapes.`
   const seoKeywords = category
-    ? `${heading.toLowerCase()}, shop ${heading.toLowerCase()}, watercolor art, original watercolor paintings, watercolor prints`
-    : 'shop originals, shop limited edition prints, shop open edition prints, watercolor paintings, watercolor prints, Canadian watercolor artist'
+    ? `${heading.toLowerCase()}, Wendy Zhang artist, linghux art, shop ${heading.toLowerCase()}, watercolor art, original watercolor paintings, watercolor prints`
+    : 'linghux art, Wendy Zhang artist, shop originals, shop limited edition prints, shop open edition prints, watercolor paintings, watercolor prints, Canadian watercolor artist'
+  const pagePath = category ? `/artwork/${category}` : '/artwork'
+  const jsonLd = [
+    buildCollectionPageJsonLd({
+      name: pageTitle,
+      description: pageDescription,
+      url: pagePath,
+      items: filteredItems.map((item) => ({
+        name: item.title,
+        url: getArtworkPath(item.slug || item.id, item.category),
+      })),
+    }),
+    buildBreadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: 'Artwork', url: '/artwork' },
+      ...(category ? [{ name: heading, url: pagePath }] : []),
+    ]),
+  ]
 
   return (
     <>
-      <Seo title={pageTitle} description={pageDescription} keywords={seoKeywords} />
+      <Seo title={pageTitle} description={pageDescription} url={pagePath} keywords={seoKeywords} jsonLd={jsonLd} />
       <section id="work" className="main style3">
         <div className="gallery-div">
         <header>
@@ -73,7 +90,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         </header>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
-            const path = getArtworkPath(item.slug || item.id, category)
+            const path = getArtworkPath(item.slug || item.id, item.category)
             const badgeLabel = isOriginalsPage && item.type
               ? `${item.type} Original Watercolor`
               : getArtworkBadgeLabel(item)

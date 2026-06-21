@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { clearPendingCheckoutSession } from '../utils/pendingCheckoutSession'
+import Seo from '../components/Seo'
 
 export default function CheckoutCancel() {
   const [searchParams] = useSearchParams()
@@ -34,16 +35,19 @@ export default function CheckoutCancel() {
   }, [searchParams])
 
   return (
-    <section className="cart-page">
-      <div className="cart-wrap">
-        <h2>Checkout cancelled</h2>
-        <p>Your payment was cancelled. Your cart is still saved.</p>
-        {releaseMessage && (
-          <p>{releaseMessage}</p>
-        )}
-        {isReleasing && <p>Checking reserved inventory status…</p>}
-        <Link to="/cart" className="button">Return to cart</Link>
-      </div>
-    </section>
+    <>
+      <Seo title="Checkout cancelled | linghux" description="Your linghux checkout was cancelled." robots="noindex, follow" />
+      <section className="cart-page">
+        <div className="cart-wrap">
+          <h2>Checkout cancelled</h2>
+          <p>Your payment was cancelled. Your cart is still saved.</p>
+          {releaseMessage && (
+            <p>{releaseMessage}</p>
+          )}
+          {isReleasing && <p>Checking reserved inventory status…</p>}
+          <Link to="/cart" className="button">Return to cart</Link>
+        </div>
+      </section>
+    </>
   )
 }

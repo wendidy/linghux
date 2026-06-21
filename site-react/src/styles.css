@@ -99,7 +99,28 @@ header#header {
   padding: 1rem 6em; 
   border-bottom: 1px solid var(--surface-muted) 
 }
-.footer { background: var(--ink); color: var(--bg-white); padding:1rem; text-align:center }
+.footer { background: var(--ink); color: var(--bg-white); padding:1.25rem 1rem; text-align:center }
+.footer-content {
+  display: grid;
+  gap: 0.75rem;
+}
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.85rem 1.25rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.footer-nav a {
+  color: var(--bg-white);
+  text-decoration: none;
+}
+.footer-nav a:hover,
+.footer-nav a:focus {
+  color: var(--accent-soft);
+}
 input[type=button],
 input[type=submit],
 input[type=reset],

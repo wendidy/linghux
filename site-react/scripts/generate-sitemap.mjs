@@ -7,38 +7,67 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 try {
-  const mod = await import('../src/data/portfolio.js')
-  const items = mod.items || []
+  const [{ items = [] }, { getArtworkPath }, { buildImageAlt, toAbsoluteUrl }] = await Promise.all([
+    import('../src/data/portfolio.js'),
+    import('../src/utils/artwork.js'),
+    import('../src/utils/seo.js'),
+  ])
 
-  const domain = 'https://shop.linghux.com'
   const pages = [
     '/',
     '/about',
     '/contact',
     '/shipping',
-    '/cart',
-    '/success',
-    '/cancel',
     '/artwork',
     '/artwork/originals',
     '/artwork/limited-edition-prints',
     '/artwork/open-edition-prints',
   ]
 
-  const artworkUrls = items
+  const pageEntries = pages.map((url) => ({ url }))
+  const artworkEntries = items
     .filter(Boolean)
-    .map((item) => `/artwork/work/${item.slug || item.id}`)
+    .map((item) => ({
+      url: getArtworkPath(item.slug || item.id, item.category),
+      images: (Array.isArray(item.images) ? item.images : [item.image])
+        .filter(Boolean)
+        .map((src) => ({
+          loc: toAbsoluteUrl(src),
+          title: `${item.title} by Wendy Zhang`,
+          caption: buildImageAlt(item),
+        })),
+    }))
 
-  const urls = Array.from(new Set([...pages, ...artworkUrls]))
+  const seenUrls = new Set()
+  const urls = [...pageEntries, ...artworkEntries].filter((entry) => {
+    const absoluteUrl = toAbsoluteUrl(entry.url)
+    if (seenUrls.has(absoluteUrl)) return false
+    seenUrls.add(absoluteUrl)
+    return true
+  })
+
+  const escapeXml = (value) => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 
   const xmlLines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
   ]
 
-  for (const u of urls) {
+  for (const entry of urls) {
     xmlLines.push('  <url>')
-    xmlLines.push(`    <loc>${domain}${u}</loc>`)
+    xmlLines.push(`    <loc>${escapeXml(toAbsoluteUrl(entry.url))}</loc>`)
+    for (const image of entry.images || []) {
+      xmlLines.push('    <image:image>')
+      xmlLines.push(`      <image:loc>${escapeXml(image.loc)}</image:loc>`)
+      if (image.title) xmlLines.push(`      <image:title>${escapeXml(image.title)}</image:title>`)
+      if (image.caption) xmlLines.push(`      <image:caption>${escapeXml(image.caption)}</image:caption>`)
+      xmlLines.push('    </image:image>')
+    }
     xmlLines.push('  </url>')
   }
 

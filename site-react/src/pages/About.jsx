@@ -1,12 +1,26 @@
 import Seo from '../components/Seo'
+import { buildArtistPageJsonLd, buildBreadcrumbJsonLd, SITE_URL } from '../utils/seo'
 
 export default function About(){
+  const pageTitle = 'Wendy Zhang | About the linghux watercolor artist'
+  const pageDescription = 'Learn about Wendy Zhang, the Canadian watercolor artist behind linghux, creating original plein air paintings and archival prints rooted in Newfoundland and Colorado landscapes.'
+  const pageUrl = `${SITE_URL}/about`
+  const jsonLd = [
+    buildArtistPageJsonLd(),
+    buildBreadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: 'About Wendy Zhang', url: '/about' },
+    ]),
+  ]
+
   return (
     <>
       <Seo
-        title="About linghux | Watercolor artist and prints"
-        description="Learn about Wendy Zhang, a Canadian watercolor artist creating originals, limited edition prints, and open edition prints rooted in Newfoundland and Colorado landscapes."
-        keywords="about, watercolor artist, shop originals, shop limited edition prints, shop open edition prints, Canadian painter"
+        title={pageTitle}
+        description={pageDescription}
+        url={pageUrl}
+        keywords="Wendy Zhang artist, linghux, Canadian watercolor artist, plein air painter, Newfoundland watercolor artist, Colorado landscape paintings"
+        jsonLd={jsonLd}
       />
       <section>
         <div className="content box style2">
@@ -16,9 +30,9 @@ export default function About(){
             </div>
             <div className="about-text">
               <header>
-                <h1>About</h1>
+                <h1>About Wendy Zhang</h1>
               </header>
-              <p>Wendy Zhang’s work is shaped by a life lived across three countries and varied landscapes. Moving between cultures taught her that what endures beyond language, geography, or circumstance is a single, unbroken thread — woven between people, and the earth that holds them.  In unfamiliar places, she found herself drawn to the quiet exchanges and shared moments that give a place its meaning, and to the way the natural world carries its own kind of memory.</p>
+              <p>Wendy Zhang is the Canadian watercolor artist behind linghux. Her work is shaped by a life lived across three countries and varied landscapes. Moving between cultures taught her that what endures beyond language, geography, or circumstance is a single, unbroken thread — woven between people, and the earth that holds them.  In unfamiliar places, she found herself drawn to the quiet exchanges and shared moments that give a place its meaning, and to the way the natural world carries its own kind of memory.</p>
               <p>Watercolor became her way of honoring those encounters. Using both her camera and her brushes, Wendy translates fleeting experiences into gentle, lasting forms—allowing each painting to serve as a bridge: between artist and viewer, between memory and presence, between a moment once lived and a moment newly felt. Through this process, she seeks to preserve what travel revealed to be essential: the invisible connection that bind us to one another, and to the living world we move through.</p>
             </div>
           </div>
