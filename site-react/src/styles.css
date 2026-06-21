@@ -223,9 +223,9 @@ button:active {
 }
 .page-title {
   margin: 0 0 1rem;
-  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-family: 'Spectral', Georgia, 'Times New Roman', serif;
   font-size: 3rem;
-  font-weight: 500;
+  font-weight: 550;
   letter-spacing: 0.02em;
   line-height: 1.05;
   color: var(--ink);
@@ -234,7 +234,7 @@ button:active {
   max-width: 42rem;
   margin: -0.25rem auto 0;
   color: var(--charcoal);
-  font-family: 'Spectral', Georgia, serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.05rem;
   line-height: 1.65;
 }
@@ -748,7 +748,9 @@ button:active {
   min-height: 1rem;
 }
 .product-badge span:first-child {
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.78rem;
+  font-weight: 300;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--charcoal);

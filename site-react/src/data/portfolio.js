@@ -68,7 +68,7 @@ const originals = [
     date: '2024-10-07',
     location: 'Vail, Colorado, USA',
     image: '/images/goreCreek/goreCreek.jpg',
-    images: gallery('goreCreek', ['goreCreek.png']),
+    images: gallery('goreCreek', ['goreCreek.png', 'goreCreek2.jpg']),
     description: 'Vail — the reputation of this town travels far. I went there not for the snow, but for the aspen trees in fall. Layers of evergreen pressed in around them, creating depth and a palette of colours, all of it reflected perfectly in the creek. I sat watching the people fishing, half-listening to the birds.'
   },
   // {
@@ -191,8 +191,8 @@ const originals = [
     medium: 'Watercolor and pencil on paper',
     date: '2025-05-26',
     location: 'San Diego, California, USA',
-    image: '/images/pacificBeach/pacificBeach.jpg',
-    images: gallery('pacificBeach', ['pacificBeach.jpg', 'pacificBeach2.jpg']),
+    image: '/images/pacificBeach/pacificBeach2.jpg',
+    images: gallery('pacificBeach', ['pacificBeach2.jpg', 'pacificBeach.jpg']),
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
   {
@@ -249,7 +249,7 @@ const openEditionPrints = [
     date: '2024-09-08',
     location: 'Rocky Mountain National Park, Colorado, USA',
     image: '/images/dreamLake/dreamLake.jpg',
-    images: gallery('dreamLake', ['dreamLake.jpg', 'dreamLake2.jpg']),
+    images: gallery('dreamLake', ['dreamLake.jpg']),
     description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
   },
   {
@@ -271,7 +271,7 @@ const openEditionPrints = [
     date: '2024-11-15',
     location: 'Denver, Colorado, USA',
     image: '/images/universityOfDenver/universityOfDenver.jpg',
-    images: gallery('universityOfDenver', ['universityOfDenver.jpg', 'universityOfDenver2.jpg']),
+    images: gallery('universityOfDenver', ['universityOfDenver.jpg']),
     description: 'My friend and I arrived early to Denver to slip ahead of the traffic before the concert. The University of Denver surprised me — intimate in scale, with white and red lounge chairs scattered across the grounds like punctuation among the trees. The accent colours caught the afternoon light with quiet confidence. I found shelter beneath a full-leafed canopy and let one red chair become the whole story.'
   },
   {
@@ -326,7 +326,7 @@ const openEditionPrints = [
     date: '2024-05-31',
     location: 'Bourton-on-the-Water, England',
     image: '/images/bourtonOnTheWater/bourtonOnTheWater.jpg',
-    images: gallery('bourtonOnTheWater', ['bourtonOnTheWater.jpg', 'bourtonOnTheWater2.jpg']),
+    images: gallery('bourtonOnTheWater', ['bourtonOnTheWater.jpg']),
     description: 'It was a peaceful, sunny day during my graduation trip to England, the Coltwolds looked like a dream from centuries ago. Some sheeps were grazing on the farm, and some were laying down in a circle underneath the giant trees avoiding the sun. My friend and I parted ways to wander separately. I chose a bench beside the river and captured the history of this old town, listening to the water flowing. My most cherished encounter: a father urging his daughter for five whole minutes to watch me paint, while she remained entirely unmoved and longed to be anywhere else.'
   },
   {
@@ -350,7 +350,7 @@ const openEditionPrints = [
     date: '2024-06-02',
     location: 'Chateau De Versailles, France',
     image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
-    images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
+    images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg']),
     description: 'The day was warm and filled with light. In front of the palace, families had spread themselves across the lawns with their picnics, and ducks claimed the Grand Canal as their own lunch spot. A little girl was very curious about the painting, but was too shy to ask — until her mother approached politely. Neither of us spoke the other\'s language, yet we shared a moment of warmth and kindness through the canvas between us.'
   },
     // description: 'During my studies in college, we didn\'t have a lot free time to do anything other than studying. Friends enjoyed each other\'s company in the cafetria and classrooms - whispering unrelated subjects that annoyed the other classmates a bit too much. We decided to do a picnic for once and went to the river bank by Columbia Lake. It was a nice get away from the busy campus life, and really enjoyed the nature as we should be.'
@@ -362,7 +362,7 @@ const openEditionPrints = [
     date: '2024-06-03',
     location: 'Paris, France',
     image: '/images/petitPalais/petitPalais.jpg',
-    images: gallery('petitPalais', ['petitPalais.jpg', 'petitPalais2.jpg']),
+    images: gallery('petitPalais', ['petitPalais.jpg']),
     description: 'My friend had gone to Vimy to visit the memorial for his great-grandfather, and I was left to wander Paris alone — my first time in France. I gave myself courage to feel comfortable being with myself, and absorb what I might only ever witness once. At the Petit Palais near the Louvre, the flower arrangements stilled me completely. I sat not on the bench but behind it, and painted from there.'
   },
   {
@@ -374,7 +374,7 @@ const openEditionPrints = [
     date: '2024-09-15',
     location: 'Longmont, CO, USA',
     image: '/images/rooseveltPark/rooseveltPark.jpg',
-    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg', 'rooseveltPark3.jpg']),
+    images: gallery('rooseveltPark', ['rooseveltPark.jpg']),
     description: 'It was a pleasure to be joining the Artists\' Guild for a get together in Roosevelt Park. I was most fond of the flora beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground and let the scene come to me.',
   },
   {
@@ -386,7 +386,7 @@ const openEditionPrints = [
     date: '2022-07-10',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/oxenPond/oxenPond.jpg',
-    images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond2.jpg']),
+    images: gallery('oxenPond', ['oxenPond.jpg']),
     description: 'The sun was beaming down on the pond, and I must have stilled myself enough to watch a group of ducks edge toward the shore and gather near my feet, unbothered. Some dove beneath the surface to graze on algae; others simply rested. I captured one of them with their head submerged and their butt skyward, it was such an adorable scene to watch.'
   },
   {
@@ -432,6 +432,17 @@ const openEditionPrints = [
     image: '/images/neckPoint/neckPoint.jpg',
     images: gallery('neckPoint', ['neckPoint.jpg']),
     description: 'If you ask me the finest place in British Columbia, I will always say Vancouver Island. Something shifts when you cross the strait from the mainland — the air loosens, the pace unravels. Water has run through so much of my work; I\'m drawn to its softness and its force in equal measure. My friends set off on the trail while I stayed behind to sit with the water, which has always been enough.'
+  },
+  {
+    id: 'pacificBeach',
+    category: 'open-edition-prints',
+    title: 'Pacific Beach',
+    size: ['8x10', '11x17','13x19'],
+    date: '2025-05-26',
+    location: 'San Diego, California, USA',
+    image: '/images/pacificBeach/pacificBeach.jpg',
+    images: gallery('pacificBeach', ['pacificBeach.jpg']),
+    description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
 ]
 
