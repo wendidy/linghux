@@ -26,7 +26,7 @@ export default function About(){
         <div className="content box style2">
           <div className="about-grid">
             <div className="about-photo">
-              <img loading="lazy" src="/images/about.jpg" alt="Wendy Zhang painting" />
+              <img loading="lazy" src="/images/wendy-about.jpg" alt="Wendy Zhang painting" />
             </div>
             <div className="about-text">
               <header>

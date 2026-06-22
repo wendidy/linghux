@@ -19,6 +19,10 @@
 Main site hosted on **Vercel**. Secrets and env vars are stored on vercel.
 If new env vars are introduced, do **vercel link** under linghux-blog
 
+Production domain env var:
+
+* `SITE_URL=https://linghux.com`
+
 Security hardening checklist:
 
 * `SECURITY_HARDENING.md` contains the recommended Vercel Firewall/WAF, CDN rate limiting, and bot protection rules for this project.
@@ -39,7 +43,12 @@ ___
   Vercel → Environment Variables → STRIPE_SECRET_KEY
   ```
 
-TODO: Currently webhook is pointing to https://linghux-u7a0p5aju-linghuxiaolhx-4206s-projects.vercel.app/api/stripe-webhook, need to change it to the real website once the domain is set up with vercel
+Stripe webhook endpoint:
+
+```
+https://linghux.com/api/stripe-webhook
+```
+
 ---
 
 ## DB
