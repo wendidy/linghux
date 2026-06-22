@@ -108,6 +108,20 @@ export default function WorkPortfolioItem({ category }) {
   }, [isFullscreenOpen])
 
   useEffect(() => {
+    if (!isFullscreenOpen) return undefined
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsFullscreenOpen(false)
+        setIsZoomed(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isFullscreenOpen])
+
+  useEffect(() => {
     setSelectedVariantId(initialVariantId)
   }, [initialVariantId])
 
@@ -165,6 +179,10 @@ export default function WorkPortfolioItem({ category }) {
       { name: item.title, url: canonicalPath },
     ]),
   ]
+  const closeFullscreenPreview = () => {
+    setIsFullscreenOpen(false)
+    setIsZoomed(false)
+  }
 
   return (
     <>
@@ -376,11 +394,19 @@ export default function WorkPortfolioItem({ category }) {
           role="dialog"
           aria-modal="true"
           aria-label="Full screen artwork preview"
-          onClick={() => {
-            setIsFullscreenOpen(false)
-            setIsZoomed(false)
-          }}
+          onClick={closeFullscreenPreview}
         >
+          <button
+            type="button"
+            className="fullscreen-close-button"
+            aria-label="Close full screen preview"
+            onClick={(e) => {
+              e.stopPropagation()
+              closeFullscreenPreview()
+            }}
+          >
+            <span aria-hidden="true" />
+          </button>
           <div className="fullscreen-image-content" onClick={(e) => e.stopPropagation()}>
             <img
               src={activeImage || item.image}
