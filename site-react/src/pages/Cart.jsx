@@ -161,6 +161,7 @@ export default function Cart() {
         quantity: item.quantity,
         itemId: item.id,
         title: item.title,
+        size: item.size,
         category: item.category,
       }))
 

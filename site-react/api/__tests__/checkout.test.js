@@ -258,6 +258,46 @@ describe('Checkout API Handler', () => {
       })
     })
 
+    it('should include readable artwork metadata on the session and payment intent', async () => {
+      req.body = {
+        lineItems: [
+          {
+            id: 'dreamLake:open-edition-prints:8x10',
+            itemId: 'dreamLake:open-edition-prints:8x10',
+            title: 'Dream Lake <Study>',
+            size: '8x10',
+            quantity: 2,
+          },
+        ],
+        currency: 'USD',
+        shippingCountry: 'US',
+      }
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([['dreamLake:open-edition-prints:8x10', createPriceEntry('prod_1')]])
+      )
+      reserveInventory.mockResolvedValueOnce([])
+
+      await handler(req, res)
+
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
+      const expectedMetadata = expect.objectContaining({
+        item_count: '1',
+        artwork_titles: 'Dream Lake Study',
+        item_1_title: 'Dream Lake Study',
+        item_1_details: 'size: 8x10 | qty: 2 | id: dreamLake:open-edition-prints:8x10',
+      })
+      expect(call.metadata).toEqual(expectedMetadata)
+      expect(call.payment_intent_data.metadata).toEqual(expectedMetadata)
+      expect(JSON.parse(call.metadata.items)).toEqual([
+        {
+          itemId: 'dreamLake:open-edition-prints:8x10',
+          title: 'Dream Lake Study',
+          size: '8x10',
+          quantity: 2,
+        },
+      ])
+    })
+
     it('should use default quantity of 1', async () => {
       req.body = [{ id: 'item_1' }] // No quantity
 
@@ -350,7 +390,9 @@ describe('Checkout API Handler', () => {
         currency: 'USD',
         shipping_country: 'US',
         shipping_rate_id: 'shr_1TgZ2d2VIu8UkxmlKM89ukTI',
-        items: '[{"itemId":"item_1"}]',
+        items: '[{"itemId":"item_1","quantity":1}]',
+        item_count: '1',
+        item_1_details: 'qty: 1 | id: item_1',
       })
     })
 

@@ -35,6 +35,7 @@ const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
   USD: 'US',
 }
 const METADATA_TEXT_MAX_LENGTH = 120
+const METADATA_VALUE_MAX_LENGTH = 500
 
 function getBaseUrl(req) {
   if (process.env.SITE_URL) {
@@ -63,14 +64,14 @@ function shippingRateFor(country, subtotal) {
   return subtotal >= rule.freeThreshold ? rule.freeRateId : rule.paidRateId
 }
 
-function cleanMetadataText(value) {
+function cleanMetadataText(value, maxLength = METADATA_TEXT_MAX_LENGTH) {
   if (typeof value !== 'string') return undefined
   const cleaned = value
     .replace(/[\u0000-\u001F\u007F]/g, ' ')
     .replace(/[<>]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-  return cleaned ? cleaned.slice(0, METADATA_TEXT_MAX_LENGTH) : undefined
+  return cleaned ? cleaned.slice(0, maxLength) : undefined
 }
 
 function quantityFor(item) {
@@ -83,6 +84,33 @@ function quantityFor(item) {
     return item.quantity
   }
   return null
+}
+
+function addReadableItemMetadata(metadata, lineItems) {
+  metadata.item_count = String(lineItems.length)
+
+  const titles = lineItems.map((line) => line.itemTitle).filter(Boolean)
+  const titleSummary = cleanMetadataText(titles.join(' | '), METADATA_VALUE_MAX_LENGTH)
+  if (titleSummary) metadata.artwork_titles = titleSummary
+
+  lineItems.forEach((line, index) => {
+    const number = index + 1
+    if (line.itemTitle) {
+      metadata[`item_${number}_title`] = line.itemTitle
+    }
+
+    const details = cleanMetadataText(
+      [
+        line.itemSize ? `size: ${line.itemSize}` : null,
+        `qty: ${line.quantity}`,
+        `id: ${line.itemId}`,
+      ].filter(Boolean).join(' | '),
+      METADATA_VALUE_MAX_LENGTH
+    )
+    if (details) {
+      metadata[`item_${number}_details`] = details
+    }
+  })
 }
 
 async function checkoutHandler(req, res) {
@@ -162,6 +190,7 @@ async function checkoutHandler(req, res) {
       return {
         itemId: metadataItemId,
         itemTitle: cleanMetadataText(item.title),
+        itemSize: cleanMetadataText(item.size),
         category: cleanMetadataText(item.category),
         price: price.id,
         quantity,
@@ -214,8 +243,11 @@ async function checkoutHandler(req, res) {
     const itemMetadata = lineItems.map((line) => ({
       itemId: line.itemId,
       title: line.itemTitle,
+      size: line.itemSize,
+      quantity: line.quantity,
     }))
     metadata.items = JSON.stringify(itemMetadata)
+    addReadableItemMetadata(metadata, lineItems)
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
