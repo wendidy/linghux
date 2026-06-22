@@ -138,7 +138,7 @@ const originals = [
     date: '2024-09-15',
     location: 'Longmont, CO, USA',
     image: '/images/rooseveltPark/rooseveltPark.jpg',
-    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg', 'rooseveltPark3.jpg']),
+    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg']),
     description: 'It was a pleasure to be joining the Artists\' Guild for a get together in Roosevelt Park. I was most fond of the flora beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground and let the scene come to me.',
   },
   // {
@@ -217,7 +217,7 @@ const originals = [
     size: '7.24"x10.08"',
     framedSize: 'comes in a 8×10 frame — style is artist\'s choice and may vary from shown.',
     medium: 'Watercolor and pencil on paper',
-    date: '2023-11-15',
+    date: '2024-06-25',
     location: 'Tobermory, Ontario, Canada',
     image: '/images/tobermory/tobermory.jpg',
     images: gallery('tobermory', ['tobermory.jpg']),
@@ -261,7 +261,7 @@ const openEditionPrints = [
     location: 'Pelee Island, Ontario, Canada',
     image: '/images/peleeIsland/peleeIsland.jpg',
     images: gallery('peleeIsland', ['peleeIsland.jpg']),
-    description: 'Have you ever watched a snake move through water — that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer: fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
+    description: 'Have you ever watched a snake move through water with that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer of the fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
   },
   {
     id: 'universityOfDenver',

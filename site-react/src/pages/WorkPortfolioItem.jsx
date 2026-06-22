@@ -301,10 +301,12 @@ export default function WorkPortfolioItem({ category }) {
               Medium: {item.medium}
             </p>
           )}
-          <p className="meta-line">
+          {original && (
+            <p className="meta-line">
             <i className="fas fa-certificate entry-icon" aria-hidden="true" />
             Signed authenticity certificate
           </p>
+          )}
           {item.note && (
             <p className="meta-line">
               <i className="fas fa-sticky-note entry-icon" aria-hidden="true" />

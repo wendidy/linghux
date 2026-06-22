@@ -302,7 +302,6 @@ export default function Cart() {
               </div>
               <div className="trust-badges">
                 <span className="trust-badge">Secure checkout</span>
-                <span className="trust-badge">Certificate of authenticity included</span>
               </div>
               {pricesError && <p className="cart-error">{pricesError}</p>}
               {availabilityError && <p className="cart-error">{availabilityError}</p>}

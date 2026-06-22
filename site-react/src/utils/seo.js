@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://shop.linghux.com'
+export const SITE_URL = 'https://linghux.com'
 export const SITE_NAME = 'linghux'
 export const ARTIST_NAME = 'Wendy Zhang'
 export const DEFAULT_SHARE_IMAGE = '/images/signalHill/signalHill.jpg'

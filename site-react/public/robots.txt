@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://shop.linghux.com/sitemap.xml
+Sitemap: https://linghux.com/sitemap.xml
