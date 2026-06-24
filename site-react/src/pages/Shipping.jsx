@@ -26,6 +26,7 @@ export default function Shipping() {
           </header>
           <h3>Shipping</h3>
           <p>Flat-rate tracked shipping is available for orders within Canada and the United States.</p>
+          <p><b>For global collectors</b>, please connect directly with Wendy at <a href="mailto:linghuxiaolhx@gmail.com">linghuxiaolhx@gmail.com</a> to arrange international shipping.</p>
           <ul>
             <li>Canada — CAD $20</li>
             <li>United States — USD $25</li>
