@@ -14,14 +14,14 @@ import {
 
 const shopPanels = [
   {
-    title: 'Limited Edition Watercolor Prints',
+    title: 'Limited Edition Prints',
     image: '/images/signalHill/signalHill.jpg',
     alt: `Limited edition watercolor print by ${ARTIST_NAME}`,
     button: 'Shop Limited Edition Prints',
     to: `/artwork/${ARTWORK_CATEGORIES.limitedEditionPrints}`,
   },
   {
-    title: 'Open Edition Watercolor Prints',
+    title: 'Open Edition Prints',
     image: '/images/peleeIsland/peleeIsland.jpg',
     alt: `Open edition watercolor print by ${ARTIST_NAME}`,
     button: 'Shop Open Edition Prints',
