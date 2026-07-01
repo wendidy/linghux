@@ -21,7 +21,7 @@ If new env vars are introduced, do **vercel link** under linghux-blog
 
 Production domain env var:
 
-* `SITE_URL=https://linghux.com`
+* `SITE_URL=https://www.linghux.com`
 
 Security hardening checklist:
 
@@ -46,7 +46,7 @@ ___
 Stripe webhook endpoint:
 
 ```
-https://linghux.com/api/stripe-webhook
+https://www.linghux.com/api/stripe-webhook
 ```
 
 ---

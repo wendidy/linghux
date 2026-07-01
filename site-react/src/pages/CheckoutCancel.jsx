@@ -39,7 +39,7 @@ export default function CheckoutCancel() {
       <Seo title="Checkout cancelled | linghux" description="Your linghux checkout was cancelled." robots="noindex, follow" />
       <section className="cart-page">
         <div className="cart-wrap">
-          <h2>Checkout cancelled</h2>
+          <h1>Checkout Cancelled for Your Artwork Order</h1>
           <p>Your payment was cancelled. Your cart is still saved.</p>
           {releaseMessage && (
             <p>{releaseMessage}</p>

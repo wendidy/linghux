@@ -28,7 +28,7 @@ const shopPanels = [
     to: `/artwork/${ARTWORK_CATEGORIES.openEditionPrints}`,
   },
   {
-    title: 'Originals',
+    title: 'Original Watercolor Paintings',
     image: '/images/goreCreek/goreCreek.png',
     alt: `Original watercolor painting by ${ARTIST_NAME}`,
     button: 'Shop Originals',
@@ -38,7 +38,7 @@ const shopPanels = [
 
 export default function Home(){
   const pageTitle = `${SITE_NAME} watercolor art by ${ARTIST_NAME} | Originals and prints`
-  const pageDescription = `Shop original watercolor paintings and archival prints by ${ARTIST_NAME}, the Canadian artist behind ${SITE_NAME}, including Newfoundland and Colorado plein air landscapes.`
+  const pageDescription = `Shop original watercolors and archival prints by ${ARTIST_NAME}, the Canadian artist behind ${SITE_NAME}, with plein air landscapes from Newfoundland, Colorado, and beyond.`
   const pageUrl = `${SITE_URL}/`
   const jsonLd = [
     {
@@ -87,7 +87,7 @@ export default function Home(){
 
       <section className="home-intro-section">
         <div className="home-intro-copy">
-          <p>linghux watercolor by Wendy Zhang</p>
+          <h1>linghux watercolor art by Wendy Zhang</h1>
           <p>"I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
           <p>Tell me, where did the world speak to you most dearly?"</p>
         </div>
