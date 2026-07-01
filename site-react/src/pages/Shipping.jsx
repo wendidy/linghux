@@ -1,14 +1,17 @@
 import Seo from '../components/Seo'
-import { buildBreadcrumbJsonLd, SITE_URL } from '../utils/seo'
+import { buildBreadcrumbJsonLd, buildShippingServiceJsonLd, SITE_URL } from '../utils/seo'
 
 export default function Shipping() {
   const pageTitle = 'Shipping and delivery | linghux watercolor art'
   const pageDescription = 'Shipping details for linghux original watercolor paintings and prints by Wendy Zhang, including tracked delivery in Canada and the United States.'
   const pageUrl = `${SITE_URL}/shipping`
-  const jsonLd = buildBreadcrumbJsonLd([
-    { name: 'Home', url: '/' },
-    { name: 'Shipping and delivery', url: '/shipping' },
-  ])
+  const jsonLd = [
+    buildShippingServiceJsonLd({ title: pageTitle, description: pageDescription, url: pageUrl }),
+    buildBreadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: 'Shipping and delivery', url: '/shipping' },
+    ]),
+  ]
 
   return (
     <>
@@ -22,8 +25,9 @@ export default function Shipping() {
       <section id="shipping" className="main style2 about-section">
         <div className="box style2">
           <header>
-            <h2>Shipping & Delivery</h2>
+            <h1>Shipping and Delivery for Watercolor Art</h1>
           </header>
+          <h2>Shipping Rates and Delivery Timing</h2>
           <h3>Shipping</h3>
           <p>Flat-rate tracked shipping is available for orders within Canada and the United States.</p>
           <p><b>For global collectors</b>, please connect directly with Wendy at <a href="mailto:linghuxiaolhx@gmail.com">linghuxiaolhx@gmail.com</a> to arrange the details and instructions will be provided.</p>

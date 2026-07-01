@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
@@ -9,7 +9,6 @@ import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../uti
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildImageAlt, SITE_NAME } from '../utils/seo'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
-  const navigate = useNavigate()
   const [hoveredItemId, setHoveredItemId] = useState('')
   const isOriginalsPage = category === ARTWORK_CATEGORIES.originals
   const isLimitedEditionPage = category === ARTWORK_CATEGORIES.limitedEditionPrints
@@ -30,19 +29,21 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
   const { availabilityById } = useAvailability(itemIds)
 
-  function handleCardKeyDown(event, path) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      navigate(path)
-    }
-  }
-
+  const pageHeading = category
+    ? (
+        category === ARTWORK_CATEGORIES.originals
+          ? 'Original Watercolor Paintings'
+          : category === ARTWORK_CATEGORIES.limitedEditionPrints
+            ? 'Limited Edition Watercolor Prints'
+            : 'Open Edition Watercolor Prints'
+      )
+    : 'Available Watercolor Artworks'
   const pageTitle = category
-    ? `${heading} by Wendy Zhang | ${SITE_NAME} watercolor art`
-    : `Artwork by Wendy Zhang | ${SITE_NAME} watercolor paintings and prints`
+    ? `${pageHeading} by Wendy Zhang | ${SITE_NAME}`
+    : `Artwork by Wendy Zhang | ${SITE_NAME}`
   const pageDescription = category
-    ? `Browse ${heading.toLowerCase()} by Wendy Zhang, the Canadian watercolor artist behind ${SITE_NAME}, including Newfoundland and Colorado plein air landscape paintings.`
-    : `Shop original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind ${SITE_NAME}, including Newfoundland and Colorado landscapes.`
+    ? `Browse ${pageHeading.toLowerCase()} by Wendy Zhang, including plein air landscapes from Newfoundland, Colorado, and beyond.`
+    : `Shop original watercolors and archival prints by Wendy Zhang, including plein air landscapes from Newfoundland, Colorado, and beyond.`
   const seoKeywords = category
     ? `${heading.toLowerCase()}, Wendy Zhang artist, linghux art, shop ${heading.toLowerCase()}, watercolor art, original watercolor paintings, watercolor prints`
     : 'linghux art, Wendy Zhang artist, shop originals, shop limited edition prints, shop open edition prints, watercolor paintings, watercolor prints, Canadian watercolor artist'
@@ -70,24 +71,24 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
       <section id="work" className="main style3">
         <div className="gallery-div">
         <header>
-          <h2 className="page-title">{heading}</h2>
+          <h1 className="page-title">{pageHeading}</h1>
           {isOriginalsPage && (
             <p className="page-intro">
-              Painted in the field or by studio light, these are originals in the truest sense — one moment, one hand, one painting. Each piece is tagged so you know exactly where it began.
+              Painted in the field or by studio light, these are originals in the truest sense — one moment, one hand, one painting. Each piece is tagged so you know exactly where it began, and each one carries Wendy's direct encounter with a place, from mountain trails to quiet shorelines.
             </p>
           )}
           {isLimitedEditionPage && (
             <p className="page-intro">
-              A limited edition print, produced on archival cotton paper and signed by hand.
-              Once the edition is complete, it will never be released again.
+              Limited edition watercolor prints are produced on archival cotton paper and signed by hand. Each edition is intentionally small, giving collectors a lasting print with a clear edition history, rich color, and a direct connection to the original plein air painting. Once an edition is complete, it will never be released again.
             </p>
           )}
           {category === ARTWORK_CATEGORIES.openEditionPrints && (
             <p className="page-intro">
-              The painting, faithfully reproduced and always available. Open edition prints for those who found a piece they couldn't leave behind.
+              Open edition watercolor prints keep favorite landscapes available for collectors who found a piece they couldn't leave behind. Each print is made from Wendy's original artwork and selected to bring the atmosphere of the place into an everyday room.
             </p>
           )}
         </header>
+        <h2 className="gallery-section-heading">Browse Available Watercolor Artwork</h2>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
             const path = getArtworkPath(item.slug || item.id, item.category)
@@ -100,6 +101,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
             const primaryImage = galleryImages[0] || item.image
             const hoverImage = galleryImages[1] || ''
             const isHovered = hoveredItemId === item.id && Boolean(hoverImage)
+            const hoverImageAlt = [item.title, 'alternate artwork view', item.location, item.medium].filter(Boolean).join(' - ')
             const displayItemId = item.defaultVariantId || item.id
             const displaySize = Array.isArray(item.size) ? item.size.join(', ') : item.size
             const variants = Array.isArray(item.variants) ? item.variants : []
@@ -108,13 +110,10 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
               : availabilityById[item.id]?.soldOut
 
             return (
-              <article
+              <Link
+                to={path}
                 className="gallery-item product-card"
                 key={`${item.category}:${item.id}`}
-                role="link"
-                tabIndex={0}
-                onClick={() => navigate(path)}
-                onKeyDown={(event) => handleCardKeyDown(event, path)}
                 aria-label={`View ${item.title}`}
               >
                 <div
@@ -133,8 +132,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                       loading="lazy"
                       className="zoomable product-image product-image-hover"
                       src={hoverImage}
-                      alt=""
-                      aria-hidden="true"
+                      alt={hoverImageAlt}
                     />
                   )}
                 </div>
@@ -162,7 +160,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                     {displaySize && <span className="size">{displaySize}</span>}
                   </div>
                 </div>
-              </article>
+              </Link>
             )
           })}
         </div>

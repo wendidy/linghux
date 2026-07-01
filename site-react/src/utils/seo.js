@@ -1,6 +1,7 @@
-export const SITE_URL = 'https://linghux.com'
+export const SITE_URL = 'https://www.linghux.com'
 export const SITE_NAME = 'linghux'
 export const ARTIST_NAME = 'Wendy Zhang'
+export const TWITTER_SITE = '@linghux'
 export const DEFAULT_SHARE_IMAGE = '/images/signalHill/signalHill.jpg'
 export const ORGANIZATION_SCHEMA_ID = `${SITE_URL}/#organization`
 export const WEBSITE_SCHEMA_ID = `${SITE_URL}/#website`
@@ -22,10 +23,66 @@ export function canonicalForPath(pathname = '/') {
 export const DEFAULT_SEO = {
   title: 'linghux watercolor art by Wendy Zhang | Original paintings and prints',
   description:
-    'Shop original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux, with plein air landscapes from Newfoundland, Colorado, and beyond.',
+    'Shop original watercolors and archival prints by Wendy Zhang, the Canadian artist behind linghux, with plein air landscapes from Newfoundland, Colorado, and beyond.',
   keywords:
     'linghux art, Wendy Zhang artist, original watercolor paintings, watercolor prints, Canadian watercolor artist, Newfoundland watercolor, Colorado plein air paintings',
   image: toAbsoluteUrl(DEFAULT_SHARE_IMAGE),
+}
+
+export function buildAboutPageJsonLd({ title, description, url }) {
+  const absoluteUrl = toAbsoluteUrl(url)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${absoluteUrl}#about-page`,
+    name: title,
+    description,
+    url: absoluteUrl,
+    isPartOf: { '@id': WEBSITE_SCHEMA_ID },
+    about: { '@id': ARTIST_SCHEMA_ID },
+    mainEntity: { '@id': ARTIST_SCHEMA_ID },
+  }
+}
+
+export function buildContactPageJsonLd({ title, description, url }) {
+  const absoluteUrl = toAbsoluteUrl(url)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${absoluteUrl}#contact-page`,
+    name: title,
+    description,
+    url: absoluteUrl,
+    isPartOf: { '@id': WEBSITE_SCHEMA_ID },
+    about: { '@id': ORGANIZATION_SCHEMA_ID },
+    mainEntity: {
+      '@type': 'ContactPoint',
+      email: 'linghuxiaolhx@gmail.com',
+      contactType: 'customer support',
+      areaServed: [
+        { '@type': 'Country', name: 'Canada' },
+        { '@type': 'Country', name: 'United States' },
+      ],
+    },
+  }
+}
+
+export function buildShippingServiceJsonLd({ title, description, url }) {
+  const absoluteUrl = toAbsoluteUrl(url)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${absoluteUrl}#shipping-service`,
+    name: title,
+    description,
+    url: absoluteUrl,
+    provider: { '@id': ORGANIZATION_SCHEMA_ID },
+    areaServed: [
+      { '@type': 'Country', name: 'Canada' },
+      { '@type': 'Country', name: 'United States' },
+    ],
+    serviceType: 'Artwork shipping and delivery',
+  }
 }
 
 export function buildImageAlt(item) {
@@ -41,8 +98,9 @@ export function buildProductPageDescription(item) {
     : item.category === 'limited-edition-prints'
       ? 'limited edition watercolor print'
       : 'open edition watercolor print'
+  const article = /^[aeiou]/i.test(kind) ? 'an' : 'a'
   const locationText = item.location ? ` inspired by ${item.location}` : ''
-  const base = `${item.title} is a ${kind} by ${ARTIST_NAME}${locationText}. ${item.description || ''}`.trim()
+  const base = `${item.title} is ${article} ${kind} by ${ARTIST_NAME}${locationText}. ${item.description || ''}`.trim()
   const maxLength = 160
   if (base.length <= maxLength) return base
   return `${base.slice(0, maxLength - 3).trim()}...`

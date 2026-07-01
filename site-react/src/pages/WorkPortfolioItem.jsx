@@ -160,6 +160,7 @@ export default function WorkPortfolioItem({ category }) {
   const canonicalPath = getArtworkPath(item.slug || item.id, item.category)
   const pageTitle = `${item.title} | ${productKind} by Wendy Zhang | ${SITE_NAME}`
   const pageDescription = buildProductPageDescription(item)
+  const productHeading = `${item.title} ${productKind.replace(/^\w/, (char) => char.toUpperCase())}`
   const imageAlt = buildImageAlt(item)
   const galleryAlt = (index) => [item.title, `alternate view ${index + 1}`, item.location, item.medium].filter(Boolean).join(' — ')
   const jsonLd = [
@@ -235,7 +236,8 @@ export default function WorkPortfolioItem({ category }) {
           )}
         </div>
         <aside className="work-item-meta">
-          <h1>{item.title}</h1>
+          <h1>{productHeading}</h1>
+          <h2>Artwork Details and Availability</h2>
           <p className="price">
             <i aria-hidden="true" />
             <PriceText

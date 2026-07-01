@@ -1,15 +1,18 @@
 import { useEffect } from 'react'
 import Seo from '../components/Seo'
-import { ARTIST_NAME, buildBreadcrumbJsonLd, SITE_NAME, SITE_URL } from '../utils/seo'
+import { ARTIST_NAME, buildBreadcrumbJsonLd, buildContactPageJsonLd, SITE_NAME, SITE_URL } from '../utils/seo'
 
 export default function Contact(){
   const pageTitle = `Contact ${ARTIST_NAME} | ${SITE_NAME} watercolor art`
   const pageDescription = `Contact ${ARTIST_NAME}, the artist behind ${SITE_NAME}, about original watercolor paintings, prints, commissions, and collector questions.`
   const pageUrl = `${SITE_URL}/contact`
-  const jsonLd = buildBreadcrumbJsonLd([
-    { name: 'Home', url: '/' },
-    { name: `Contact ${ARTIST_NAME}`, url: '/contact' },
-  ])
+  const jsonLd = [
+    buildContactPageJsonLd({ title: pageTitle, description: pageDescription, url: pageUrl }),
+    buildBreadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: `Contact ${ARTIST_NAME}`, url: '/contact' },
+    ]),
+  ]
 
   useEffect(() => {
     // dynamically load EmailJS SDK (same as original site)
@@ -53,7 +56,14 @@ export default function Contact(){
       <section id="contact" className="main style3 secondary">
         <div className="content">
           <header>
-            <h2>Connect With Me</h2>
+            <h1>Contact Wendy Zhang About Watercolor Art</h1>
+            <p>
+              Use this form for questions about available originals, print sizing, collector orders, shipping, or commissions. Wendy reads each note personally and can help with artwork details, framing context, and choosing a piece that fits your space.
+            </p>
+            <p>
+              For time-sensitive order questions, include the artwork title and your preferred shipping country so she can respond with the clearest next step.
+            </p>
+            <h2>Collector Questions and Studio Inquiries</h2>
           </header>
           <div className="box">
             <form id="contact-form" onSubmit={handleSubmit}>
