@@ -1,12 +1,11 @@
 import Seo from '../components/Seo'
-import { buildAboutPageJsonLd, buildArtistPageJsonLd, buildBreadcrumbJsonLd, SITE_URL } from '../utils/seo'
+import { buildArtistPageJsonLd, buildBreadcrumbJsonLd, SITE_URL } from '../utils/seo'
 
 export default function About(){
   const pageTitle = 'Wendy Zhang | About the linghux watercolor artist'
   const pageDescription = 'Learn about Wendy Zhang, the Canadian watercolor artist behind linghux, creating original plein air paintings and archival prints rooted in Newfoundland and Colorado landscapes.'
   const pageUrl = `${SITE_URL}/about`
   const jsonLd = [
-    buildAboutPageJsonLd({ title: pageTitle, description: pageDescription, url: pageUrl }),
     buildArtistPageJsonLd(),
     buildBreadcrumbJsonLd([
       { name: 'Home', url: '/' },

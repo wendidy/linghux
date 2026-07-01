@@ -25,12 +25,6 @@ function updateLink(rel, href) {
   element.setAttribute('href', href)
 }
 
-function removeLink(rel) {
-  document.head.querySelectorAll(`link[rel="${rel}"]`).forEach((element) => {
-    element.remove()
-  })
-}
-
 function updateJsonLd(jsonLd) {
   document.head.querySelectorAll('script[data-seo-json-ld="true"]').forEach((element) => {
     element.remove()
@@ -46,14 +40,6 @@ function updateJsonLd(jsonLd) {
   })
 }
 
-function truncateMeta(value, maxLength) {
-  if (!value || value.length <= maxLength) return value
-  const trimmed = value.slice(0, maxLength - 3).trim()
-  const wordBreak = trimmed.lastIndexOf(' ')
-  const cutPoint = wordBreak > maxLength * 0.6 ? wordBreak : trimmed.length
-  return `${trimmed.slice(0, cutPoint).trim()}...`
-}
-
 export default function Seo({
   title,
   description,
@@ -62,8 +48,6 @@ export default function Seo({
   keywords,
   robots = 'index, follow',
   type = 'website',
-  ogTitle,
-  ogDescription,
   jsonLd,
 }) {
   const { pathname } = useLocation()
@@ -74,12 +58,6 @@ export default function Seo({
     const pageDescription = description || DEFAULT_SEO.description
     const pageUrl = url ? toAbsoluteUrl(url) : canonicalForPath(pathname)
     const pageImage = image ? toAbsoluteUrl(image) : DEFAULT_SEO.image
-    const pageOgTitle = ogTitle || truncateMeta(pageTitle, 60)
-    const pageOgDescription = ogDescription || truncateMeta(pageDescription, 65)
-    const allowsIndexing = !robots
-      .split(',')
-      .map((directive) => directive.trim().toLowerCase())
-      .includes('noindex')
     const pageKeywords = typeof keywords === 'string'
       ? keywords
       : Array.isArray(keywords)
@@ -87,22 +65,22 @@ export default function Seo({
         : DEFAULT_SEO.keywords
 
     document.title = pageTitle
-    if (allowsIndexing) {
-      updateLink('canonical', pageUrl)
-    } else {
-      removeLink('canonical')
-    }
+    updateLink('canonical', pageUrl)
     updateMeta('name', 'description', pageDescription)
     updateMeta('name', 'keywords', pageKeywords)
     updateMeta('name', 'robots', robots)
     updateMeta('property', 'og:site_name', SITE_NAME)
-    updateMeta('property', 'og:title', pageOgTitle)
-    updateMeta('property', 'og:description', pageOgDescription)
+    updateMeta('property', 'og:title', pageTitle)
+    updateMeta('property', 'og:description', pageDescription)
     updateMeta('property', 'og:type', type)
     updateMeta('property', 'og:url', pageUrl)
     updateMeta('property', 'og:image', pageImage)
+    updateMeta('name', 'twitter:card', 'summary_large_image')
+    updateMeta('name', 'twitter:title', pageTitle)
+    updateMeta('name', 'twitter:description', pageDescription)
+    updateMeta('name', 'twitter:image', pageImage)
     updateJsonLd(jsonLd ? JSON.parse(jsonLdString) : null)
-  }, [title, description, url, image, keywords, robots, type, ogTitle, ogDescription, pathname, jsonLdString])
+  }, [title, description, url, image, keywords, robots, type, pathname, jsonLdString])
 
   return null
 }

@@ -188,14 +188,14 @@ export default function Cart() {
   return (
     <>
       <Seo
-        title="Your watercolor art basket | linghux secure checkout"
+        title="Your basket | linghux"
         description="Review artwork in your linghux basket before secure checkout."
         robots="noindex, follow"
       />
       <section className="cart-page">
       <div className="cart-wrap">
         <header>
-          <h1>Your Watercolor Art Basket</h1>
+          <h2>Your Basket</h2>
         </header>
 
         {items.length === 0 ? (
