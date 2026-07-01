@@ -1,7 +1,6 @@
 export const SITE_URL = 'https://www.linghux.com'
 export const SITE_NAME = 'linghux'
 export const ARTIST_NAME = 'Wendy Zhang'
-export const TWITTER_SITE = '@linghux'
 export const DEFAULT_SHARE_IMAGE = '/images/signalHill/signalHill.jpg'
 export const ORGANIZATION_SCHEMA_ID = `${SITE_URL}/#organization`
 export const WEBSITE_SCHEMA_ID = `${SITE_URL}/#website`

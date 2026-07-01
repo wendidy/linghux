@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { canonicalForPath, DEFAULT_SEO, SITE_NAME, TWITTER_SITE, toAbsoluteUrl } from '../utils/seo'
+import { canonicalForPath, DEFAULT_SEO, SITE_NAME, toAbsoluteUrl } from '../utils/seo'
 
 function updateMeta(attribute, name, content) {
   if (!content) return
@@ -64,8 +64,6 @@ export default function Seo({
   type = 'website',
   ogTitle,
   ogDescription,
-  twitterTitle,
-  twitterDescription,
   jsonLd,
 }) {
   const { pathname } = useLocation()
@@ -78,8 +76,6 @@ export default function Seo({
     const pageImage = image ? toAbsoluteUrl(image) : DEFAULT_SEO.image
     const pageOgTitle = ogTitle || truncateMeta(pageTitle, 60)
     const pageOgDescription = ogDescription || truncateMeta(pageDescription, 65)
-    const pageTwitterTitle = twitterTitle || truncateMeta(pageTitle, 55)
-    const pageTwitterDescription = twitterDescription || truncateMeta(pageDescription, 125)
     const allowsIndexing = !robots
       .split(',')
       .map((directive) => directive.trim().toLowerCase())
@@ -105,13 +101,8 @@ export default function Seo({
     updateMeta('property', 'og:type', type)
     updateMeta('property', 'og:url', pageUrl)
     updateMeta('property', 'og:image', pageImage)
-    updateMeta('name', 'twitter:card', 'summary_large_image')
-    updateMeta('name', 'twitter:site', TWITTER_SITE)
-    updateMeta('name', 'twitter:title', pageTwitterTitle)
-    updateMeta('name', 'twitter:description', pageTwitterDescription)
-    updateMeta('name', 'twitter:image', pageImage)
     updateJsonLd(jsonLd ? JSON.parse(jsonLdString) : null)
-  }, [title, description, url, image, keywords, robots, type, ogTitle, ogDescription, twitterTitle, twitterDescription, pathname, jsonLdString])
+  }, [title, description, url, image, keywords, robots, type, ogTitle, ogDescription, pathname, jsonLdString])
 
   return null
 }
