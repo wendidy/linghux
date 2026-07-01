@@ -117,7 +117,7 @@ export default function Home(){
       <section className="newsletter-section">
         <div className="newsletter-wrap">
           <h2 className="newsletter-title">
-            Collector List for New Watercolors
+            Join my collectors list for first access to new paintings and limited releases
           </h2>
           <div className="newsletter-frame-shell">
             <iframe

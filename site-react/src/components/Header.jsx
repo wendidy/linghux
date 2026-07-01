@@ -27,7 +27,7 @@ export default function Header(){
     <div className="site-header-stack">
       <div className="site-announcement">Complimentary shipping on qualifying orders across Canada & US - <Link to="/shipping">more info</Link></div>
       <header id="header">
-        <div className="site-logo"><Link to="/">linghux</Link></div>
+        <h1><a href="/">linghux</a></h1>
         <nav className="desktop-nav">
           <ul>
             <li><NavLink to="/" className={linkClass}>Home</NavLink></li>

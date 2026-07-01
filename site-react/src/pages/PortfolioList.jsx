@@ -74,21 +74,21 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
           <h1 className="page-title">{pageHeading}</h1>
           {isOriginalsPage && (
             <p className="page-intro">
-              Painted in the field or by studio light, these are originals in the truest sense — one moment, one hand, one painting. Each piece is tagged so you know exactly where it began, and each one carries Wendy's direct encounter with a place, from mountain trails to quiet shorelines.
+              Painted in the field or by studio light, these are originals in the truest sense — one moment, one hand, one painting. Each piece is tagged so you know exactly where it began.
             </p>
           )}
           {isLimitedEditionPage && (
             <p className="page-intro">
-              Limited edition watercolor prints are produced on archival cotton paper and signed by hand. Each edition is intentionally small, giving collectors a lasting print with a clear edition history, rich color, and a direct connection to the original plein air painting. Once an edition is complete, it will never be released again.
+              A limited edition print, produced on archival cotton paper and signed by hand.
+              Once the edition is complete, it will never be released again.
             </p>
           )}
           {category === ARTWORK_CATEGORIES.openEditionPrints && (
             <p className="page-intro">
-              Open edition watercolor prints keep favorite landscapes available for collectors who found a piece they couldn't leave behind. Each print is made from Wendy's original artwork and selected to bring the atmosphere of the place into an everyday room.
+              The painting, faithfully reproduced and always available. Open edition prints for those who found a piece they couldn't leave behind.            
             </p>
           )}
         </header>
-        <h2 className="gallery-section-heading">Browse Available Watercolor Artwork</h2>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
             const path = getArtworkPath(item.slug || item.id, item.category)

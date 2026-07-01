@@ -27,18 +27,12 @@
   line-height: 1.6;
 }
 
-#shipping h1,
 #shipping h2 {
   font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   font-size: clamp(1.6rem, 2.4vw, 2rem);
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--ink);
-}
-
-#shipping h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.05;
 }
 
 #shipping h3 {
@@ -99,18 +93,6 @@ header { margin-bottom: 0; }
   top: auto;
   width: 100%;
   z-index: auto;
-}
-#header .site-logo {
-  position: static;
-  margin: 0;
-  font-size: 1.25em;
-  font-weight: 700;
-  line-height: 3em;
-}
-#header .site-logo a {
-  color: inherit;
-  font-size: inherit;
-  text-decoration: none;
 }
 header#header { 
   background: var(--bg-white); 
@@ -268,15 +250,6 @@ button:active {
   letter-spacing: 0.02em;
   line-height: 1.05;
   color: var(--ink);
-}
-.gallery-section-heading {
-  margin: 1.75rem auto -1rem;
-  text-align: center;
-  color: var(--ink);
-  font-family: 'Spectral', Georgia, 'Times New Roman', serif;
-  font-size: 1.45rem;
-  font-weight: 550;
-  line-height: 1.2;
 }
 .page-intro {
   max-width: 42rem;
@@ -447,13 +420,6 @@ button:active {
   font-size: 2rem;
   line-height: 1.15;
   margin-bottom: 0.6rem;
-}
-.work-item-meta h2 {
-  margin: 0 0 0.85rem;
-  color: var(--charcoal);
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.35;
 }
 .work-item-meta .price {
   font-size: 1.35rem;
@@ -744,8 +710,6 @@ button:active {
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: inherit;
-  text-decoration: none;
 }
 .gallery-item:hover {
   transform: translateY(-4px);
@@ -910,8 +874,6 @@ button:active {
 .cart-wrap > header {
   margin-bottom: 1.75rem;
 }
-.cart-wrap > h1,
-.cart-wrap > header h1,
 .cart-wrap > header h2 {
   margin: 0;
   font-size: 2rem;
@@ -1128,16 +1090,7 @@ button:active {
 }
 .home-intro-copy {
   margin: 0 auto;
-  max-width: 760px;
   text-align: center;
-}
-.home-intro-copy h1 {
-  margin: 0 0 0.75rem;
-  color: var(--ink);
-  font-family: 'Spectral', Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 550;
-  line-height: 1.05;
 }
 .home-intro-copy p {
   color: black;
@@ -1348,8 +1301,6 @@ button:active {
   .cart-wrap > header {
     margin-bottom: 1.25rem;
   }
-  .cart-wrap > h1,
-  .cart-wrap > header h1,
   .cart-wrap > header h2 {
     font-size: 1.65rem;
   }

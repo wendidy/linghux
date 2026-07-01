@@ -237,7 +237,6 @@ export default function WorkPortfolioItem({ category }) {
         </div>
         <aside className="work-item-meta">
           <h1>{productHeading}</h1>
-          <h2>Artwork Details and Availability</h2>
           <p className="price">
             <i aria-hidden="true" />
             <PriceText
