@@ -90,9 +90,6 @@ export default function Home(){
           <h1>linghux watercolor art by Wendy Zhang</h1>
           <p>"I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
           <p>Tell me, where did the world speak to you most dearly?"</p>
-          <p>
-            Wendy paints original plein air watercolors and archival prints shaped by travel, attention, and the quiet exchanges that make a place memorable. Explore originals, limited editions, and open edition prints from Newfoundland, Colorado, Ontario, France, England, and the western coast.
-          </p>
         </div>
       </section>
 

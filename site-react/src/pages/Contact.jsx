@@ -9,8 +9,8 @@ export default function Contact(){
   const jsonLd = [
     buildContactPageJsonLd({ title: pageTitle, description: pageDescription, url: pageUrl }),
     buildBreadcrumbJsonLd([
-      { name: 'Home', url: '/' },
-      { name: `Contact ${ARTIST_NAME}`, url: '/contact' },
+    { name: 'Home', url: '/' },
+    { name: `Contact ${ARTIST_NAME}`, url: '/contact' },
     ]),
   ]
 
@@ -56,14 +56,7 @@ export default function Contact(){
       <section id="contact" className="main style3 secondary">
         <div className="content">
           <header>
-            <h1>Contact Wendy Zhang About Watercolor Art</h1>
-            <p>
-              Use this form for questions about available originals, print sizing, collector orders, shipping, or commissions. Wendy reads each note personally and can help with artwork details, framing context, and choosing a piece that fits your space.
-            </p>
-            <p>
-              For time-sensitive order questions, include the artwork title and your preferred shipping country so she can respond with the clearest next step.
-            </p>
-            <h2>Collector Questions and Studio Inquiries</h2>
+            <h2>Connect With Me</h2>
           </header>
           <div className="box">
             <form id="contact-form" onSubmit={handleSubmit}>

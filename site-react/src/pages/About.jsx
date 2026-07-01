@@ -3,7 +3,7 @@ import { buildAboutPageJsonLd, buildArtistPageJsonLd, buildBreadcrumbJsonLd, SIT
 
 export default function About(){
   const pageTitle = 'Wendy Zhang | About the linghux watercolor artist'
-  const pageDescription = 'Meet Wendy Zhang, the Canadian watercolor artist behind linghux, and learn how plein air travel shapes her original paintings and archival prints.'
+  const pageDescription = 'Learn about Wendy Zhang, the Canadian watercolor artist behind linghux, creating original plein air paintings and archival prints rooted in Newfoundland and Colorado landscapes.'
   const pageUrl = `${SITE_URL}/about`
   const jsonLd = [
     buildAboutPageJsonLd({ title: pageTitle, description: pageDescription, url: pageUrl }),
@@ -31,7 +31,7 @@ export default function About(){
             </div>
             <div className="about-text">
               <header>
-                <h1>About Wendy Zhang, Watercolor Artist</h1>
+                <h1>About Wendy Zhang</h1>
               </header>
               <p>Wendy Zhang is the Canadian watercolor artist behind linghux. Her work is shaped by a life lived across three countries and varied landscapes — and by the practice of painting directly in them.</p>
               <p>Working plein air, Wendy sets up wherever she finds herself: beside mountain trails, in coastal light, along quiet city edges. Painting on location is not a method so much as a commitment — to being fully present in a place, to recording what the eye catches and the hand follows before the moment passes.</p>
@@ -49,7 +49,7 @@ export default function About(){
           <div className="about-grid reverse">
             <div className="about-text">
               <header>
-                <h2>Upcoming Art Shows and Exhibitions</h2>
+                <h2>Shows</h2>
               </header>
               <ul>
                 <li><strong>Avon Arts Celebration 2025</strong>, <em>July 2025</em>, Avon, Colorado</li>
@@ -67,7 +67,7 @@ export default function About(){
       <section className="newsletter-section">
         <div className="newsletter-wrap">
           <h2 className="newsletter-title">
-            Collector List for New Watercolors
+            Join my collectors list for first access to new paintings and limited releases
           </h2>
           <div className="newsletter-frame-shell">
             <iframe

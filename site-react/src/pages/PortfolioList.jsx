@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { items } from '../data/portfolio'
 import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
@@ -9,6 +9,7 @@ import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../uti
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildImageAlt, SITE_NAME } from '../utils/seo'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
+  const navigate = useNavigate()
   const [hoveredItemId, setHoveredItemId] = useState('')
   const isOriginalsPage = category === ARTWORK_CATEGORIES.originals
   const isLimitedEditionPage = category === ARTWORK_CATEGORIES.limitedEditionPrints
@@ -110,10 +111,13 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
               : availabilityById[item.id]?.soldOut
 
             return (
-              <Link
-                to={path}
+              <article
                 className="gallery-item product-card"
                 key={`${item.category}:${item.id}`}
+                role="link"
+                tabIndex={0}
+                onClick={() => navigate(path)}
+                onKeyDown={(event) => handleCardKeyDown(event, path)}
                 aria-label={`View ${item.title}`}
               >
                 <div
@@ -160,7 +164,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                     {displaySize && <span className="size">{displaySize}</span>}
                   </div>
                 </div>
-              </Link>
+              </article>
             )
           })}
         </div>
