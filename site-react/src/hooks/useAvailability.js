@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { fetchAvailability } from '../utils/availability'
 
 export function useAvailability(itemIds) {
@@ -10,41 +10,64 @@ export function useAvailability(itemIds) {
   const [availabilityById, setAvailabilityById] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const requestIdRef = useRef(0)
+  const mountedRef = useRef(true)
 
   useEffect(() => {
-    let isActive = true
-    const controller = new AbortController()
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      requestIdRef.current += 1
+    }
+  }, [])
 
-    if (ids.length === 0) {
+  const loadAvailability = useCallback(async ({ signal } = {}) => {
+    const requestId = ++requestIdRef.current
+    const requestIds = idsKey ? idsKey.split('|') : []
+
+    if (requestIds.length === 0) {
       setAvailabilityById({})
       setLoading(false)
       setError('')
-      return () => controller.abort()
+      return {}
     }
 
     setLoading(true)
     setError('')
 
-    fetchAvailability(ids, { signal: controller.signal })
-      .then((map) => {
-        if (!isActive) return
+    try {
+      const map = await fetchAvailability(requestIds, { signal })
+      if (mountedRef.current && requestId === requestIdRef.current) {
         setAvailabilityById(map)
-      })
-      .catch((err) => {
-        if (!isActive || err?.name === 'AbortError') return
+      }
+      return map
+    } catch (err) {
+      if (err?.name === 'AbortError') return null
+      if (mountedRef.current && requestId === requestIdRef.current) {
         setAvailabilityById({})
         setError(err?.message || 'Failed to load availability')
-      })
-      .finally(() => {
-        if (!isActive) return
+      }
+      throw err
+    } finally {
+      if (mountedRef.current && requestId === requestIdRef.current) {
         setLoading(false)
-      })
-
-    return () => {
-      isActive = false
-      controller.abort()
+      }
     }
   }, [idsKey])
 
-  return { availabilityById, loading, error }
+  useEffect(() => {
+    const controller = new AbortController()
+    loadAvailability({ signal: controller.signal }).catch(() => {})
+
+    return () => {
+      controller.abort()
+    }
+  }, [loadAvailability])
+
+  const refreshAvailability = useCallback(
+    () => loadAvailability(),
+    [loadAvailability]
+  )
+
+  return { availabilityById, loading, error, refreshAvailability }
 }

@@ -7,6 +7,7 @@ import PriceText from '../components/PriceText'
 import Seo from '../components/Seo'
 import { formatCurrency, PRICE_LABELS } from '../utils/stripePrices'
 import { getEditionLabel, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
+import { isCartItemUnavailable } from '../utils/cartAvailability'
 import {
   clearPendingCheckoutSession,
   readPendingCheckoutSession,
@@ -28,11 +29,15 @@ export default function Cart() {
   const [shippingCountry, setShippingCountry] = useState(() => (currency === 'CAD' ? 'CA' : 'US'))
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [error, setError] = useState('')
+  const [pendingCheckoutStatus, setPendingCheckoutStatus] = useState(() => (
+    readPendingCheckoutSession()?.sessionId ? 'releasing' : 'idle'
+  ))
   const itemIds = useMemo(() => items.map((item) => item.priceId || item.id).filter(Boolean), [items])
   const {
     availabilityById,
     loading: availabilityLoading,
     error: availabilityError,
+    refreshAvailability,
   } = useAvailability(itemIds)
 
   const priceForItem = useCallback(
@@ -45,30 +50,68 @@ export default function Cart() {
   }, [currency])
 
   useEffect(() => {
-    const pending = readPendingCheckoutSession()
-    if (!pending?.sessionId) return undefined
+    let isActive = true
+    let isRestoring = false
+    let controller = null
 
-    const controller = new AbortController()
-    fetch('/api/checkout-cancel', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: pending.sessionId }),
-      signal: controller.signal,
-    })
-      .then(async (res) => {
+    const releasePendingCheckout = async () => {
+      if (isRestoring) return
+
+      const pending = readPendingCheckoutSession()
+      if (!pending?.sessionId) {
+        if (isActive) setPendingCheckoutStatus('idle')
+        return
+      }
+
+      isRestoring = true
+      controller = new AbortController()
+      setPendingCheckoutStatus('releasing')
+
+      let reservationReleased = false
+      try {
+        const res = await fetch('/api/checkout-cancel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: pending.sessionId }),
+          signal: controller.signal,
+        })
         if (!res.ok) {
           const payload = await res.json().catch(() => ({}))
           throw new Error(payload?.error || 'Unable to release the previous checkout reservation')
         }
-        clearPendingCheckoutSession(pending.sessionId)
-      })
-      .catch((err) => {
-        if (err?.name === 'AbortError') return
-        setError('Your previous checkout was not completed. Its reserved items will be released automatically soon.')
-      })
 
-    return () => controller.abort()
-  }, [])
+        reservationReleased = true
+        clearPendingCheckoutSession(pending.sessionId)
+        await refreshAvailability()
+        if (!isActive || controller.signal.aborted) return
+
+        setError('')
+        setPendingCheckoutStatus('idle')
+      } catch (err) {
+        if (!isActive || err?.name === 'AbortError') return
+
+        if (reservationReleased) {
+          setPendingCheckoutStatus('idle')
+          setError('Your previous checkout was cancelled, but availability could not be refreshed. Please refresh the page and try again.')
+          return
+        }
+
+        setPendingCheckoutStatus('failed')
+        setError('Your previous checkout was not completed. Its reserved items will be released automatically soon. Please refresh the page in a moment.')
+      } finally {
+        isRestoring = false
+      }
+    }
+
+    releasePendingCheckout()
+    window.addEventListener('pageshow', releasePendingCheckout)
+
+    return () => {
+      isActive = false
+      controller?.abort()
+      window.removeEventListener('pageshow', releasePendingCheckout)
+    }
+  }, [refreshAvailability])
 
   const availabilityForItem = useCallback(
     (item) => availabilityById[item.priceId || item.id] || null,
@@ -77,10 +120,9 @@ export default function Cart() {
 
   const isItemUnavailable = (item) => {
     const availability = availabilityForItem(item)
-    if (!availability) return false
-    if (Boolean(availability.soldOut)) return true
-    if (typeof availability.available === 'number' && item.quantity > availability.available) return true
-    return false
+    return isCartItemUnavailable(item, availability, {
+      suppress: pendingCheckoutStatus !== 'idle' || availabilityLoading,
+    })
   }
 
   const cartCurrency = useMemo(() => {
@@ -144,6 +186,10 @@ export default function Cart() {
     setIsCheckingOut(true)
 
     try {
+      if (pendingCheckoutStatus !== 'idle' || availabilityLoading) {
+        throw new Error('Please wait while artwork availability is refreshed.')
+      }
+
       const missing = items.find(
         (item) => !item.id
       )
@@ -295,9 +341,16 @@ export default function Cart() {
                   type="button"
                   className="checkout-primary"
                   onClick={checkout}
-                  disabled={isCheckingOut || items.some((it) => isItemUnavailable(it))}
+                  disabled={
+                    isCheckingOut ||
+                    availabilityLoading ||
+                    pendingCheckoutStatus !== 'idle' ||
+                    items.some((it) => isItemUnavailable(it))
+                  }
                 >
-                  {isCheckingOut ? 'Redirecting…' : 'Proceed to Secure Checkout'}
+                  {pendingCheckoutStatus === 'releasing'
+                    ? 'Restoring availability…'
+                    : (isCheckingOut ? 'Redirecting…' : 'Proceed to Secure Checkout')}
                 </button>
               </div>
               <div className="trust-badges">
