@@ -389,7 +389,7 @@ describe('Checkout API Handler', () => {
         reservation_ids: '["res_123"]',
         currency: 'USD',
         shipping_country: 'US',
-        shipping_rate_id: 'shr_1TgZ2d2VIu8UkxmlKM89ukTI',
+        shipping_rate_id: 'shr_1TcEee2VIu8UkxmlUSw3XsDr',
         items: '[{"itemId":"item_1","quantity":1}]',
         item_count: '1',
         item_1_details: 'qty: 1 | id: item_1',

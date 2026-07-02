@@ -30,6 +30,13 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
   const { priceById, loading: pricesLoading } = useStripePrices(itemIds)
   const { availabilityById } = useAvailability(itemIds)
 
+  function handleCardKeyDown(event, path) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      navigate(path)
+    }
+  }
+
   const pageHeading = category
     ? (
         category === ARTWORK_CATEGORIES.originals
@@ -86,7 +93,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
           )}
           {category === ARTWORK_CATEGORIES.openEditionPrints && (
             <p className="page-intro">
-              The painting, faithfully reproduced and always available. Open edition prints for those who found a piece they couldn't leave behind.            
+              The painting, faithfully reproduced and always available. Open edition prints for those who found a piece they couldn't leave behind.
             </p>
           )}
         </header>
@@ -102,7 +109,6 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
             const primaryImage = galleryImages[0] || item.image
             const hoverImage = galleryImages[1] || ''
             const isHovered = hoveredItemId === item.id && Boolean(hoverImage)
-            const hoverImageAlt = [item.title, 'alternate artwork view', item.location, item.medium].filter(Boolean).join(' - ')
             const displayItemId = item.defaultVariantId || item.id
             const displaySize = Array.isArray(item.size) ? item.size.join(', ') : item.size
             const variants = Array.isArray(item.variants) ? item.variants : []
@@ -136,7 +142,8 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
                       loading="lazy"
                       className="zoomable product-image product-image-hover"
                       src={hoverImage}
-                      alt={hoverImageAlt}
+                      alt=""
+                      aria-hidden="true"
                     />
                   )}
                 </div>
