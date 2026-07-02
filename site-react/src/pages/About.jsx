@@ -31,7 +31,7 @@ export default function About(){
             </div>
             <div className="about-text">
               <header>
-                <h1>About Wendy Zhang</h1>
+                <h2>About Wendy Zhang</h2>
               </header>
               <p>Wendy Zhang is the Canadian watercolor artist behind linghux. Her work is shaped by a life lived across three countries and varied landscapes — and by the practice of painting directly in them.</p>
               <p>Working plein air, Wendy sets up wherever she finds herself: beside mountain trails, in coastal light, along quiet city edges. Painting on location is not a method so much as a commitment — to being fully present in a place, to recording what the eye catches and the hand follows before the moment passes.</p>
