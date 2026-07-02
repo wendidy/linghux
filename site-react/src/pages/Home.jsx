@@ -87,7 +87,7 @@ export default function Home(){
 
       <section className="home-intro-section">
         <div className="home-intro-copy">
-          <h1>linghux watercolor art by Wendy Zhang</h1>
+          <h2>linghux watercolor art by Wendy Zhang</h2>
           <p>"I wander for landscapes and linger for people, collecting their stories in watercolor.</p>
           <p>Tell me, where did the world speak to you most dearly?"</p>
         </div>

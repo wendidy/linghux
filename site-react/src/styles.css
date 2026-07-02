@@ -1092,6 +1092,12 @@ button:active {
   margin: 0 auto;
   text-align: center;
 }
+
+.home-intro-copy h2 {
+  padding-bottom: 1rem;
+  /* font-size: clamp(1.1rem, 1.6vw, 1.5rem); */
+}
+
 .home-intro-copy p {
   color: black;
   /* font-size: clamp(1.1rem, 1.6vw, 1.5rem); */
