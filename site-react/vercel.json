@@ -9,7 +9,7 @@
       "has": [
         {
           "type": "host",
-          "value": "www.linghux.com"
+          "value": "linghux.com"
         }
       ],
       "destination": "https://www.linghux.com/:path*",
