@@ -29,6 +29,15 @@ export function getArtworkPath(itemId, category) {
   return category ? `/artwork/${category}/${itemId}` : `/artwork/work/${itemId}`
 }
 
+export function getCanonicalArtworkPath(itemOrCategory, category) {
+  if (typeof itemOrCategory === 'string') {
+    return getArtworkPath(itemOrCategory, category)
+  }
+
+  const itemCategory = itemOrCategory?.category || category
+  return getArtworkPath(itemOrCategory?.slug || itemOrCategory?.id, itemCategory)
+}
+
 export function findArtwork(items, itemId, category) {
   return items.find((item) => {
     if (category && item.category !== category) return false

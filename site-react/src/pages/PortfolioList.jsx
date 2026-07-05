@@ -5,7 +5,7 @@ import { useStripePrices } from '../hooks/useStripePrices'
 import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import Seo from '../components/Seo'
-import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath } from '../utils/artwork'
+import { ARTWORK_CATEGORIES, getArtworkBadgeLabel, getArtworkPath, getCanonicalArtworkPath } from '../utils/artwork'
 import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd, buildImageAlt, SITE_NAME } from '../utils/seo'
 
 export default function PortfolioList({ category, heading = 'Artworks' }){
@@ -99,7 +99,7 @@ export default function PortfolioList({ category, heading = 'Artworks' }){
         </header>
         <div className="gallery product-grid">
           {filteredItems.map(item => {
-            const path = getArtworkPath(item.slug || item.id, item.category)
+            const path = getCanonicalArtworkPath(item)
             const badgeLabel = isOriginalsPage && item.type
               ? `${item.type} Original Watercolor`
               : getArtworkBadgeLabel(item)

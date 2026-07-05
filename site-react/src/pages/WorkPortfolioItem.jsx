@@ -7,7 +7,7 @@ import { useAvailability } from '../hooks/useAvailability'
 import PriceText from '../components/PriceText'
 import Seo from '../components/Seo'
 import { PRICE_LABELS } from '../utils/stripePrices'
-import { findArtwork, getArtworkPath, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
+import { findArtwork, getArtworkPath, getCanonicalArtworkPath, isLimitedEdition, isOpenEdition, isOriginal } from '../utils/artwork'
 import {
   buildBreadcrumbJsonLd,
   buildImageAlt,
@@ -157,7 +157,7 @@ export default function WorkPortfolioItem({ category }) {
     : limitedEdition
       ? 'limited edition watercolor print'
       : 'open edition watercolor print'
-  const canonicalPath = getArtworkPath(item.slug || item.id, item.category)
+  const canonicalPath = getCanonicalArtworkPath(item)
   const pageTitle = `${item.title} | ${productKind} by Wendy Zhang | ${SITE_NAME}`
   const pageDescription = buildProductPageDescription(item)
   const productHeading = `${item.title}`

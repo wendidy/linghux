@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 try {
-  const [{ items = [] }, { getArtworkPath }, { buildImageAlt, toAbsoluteUrl }] = await Promise.all([
+  const [{ items = [] }, { getCanonicalArtworkPath }, { buildImageAlt, toAbsoluteUrl }] = await Promise.all([
     import('../src/data/portfolio.js'),
     import('../src/utils/artwork.js'),
     import('../src/utils/seo.js'),
@@ -28,7 +28,7 @@ try {
   const artworkEntries = items
     .filter(Boolean)
     .map((item) => ({
-      url: getArtworkPath(item.slug || item.id, item.category),
+      url: getCanonicalArtworkPath(item),
       images: (Array.isArray(item.images) ? item.images : [item.image])
         .filter(Boolean)
         .map((src) => ({

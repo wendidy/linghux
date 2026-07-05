@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import PortfolioList from './pages/PortfolioList'
 import WorkPortfolioItem from './pages/WorkPortfolioItem'
 import Cart from './pages/Cart'
@@ -9,12 +9,20 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Shipping from './pages/Shipping'
 import Layout from './components/Layout'
-import { ARTWORK_NAV_ITEMS } from './utils/artwork'
+import { ARTWORK_NAV_ITEMS, getCanonicalArtworkPath } from './utils/artwork'
+import { items } from './data/portfolio'
 
 const artworkRoutes = [
   { category: null, heading: 'Artworks' },
   ...ARTWORK_NAV_ITEMS.map((item) => ({ category: item.category, heading: item.label })),
 ]
+
+function CanonicalArtworkRedirect() {
+  const { workId } = useParams()
+  const item = items.find((entry) => entry.id === workId || entry.slug === workId)
+  const destination = item ? getCanonicalArtworkPath(item) : '/artwork'
+  return <Navigate to={destination} replace />
+}
 
 export default function App(){
   return (
@@ -41,7 +49,7 @@ export default function App(){
               }
             />
           ))}
-          <Route path="artwork/work/:workId" element={<WorkPortfolioItem />} />
+          <Route path="artwork/work/:workId" element={<CanonicalArtworkRedirect />} />
           {ARTWORK_NAV_ITEMS.map((item) => (
             <Route
               key={`${item.category}-detail`}
