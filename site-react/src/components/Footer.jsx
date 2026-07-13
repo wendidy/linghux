@@ -12,6 +12,12 @@ export default function Footer(){
           <Link to="/about">About Wendy Zhang</Link>
           <Link to="/shipping">Shipping</Link>
           <Link to="/contact">Contact</Link>
+          <a href="https://www.instagram.com/linghux_art" class="social-link instagram" target="_blank" rel="noopener noreferrer" aria-label="Follow linghux on Instagram">
+              <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.youtube.com/@linghux" class="social-link youtube" target="_blank" rel="noopener noreferrer" aria-label="Visit linghux on YouTube">
+              <i class="fab fa-youtube"></i>
+          </a>
         </nav>
         <p>&copy; 2026 linghux - Wendy Zhang</p>
       </div>
