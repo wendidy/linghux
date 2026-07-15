@@ -390,14 +390,14 @@ const openEditionPrints = [
     description: 'The sun was beaming down on the pond, and I must have stilled myself enough to watch a group of ducks edge toward the shore and gather near my feet, unbothered. Some dove beneath the surface to graze on algae; others simply rested. I captured one of them with their head submerged and their butt skyward, it was such an adorable scene to watch.'
   },
   {
-    id: 'harbourfront',
+    id: 'harboursidePark',
     category: 'open-edition-prints',
-    title: 'Harbourfront',
+    title: 'Harbourside Park',
     size: ['5x7','8x10'],
     date: '2023',
     location: 'Toronto, Ontario, Canada',
-    image: '/images/harbourfront/harbourfront.jpg',
-    images: gallery('harbourfront', ['harbourfront.jpg']),
+    image: '/images/harboursidePark/harboursidePark.jpg',
+    images: gallery('harboursidePark', ['harboursidePark.jpg']),
     description: 'Just beside the Terry Fox Mile Zero memorial, a girl lay stretched out on the deck while I sat on a nearby bench. The statue of Terry Fox cast a quiet solemnity over the harbour — and over me. Overlooking the Atlantic, St. John\'s was where he began his cross-Canada run: a man who chose, against every limit, how to live. I found myself pondering over that for a long time.'
   },
   {
