@@ -191,8 +191,8 @@ const originals = [
     medium: 'Watercolor and pencil on paper',
     date: '2025-05-26',
     location: 'San Diego, California, USA',
-    image: '/images/pacificBeach/pacificBeach2.jpg',
-    images: gallery('pacificBeach', ['pacificBeach2.jpg', 'pacificBeach.jpg']),
+    image: '/images/pacificBeach/pacificBeach.jpg',
+    images: gallery('pacificBeach', [ 'pacificBeach.jpg', 'pacificBeach2.jpg']),
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
   {
@@ -235,7 +235,8 @@ const limitedEditionPrints = [
     location: 'Boulder, Colorado, USA',
     image: '/images/mountSanitas/mountSanitas4.png',
     images: gallery('mountSanitas', ['mountSanitas4.png', 'mountSanitas2.png']),
-    note: 'Important note: This panoramic landscape was originally painted as a continuous diptych and is faithfully reproduced in its authentic, two-panel format. Each order includes the full two-print collection, with each individual panel meeting the precise measurements listed above. The large print is approximately 46" Wide × 17" High on your wall assuming a 2" gap, while the smaller print is 22" Wide × 8" High.',
+    note: 'Important note: This panoramic landscape was originally painted as a continuous diptych and is faithfully reproduced in its authentic, two-panel format. Each order includes the full two-print collection, with each individual panel meeting the precise measurements listed above. \
+    The large print is approximately 46" Wide × 17" High on your wall assuming a 2" gap, while the smaller print is 22" Wide × 8" High. The 8×10 is limited to an edition of 50; the 17×22 is limited to an edition of 15.',
     description: 'Something about Colorado makes people move as though stillness would be a waste. The trail runners I met on Mount Sanitas were already on their second lap by the time I was halfway through my first — grinning, effortless, greeted me for a second hello before they were gone again. I never did find a place to sit on top of the mountain. So I borrowed the runner\'s resiliency instead: I squatted the whole time I painted, and the view asked nothing more of me than that.'
   },
 ]

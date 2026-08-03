@@ -291,10 +291,10 @@ export default function WorkPortfolioItem({ category }) {
               Location: {item.location}
             </p>
           )}
-          <p className="meta-line">
+          {/* <p className="meta-line">
             <i className="fas fa-calendar-alt entry-icon" aria-hidden="true" />
             Date: {item.date}
-          </p>
+          </p> */}
           {item.medium && (
             <p className="meta-line">
               <i className="fas fa-palette entry-icon" aria-hidden="true" />
