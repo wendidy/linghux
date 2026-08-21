@@ -30,6 +30,19 @@ function buildPrintVariants(item) {
 
 const originals = [ 
   {
+    id: 'sidney',
+    category: 'originals',
+    type: 'Plein Air',
+    title: 'Sidney',
+    size: '7.28"x9.92"',
+    framedSize: 'will be determined by the artist once the order is placed.',
+    medium: 'Watercolor and pencil on paper',
+    date: '2022-08-26',
+    location: 'Sidney, BC, Canada',
+    image: '/images/sidney/sidney.jpg',
+    images: gallery('sidney', ['sidney.jpg']),
+    description: 'I was on a ferry from Vancouver to Victoria when I came upon an artist painting the ocean beneath the sun. I was mesmerized by the way her brush moved, and it inspired me toward a new style in my own work - this piece, Sidney, marks that beginning. My companions wandered off to a local market while I stayed behind, seated on a rock by the shore, painting this scene. Clouds drifted between the distant mountains; it was a quiet afternoon, steeped in the scent of the sea.'  },  
+  {
     id: 'signalHill',
     category: 'originals',
     type: 'Plein Air',
@@ -254,6 +267,16 @@ const openEditionPrints = [
     description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
   },
   {
+    id: 'sidney',
+    category: 'open-edition-prints',
+    title: 'Sidney',
+    size: ['8x10', '11x17','13x19', '17x22'],
+    date: '2022-08-26',
+    location: 'Sidney, BC, Canada',
+    image: '/images/sidney/sidney.jpg',
+    images: gallery('sidney', ['sidney.jpg']),
+    description: 'I was on a ferry from Vancouver to Victoria when I came upon an artist painting the ocean beneath the sun. I was mesmerized by the way her brush moved, and it inspired me toward a new style in my own work - this piece, Sidney, marks that beginning. My companions wandered off to a local market while I stayed behind, seated on a rock by the shore, painting this scene. Clouds drifted between the distant mountains; it was a quiet afternoon, steeped in the scent of the sea.'  },  
+  {
     id: 'peleeIsland',
     category: 'open-edition-prints',
     title: 'Pelee Island',
@@ -446,7 +469,6 @@ const openEditionPrints = [
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
 ]
-
 const rawItems = [
   ...originals,
   ...limitedEditionPrints,
