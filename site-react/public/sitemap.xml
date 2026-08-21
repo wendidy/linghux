@@ -25,6 +25,14 @@
     <loc>https://linghux.com/artwork/open-edition-prints</loc>
   </url>
   <url>
+    <loc>https://linghux.com/artwork/originals/sidney</loc>
+    <image:image>
+      <image:loc>https://linghux.com/images/sidney/sidney.jpg</image:loc>
+      <image:title>Sidney by Wendy Zhang</image:title>
+      <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada — Watercolor and pencil on paper</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://linghux.com/artwork/originals/signalHill</loc>
     <image:image>
       <image:loc>https://linghux.com/images/signalHill/signalHill.jpg</image:loc>
@@ -134,12 +142,12 @@
   <url>
     <loc>https://linghux.com/artwork/originals/pacificBeach</loc>
     <image:image>
-      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach2.jpg</image:loc>
+      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach.jpg</image:loc>
       <image:title>Pacific Beach by Wendy Zhang</image:title>
       <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA — Watercolor and pencil on paper</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach.jpg</image:loc>
+      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach2.jpg</image:loc>
       <image:title>Pacific Beach by Wendy Zhang</image:title>
       <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA — Watercolor and pencil on paper</image:caption>
     </image:image>
@@ -184,6 +192,14 @@
       <image:loc>https://linghux.com/images/dreamLake/dreamLake.jpg</image:loc>
       <image:title>Dream Lake by Wendy Zhang</image:title>
       <image:caption>Dream Lake watercolor painting by Wendy Zhang — Rocky Mountain National Park, Colorado, USA</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://linghux.com/artwork/open-edition-prints/sidney</loc>
+    <image:image>
+      <image:loc>https://linghux.com/images/sidney/sidney.jpg</image:loc>
+      <image:title>Sidney by Wendy Zhang</image:title>
+      <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada</image:caption>
     </image:image>
   </url>
   <url>
@@ -283,11 +299,11 @@
     </image:image>
   </url>
   <url>
-    <loc>https://linghux.com/artwork/open-edition-prints/harbourfront</loc>
+    <loc>https://linghux.com/artwork/open-edition-prints/harboursidePark</loc>
     <image:image>
-      <image:loc>https://linghux.com/images/harbourfront/harbourfront.jpg</image:loc>
-      <image:title>Harbourfront by Wendy Zhang</image:title>
-      <image:caption>Harbourfront watercolor painting by Wendy Zhang — Toronto, Ontario, Canada</image:caption>
+      <image:loc>https://linghux.com/images/harboursidePark/harboursidePark.jpg</image:loc>
+      <image:title>Harbourside Park by Wendy Zhang</image:title>
+      <image:caption>Harbourside Park watercolor painting by Wendy Zhang — Toronto, Ontario, Canada</image:caption>
     </image:image>
   </url>
   <url>

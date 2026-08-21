@@ -313,6 +313,15 @@ export default function WorkPortfolioItem({ category }) {
               <span>{item.note}</span>
             </p>
           )}
+          {isPrint && (
+            <p className="meta-line print-spec">
+              <i className="fas fa-leaf entry-icon" aria-hidden="true" />
+              <span>
+                This artwork is a museum-grade Giclée print, reproduced on heavy 300gsm acid-free cotton rag paper. Printed with archival pigment inks, it captures every detail with incredible depth and is guaranteed to resist fading for decades.
+              </span>
+            </p>
+          )}
+          <hr className="work-item-divider" />
           <p className="description">{item.description}</p>
           <div className="work-item-actions">
             {canSelectPrintQuantity && (
