@@ -223,6 +223,11 @@ export default function Cart() {
                     {isLimitedEdition(item) && (
                       <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
                     )}
+                    {shippingCountry === 'US' && (isLimitedEdition(item) || isOpenEdition(item)) && (
+                      <p className="cart-item-tariff-note">
+                        US tariff contribution: a 60% surcharge will be added at checkout. <Link to="/shipping">Info</Link>
+                      </p>
+                    )}
                     {!isOriginal(item) && (
                       <div className="cart-qty">
                         <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>

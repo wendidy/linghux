@@ -38,6 +38,10 @@ function resolveArtworkCategory({ category, id, itemId } = {}) {
   return ''
 }
 
+export function catalogCategoryFor(identity) {
+  return resolveArtworkCategory({ id: identity?.id, itemId: identity?.itemId })
+}
+
 export function isOriginalInventoryItem(identity) {
   return resolveArtworkCategory(identity) === ARTWORK_CATEGORIES.originals
 }

@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
 import { reserveInventory, releaseReservations, reservationExpiresAt } from './inventory.js'
-import { inventoryCapFor } from './catalogInventory.js'
+import { catalogCategoryFor, inventoryCapFor } from './catalogInventory.js'
 import {
   MAX_ITEM_IDS,
   MAX_LINE_ITEM_QUANTITY,
@@ -36,6 +36,11 @@ const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
 }
 const METADATA_TEXT_MAX_LENGTH = 120
 const METADATA_VALUE_MAX_LENGTH = 500
+const TARIFF_PRINT_CATEGORIES = new Set([
+  'limited-edition-prints',
+  'open-edition-prints',
+])
+const TARIFF_SURCHARGE_PERCENT = 60
 
 function getBaseUrl(req) {
   if (process.env.SITE_URL) {
@@ -84,6 +89,34 @@ function quantityFor(item) {
     return item.quantity
   }
   return null
+}
+
+function categoryFromItemId(itemId) {
+  if (typeof itemId !== 'string') return ''
+  const parts = itemId.split(':')
+  return parts.length >= 3 ? parts[1] : ''
+}
+
+function categoryForLine(item, product) {
+  return product?.metadata?.category || catalogCategoryFor(item) || categoryFromItemId(item?.itemId || item?.id) || ''
+}
+
+function checkoutLineItemFor(line, shippingCountry) {
+  if (shippingCountry !== 'US' || !TARIFF_PRINT_CATEGORIES.has(line.category)) {
+    return { price: line.price, quantity: line.quantity }
+  }
+
+  return {
+    price_data: {
+      currency: line.currency,
+      product: line.productId,
+      unit_amount: Math.max(
+        1,
+        Math.round(line.unitAmount * (100 + TARIFF_SURCHARGE_PERCENT) / 100)
+      ),
+    },
+    quantity: line.quantity,
+  }
 }
 
 function addReadableItemMetadata(metadata, lineItems) {
@@ -191,11 +224,12 @@ async function checkoutHandler(req, res) {
         itemId: metadataItemId,
         itemTitle: cleanMetadataText(item.title),
         itemSize: cleanMetadataText(item.size),
-        category: cleanMetadataText(item.category),
+        category: cleanMetadataText(categoryForLine(item, entry.product)),
         price: price.id,
         quantity,
         productId: price.product,
         unitAmount: price.unit_amount,
+        currency: price.currency,
       }
     })
     const subtotal = lineItems.reduce((sum, line) => sum + line.unitAmount * line.quantity, 0)
@@ -251,7 +285,7 @@ async function checkoutHandler(req, res) {
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      line_items: lineItems.map(({ price, quantity }) => ({ price, quantity })),
+      line_items: lineItems.map((line) => checkoutLineItemFor(line, shippingCountry)),
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
       expires_at: Math.floor(checkoutExpiresAt.getTime() / 1000),

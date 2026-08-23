@@ -258,6 +258,76 @@ describe('Checkout API Handler', () => {
       })
     })
 
+    it('should add a 60% surcharge to print categories while keeping originals at full price', async () => {
+      req.body = {
+        lineItems: [
+          {
+            id: 'dreamLake:open-edition-prints:8x10',
+            itemId: 'dreamLake:open-edition-prints:8x10',
+            category: 'open-edition-prints',
+            quantity: 1,
+          },
+          {
+            id: 'mountSanitas:limited-edition-prints:8x10',
+            itemId: 'mountSanitas:limited-edition-prints:8x10',
+            category: 'limited-edition-prints',
+            quantity: 1,
+          },
+          { id: 'original-1', category: 'originals', quantity: 1 },
+        ],
+        currency: 'USD',
+        shippingCountry: 'US',
+      }
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([
+          ['dreamLake:open-edition-prints:8x10', { product: createMockProduct('prod_print_1'), price: { ...createMockPrice('price_print_1', 'prod_print_1'), unit_amount: 10000 } }],
+          ['mountSanitas:limited-edition-prints:8x10', { product: createMockProduct('prod_print_2'), price: { ...createMockPrice('price_print_2', 'prod_print_2'), unit_amount: 12500 } }],
+          ['original-1', { product: createMockProduct('prod_original'), price: { ...createMockPrice('price_original', 'prod_original'), unit_amount: 20000 } }],
+        ])
+      )
+      reserveInventory.mockResolvedValueOnce([])
+
+      await handler(req, res)
+
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
+      expect(call.line_items).toEqual([
+        {
+          price_data: { currency: 'USD', product: 'prod_print_1', unit_amount: 16000 },
+          quantity: 1,
+        },
+        {
+          price_data: { currency: 'USD', product: 'prod_print_2', unit_amount: 20000 },
+          quantity: 1,
+        },
+        { price: 'price_original', quantity: 1 },
+      ])
+    })
+
+    it('should not apply the US print adjustment to Canadian orders', async () => {
+      req.body = {
+        lineItems: [{
+          id: 'dreamLake:open-edition-prints:8x10',
+          itemId: 'dreamLake:open-edition-prints:8x10',
+          category: 'open-edition-prints',
+          quantity: 1,
+        }],
+        currency: 'CAD',
+        shippingCountry: 'CA',
+      }
+      fetchPricesByItemIds.mockResolvedValueOnce(
+        new Map([['dreamLake:open-edition-prints:8x10', {
+          product: createMockProduct('prod_print_1'),
+          price: { ...createMockPrice('price_print_1', 'prod_print_1'), currency: 'CAD' },
+        }]])
+      )
+      reserveInventory.mockResolvedValueOnce([])
+
+      await handler(req, res)
+
+      const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
+      expect(call.line_items).toEqual([{ price: 'price_print_1', quantity: 1 }])
+    })
+
     it('should include readable artwork metadata on the session and payment intent', async () => {
       req.body = {
         lineItems: [
