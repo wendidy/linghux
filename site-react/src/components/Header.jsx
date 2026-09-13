@@ -26,6 +26,9 @@ export default function Header(){
   return (
     <div className="site-header-stack">
       <div className="site-announcement">Complimentary shipping on qualifying orders across Canada & US - <Link to="/shipping">more info</Link></div>
+      <div className="site-tariff-notice">
+        New US tariff in effect, <Link to="/shipping">read more</Link>
+      </div>
       <header id="header">
         <h1><a href="/">linghux</a></h1>
         <nav className="desktop-nav">
@@ -158,7 +161,6 @@ export default function Header(){
             </li>
           </ul>
         </div>
-      </header>
-    </div>
+      </header></div>
   )
 }

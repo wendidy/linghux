@@ -87,6 +87,19 @@ header { margin-bottom: 0; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.site-tariff-notice {
+  padding: 0.55rem 1rem;
+  background: #c62828;
+  color: var(--bg-white);
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.site-tariff-notice a {
+  color: var(--bg-white);
+  text-decoration: underline;
+}
 .site-header-stack #header {
   position: static;
   left: auto;
