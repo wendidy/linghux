@@ -52,7 +52,9 @@ https://linghux.com/api/stripe-webhook
 ---
 
 ## DB
-Neon is storing limited-edition inventory state and completed Stripe orders in this codebase.
+Neon is storing limited-edition inventory state, completed Stripe orders, and Mail Club waitlist emails in this codebase.
+
+Set `DATABASE_URL` to the Neon connection string in local and deployment environments. The schema is initialized by `api/db.js`, including the `mail_club_waitlist` table with one unique row per email.
 
 Specifically, `api/db.js` creates these tables:
 
@@ -190,7 +192,6 @@ The order email includes:
 
 ## 🔄 Future Improvements
 
-* Replace iframe with custom form (Beehiiv API)
 * Add USD payout optimization (Wise)
 * Improve newsletter section design
 

@@ -245,6 +245,137 @@ button:active {
   display: block;
 }
 
+.mail-club-page {
+  padding: 4rem 2rem 5rem;
+  background: var(--bg-main);
+}
+
+.mail-club-hero {
+  position: relative;
+  max-width: 78rem;
+  min-height: min(62vh, 42rem);
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--bg-muted);
+}
+
+.mail-club-hero img {
+  width: 100%;
+  height: 100%;
+  min-height: min(62vh, 42rem);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.mail-club-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(25, 22, 19, 0.08), rgba(25, 22, 19, 0.52));
+  color: var(--bg-white);
+}
+
+.mail-club-eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mail-club-hero h1 {
+  margin: 0;
+  color: var(--bg-white);
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 500;
+  line-height: 0.95;
+}
+
+.mail-club-button {
+  min-width: 12rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.mail-club-waitlist-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  width: min(100%, 32rem);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mail-club-waitlist-form input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  background: var(--bg-white);
+}
+
+.mail-club-waitlist-form .mail-club-button {
+  width: 100%;
+}
+
+.mail-club-form-status {
+  max-width: 32rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.mail-club-form-status.is-error {
+  color: #ffd8d8;
+}
+
+.mail-club-form-status.is-success {
+  color: #e4f5dc;
+}
+
+.mail-club-content {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 4rem 1rem 0;
+  color: var(--charcoal);
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.mail-club-content header {
+  margin-bottom: 1.5rem;
+}
+
+.mail-club-content h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.mail-club-content p {
+  margin: 0 0 1.25rem;
+}
+
 @media (max-width: 1000px) {
   .about-grid,
   .about-grid.reverse {
@@ -253,6 +384,15 @@ button:active {
 
   .about-photo {
     height: 36vh;
+  }
+
+  .mail-club-page {
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  .mail-club-hero,
+  .mail-club-hero img {
+    min-height: 55vh;
   }
 }
 .page-title {

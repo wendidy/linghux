@@ -34,6 +34,7 @@ export default function Header(){
         <nav className="desktop-nav">
           <ul>
             <li><NavLink to="/" className={linkClass}>Home</NavLink></li>
+            <li><NavLink to="/mail-club" className={linkClass}>Mail Club</NavLink></li>
             <li className="artworks-dropdown">
               <a
                 href="/artwork"
@@ -132,6 +133,7 @@ export default function Header(){
             </li>
             <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>
             <li><NavLink to="/contact" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink></li>
+            <li><NavLink to="/mail-club" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Mail Club</NavLink></li>
             <li>
               <div className="mobile-currency-icons">
                 <button
