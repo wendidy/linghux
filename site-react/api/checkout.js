@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import { fetchPricesByItemIdsAndCurrency, normalizeItemIds } from './stripeProducts.js'
 import { reserveInventory, releaseReservations, reservationExpiresAt } from './inventory.js'
-import { catalogCategoryFor, inventoryCapFor } from './catalogInventory.js'
+import { catalogCategoryFor, inventoryCapFor } from '../src/server/catalogInventory.js'
 import {
   MAX_ITEM_IDS,
   MAX_LINE_ITEM_QUANTITY,

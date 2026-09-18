@@ -1,5 +1,5 @@
-import { items as catalogItems } from '../src/data/portfolio.js'
-import { ARTWORK_CATEGORIES } from '../src/utils/artwork.js'
+import { items as catalogItems } from '../data/portfolio.js'
+import { ARTWORK_CATEGORIES } from '../utils/artwork.js'
 
 function parseEditionCap(product) {
   const raw = product?.metadata?.edition_cap
