@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import { withClient } from './db.js'
 import { fetchPricesByItemIds, normalizeItemIds } from './stripeProducts.js'
-import { inventoryCapFor } from './catalogInventory.js'
+import { inventoryCapFor } from '../src/server/catalogInventory.js'
 import { cleanupExpiredReservations } from './inventory.js'
 import { MAX_ITEM_IDS, invalidItemIds, withApiSecurity } from './security.js'
 

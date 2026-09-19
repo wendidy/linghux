@@ -84,6 +84,13 @@ async function ensureSchema(client) {
     );
   `)
   await client.query(`
+    CREATE TABLE IF NOT EXISTS mail_club_waitlist (
+      id BIGSERIAL PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `)
+  await client.query(`
     CREATE TABLE IF NOT EXISTS order_items (
       id TEXT PRIMARY KEY,
       order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
