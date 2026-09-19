@@ -7,7 +7,7 @@ export default function MailClub() {
   const [status, setStatus] = useState({ type: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const pageTitle = `Mail Club | ${SITE_NAME}`
-  const pageDescription = 'Join the linghux Mail Club for handwritten notes, studio glimpses, and first access to new watercolor work from Wendy Zhang.'
+  const pageDescription = 'Receive a monthly letter, postcard, handmade bookmark, and occasional surprises from Wendy Zhang’s studio through the linghux Mail Club.'
   const pageUrl = `${SITE_URL}/mail-club`
   const jsonLd = buildBreadcrumbJsonLd([
     { name: 'Home', url: '/' },
@@ -57,7 +57,7 @@ export default function MailClub() {
             alt="A quiet studio moment from Wendy Zhang"
           />
           <div className="mail-club-hero-overlay">
-            <p className="mail-club-eyebrow">A little art in your mailbox</p>
+            <p className="mail-club-eyebrow">A piece of tranquility in your mailbox</p>
             <h1>Mail Club</h1>
             <form className="mail-club-waitlist-form" onSubmit={handleSubmit}>
               <label className="sr-only" htmlFor="mail-club-email">Email address</label>
@@ -86,16 +86,44 @@ export default function MailClub() {
 
         <div className="mail-club-content">
           <header>
-            <h2>A slower way to stay connected</h2>
+            <h2>A small way to stay connected</h2>
           </header>
           <p>
-            The Mail Club is a small, thoughtful dispatch from my studio: a chance to receive something tangible, personal, and made with care.
+            I started the Mail Club as a way to send a little piece of my creative journey to you. Each envelope is a personal note put together by hand.
+          </p>
+          <p>Each month, you will receive:</p>
+          <ul>
+            <li>A personal letter from me</li>
+            <li>A 4 × 6 postcard featuring one of my paintings</li>
+            <li>A bookmark</li>
+          </ul>
+          <p><b>
+            Each month, I will also send one extra surprise postcard to one lucky friend on the list. You are the first one to see this work before anyone does.
+          </b>
           </p>
           <p>
-            Members will get occasional letters, small artful surprises, behind-the-scenes notes, and first looks at new paintings and print releases before they are shared more widely.
+            I am preparing the first mailing now. Add your email to the waitlist and I will let you know when the club opens next month. 
+          </p>
+        </div>
+
+        <div className="mail-club-content">
+          <header>
+            <h2>How the club works</h2>
+          </header>
+          <p>
+            Mail is sent during the first week of each month using an untracked stamp. This helps keep the cost down and adds a little mystery to its arrival. We ship to every country from Canada🇨🇦. Please allow up to 21 business days for delivery.
           </p>
           <p>
-            I am preparing the first mailing now. Join the waitlist and I will send you an invitation when the club opens next month.
+            Join by the 20th of the month to receive the current month’s mailer. If you join after the 20th, you will subscribe to the next month’s mailer.
+          </p>
+          <p>
+            Your subscription is billed on the same day each month that you initially subscribed.
+          </p>
+          <p>
+            You can change your shipping address or cancel your subscription at any time through the Stripe's Customer Portal (link will be provided later). The current month's subscription is non-refundable once the payment has been charged.
+          </p>
+          <p>
+            If your mail arrives damaged or contains the wrong items, please email Wendy at <a href="mailto:linghuxiaolhx@gmail.com">linghuxiaolhx@gmail.com</a> with your name and photos of the item(s).
           </p>
         </div>
       </section>
