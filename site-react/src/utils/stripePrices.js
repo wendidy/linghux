@@ -51,7 +51,10 @@ async function fetchStripePriceChunk(itemIds, currency, signal) {
 
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(data?.error || 'Unable to load prices')
+    const error = new Error(data?.error || 'Unable to load prices')
+    error.status = res.status
+    error.isRateLimit = res.status === 429 || data?.code === 'rate_limit_error'
+    throw error
   }
 
   return data.prices || []
@@ -80,6 +83,9 @@ export async function fetchStripePrices(itemIds, currency = 'USD', { signal } = 
       errors.push(error)
     }
   }
+
+  const rateLimitError = errors.find((error) => error?.isRateLimit)
+  if (rateLimitError) throw rateLimitError
 
   if (Object.keys(map).length === 0 && errors.length > 0) {
     throw errors[0]
