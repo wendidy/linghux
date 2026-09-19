@@ -10,7 +10,10 @@ async function fetchAvailabilityChunk(itemIds, signal) {
 
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(data?.error || 'Unable to load availability')
+    const error = new Error(data?.error || 'Unable to load availability')
+    error.status = res.status
+    error.isRateLimit = res.status === 429 || data?.code === 'rate_limit_error'
+    throw error
   }
 
   return data?.availability || {}

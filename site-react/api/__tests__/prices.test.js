@@ -208,6 +208,22 @@ describe('Prices API Handler', () => {
   })
 
   describe('Error handling', () => {
+    it('should return a friendly 429 for Stripe rate limits', async () => {
+      req.body = { itemIds: ['item_1'] }
+      const error = new Error('https://stripe.com/docs/rate-limits')
+      error.type = 'rate_limit_error'
+      error.statusCode = 429
+      fetchPricesByItemIds.mockRejectedValueOnce(error)
+
+      await handler(req, res)
+
+      expect(res.status).toHaveBeenCalledWith(429)
+      expect(res.json).toHaveBeenCalledWith({
+        code: 'rate_limit_error',
+        error: 'The website is temporarily busy. Please wait a moment and refresh.',
+      })
+    })
+
     it('should return 500 for Stripe errors', async () => {
       req.body = { itemIds: ['item_1'] }
       fetchPricesByItemIds.mockRejectedValueOnce(

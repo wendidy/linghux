@@ -1,5 +1,37 @@
 import { MAX_ITEM_IDS, MAX_ITEM_ID_LENGTH, invalidItemIds, isValidItemId } from './security.js'
 
+const STRIPE_CACHE_TTL_MS = 5 * 60 * 1000
+const stripeCaches = new WeakMap()
+
+function cacheFor(stripe) {
+  let cache = stripeCaches.get(stripe)
+  if (!cache) {
+    cache = {
+      productCache: new Map(),
+      priceCache: new Map(),
+      productRequests: new Map(),
+      priceRequests: new Map(),
+    }
+    stripeCaches.set(stripe, cache)
+  }
+  return cache
+}
+
+function cachedValue(cache, key) {
+  const entry = cache.get(key)
+  if (!entry) return undefined
+  if (entry.expiresAt <= Date.now()) {
+    cache.delete(key)
+    return undefined
+  }
+  return entry.value
+}
+
+function cacheValue(cache, key, value) {
+  cache.set(key, { value, expiresAt: Date.now() + STRIPE_CACHE_TTL_MS })
+  return value
+}
+
 function normalizeItemIds(itemIds, { maxItems = MAX_ITEM_IDS } = {}) {
   const input = Array.isArray(itemIds) ? itemIds : []
   return [
@@ -80,11 +112,20 @@ function extractSearchId(itemId) {
 export async function fetchProductsByItemIds(stripe, itemIds) {
   const uniqueIds = normalizeItemIds(itemIds)
   if (!uniqueIds.length) return new Map()
+  const { productCache, productRequests } = cacheFor(stripe)
   const entries = await Promise.all(
     uniqueIds.map(async (itemId) => {
+      const cached = cachedValue(productCache, itemId)
+      if (cached !== undefined) return [itemId, cached]
+      if (productRequests.has(itemId)) return [itemId, await productRequests.get(itemId)]
+
       // For open edition prints, search by category:size instead of full variant ID
       const searchId = extractSearchId(itemId)
-      const product = await findProductByName(stripe, searchId)
+      const request = findProductByName(stripe, searchId)
+        .then((product) => cacheValue(productCache, itemId, product))
+        .finally(() => productRequests.delete(itemId))
+      productRequests.set(itemId, request)
+      const product = await request
       return [itemId, product]
     })
   )
@@ -93,9 +134,20 @@ export async function fetchProductsByItemIds(stripe, itemIds) {
 
 export async function fetchPricesByItemIds(stripe, itemIds) {
   const productsByItemId = await fetchProductsByItemIds(stripe, itemIds)
+  const { priceCache, priceRequests } = cacheFor(stripe)
   const entries = await Promise.all(
     Array.from(productsByItemId.entries()).map(async ([itemId, product]) => {
-      const price = await resolvePriceForProduct(stripe, product)
+      const cacheKey = `USD:${itemId}`
+      const cached = cachedValue(priceCache, cacheKey)
+      if (cached !== undefined) return [itemId, { product, price: cached }]
+      if (priceRequests.has(cacheKey)) {
+        return [itemId, { product, price: await priceRequests.get(cacheKey) }]
+      }
+      const request = resolvePriceForProduct(stripe, product)
+        .then((price) => cacheValue(priceCache, cacheKey, price))
+        .finally(() => priceRequests.delete(cacheKey))
+      priceRequests.set(cacheKey, request)
+      const price = await request
       return [itemId, { product, price }]
     })
   )
@@ -104,9 +156,20 @@ export async function fetchPricesByItemIds(stripe, itemIds) {
 
 export async function fetchPricesByItemIdsAndCurrency(stripe, itemIds, currency = 'USD') {
   const productsByItemId = await fetchProductsByItemIds(stripe, itemIds)
+  const { priceCache, priceRequests } = cacheFor(stripe)
   const entries = await Promise.all(
     Array.from(productsByItemId.entries()).map(async ([itemId, product]) => {
-      const price = await resolvePriceForProductAndCurrency(stripe, product, currency)
+      const cacheKey = `${currency.toUpperCase()}:${itemId}`
+      const cached = cachedValue(priceCache, cacheKey)
+      if (cached !== undefined) return [itemId, { product, price: cached }]
+      if (priceRequests.has(cacheKey)) {
+        return [itemId, { product, price: await priceRequests.get(cacheKey) }]
+      }
+      const request = resolvePriceForProductAndCurrency(stripe, product, currency)
+        .then((price) => cacheValue(priceCache, cacheKey, price))
+        .finally(() => priceRequests.delete(cacheKey))
+      priceRequests.set(cacheKey, request)
+      const price = await request
       return [itemId, { product, price }]
     })
   )

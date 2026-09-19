@@ -28,30 +28,8 @@ function mergeKnownPrices(ids, currency, prices) {
   return { ...known, ...prices }
 }
 
-function delay(ms, signal) {
-  return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(resolve, ms)
-    signal?.addEventListener('abort', () => {
-      clearTimeout(timeoutId)
-      reject(new DOMException('Aborted', 'AbortError'))
-    }, { once: true })
-  })
-}
-
-async function fetchPricesWithRetry(ids, currency, options) {
-  const first = await fetchStripePrices(ids, currency, options)
-  const missingIds = ids.filter((id) => !first[id])
-  if (missingIds.length === 0) return first
-
-  await delay(250, options?.signal)
-  const retry = await fetchStripePrices(missingIds, currency, options)
-  const prices = { ...first, ...retry }
-  const stillMissingIds = ids.filter((id) => !prices[id])
-  if (stillMissingIds.length === 0) return prices
-
-  await delay(500, options?.signal)
-  const finalRetry = await fetchStripePrices(stillMissingIds, currency, options)
-  return { ...prices, ...finalRetry }
+async function fetchPricesOnce(ids, currency, options) {
+  return fetchStripePrices(ids, currency, options)
 }
 
 export function useStripePrices(itemIds) {
@@ -80,7 +58,7 @@ export function useStripePrices(itemIds) {
     setError('')
     setPriceById(cachedPricesFor(ids, currency))
 
-    fetchPricesWithRetry(ids, currency, { signal: controller.signal })
+    fetchPricesOnce(ids, currency, { signal: controller.signal })
       .then((map) => {
         if (!isActive) return
         cachePrices(map, currency)
