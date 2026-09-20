@@ -53,7 +53,7 @@ export default function MailClub() {
       <section className="mail-club-page">
         <div className="mail-club-hero">
           <img
-            src="/images/about1.jpg"
+            src="/images/mailclub.jpg"
             alt="A quiet studio moment from Wendy Zhang"
           />
           <div className="mail-club-hero-overlay">
@@ -98,7 +98,7 @@ export default function MailClub() {
             <li>A bookmark</li>
           </ul>
           <p><b>
-            Each month, I will also send one extra surprise postcard to one lucky friend on the list. You are the first one to see this work before anyone does.
+            Each month, I will also send one extra surprise item to one lucky friend on the list. You are the first one to see this work before anyone does.
           </b>
           </p>
           <p>
