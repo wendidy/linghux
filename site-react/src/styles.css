@@ -329,6 +329,7 @@ button:active {
   min-width: 0;
   margin: 0;
   background: var(--bg-white);
+  color: var(--ink);
 }
 
 .mail-club-waitlist-form .mail-club-button {
