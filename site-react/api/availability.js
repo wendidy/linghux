@@ -92,16 +92,6 @@ async function availabilityHandler(req, res) {
 
     res.status(200).json({ availability })
   } catch (error) {
-    const isRateLimit = error?.statusCode === 429 || error?.status === 429 || error?.type === 'rate_limit_error'
-    if (isRateLimit) {
-      const retryAfter = Number.parseInt(error?.headers?.['retry-after'] || error?.raw?.headers?.['retry-after'], 10)
-      if (Number.isFinite(retryAfter)) res.setHeader('Retry-After', String(retryAfter))
-      res.status(429).json({
-        code: 'rate_limit_error',
-        error: 'The website is temporarily busy. Please wait a moment and refresh.',
-      })
-      return
-    }
     res.status(500).json({ error: error.message || 'Failed to fetch availability' })
   }
 }

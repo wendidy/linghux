@@ -18,6 +18,7 @@ try {
     '/about',
     '/contact',
     '/shipping',
+    '/mail-club',
     '/artwork',
     '/artwork/originals',
     '/artwork/limited-edition-prints',
