@@ -16,7 +16,10 @@ export function toAbsoluteUrl(value = '/') {
 }
 
 export function canonicalForPath(pathname = '/') {
-  return toAbsoluteUrl(pathname === '/' ? '/' : pathname)
+  const normalizedPath = pathname === '/'
+    ? '/'
+    : `/${pathname.replace(/^\/+|\/+$/g, '')}`
+  return toAbsoluteUrl(normalizedPath)
 }
 
 export const DEFAULT_SEO = {
