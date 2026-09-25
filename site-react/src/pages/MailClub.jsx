@@ -98,7 +98,7 @@ export default function MailClub() {
             <li>A bookmark</li>
           </ul>
           <p><b>
-            Each month, I will also send one extra surprise item to one lucky friend on the list. You are the first one to see this work before anyone does.
+            Each month, I will also send one extra surprise item to one lucky friend on the list. You are the only one to ever receive this work.
           </b>
           </p>
           <p>
