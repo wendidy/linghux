@@ -40,7 +40,7 @@ const originals = [
     date: '2022-08-26',
     location: 'Sidney, BC, Canada',
     image: '/images/sidney/sidney.jpg',
-    images: gallery('sidney', ['sidney.jpg']),
+    images: gallery('sidney', ['sidney.jpg', 'sidney2.jpg']),
     description: 'I was on a ferry from Vancouver to Victoria when I came upon an artist painting the ocean beneath the sun. I was mesmerized by the way her brush moved, and it inspired me toward a new style in my own work - this piece, Sidney, marks that beginning. My companions wandered off to a local market while I stayed behind, seated on a rock by the shore, painting this scene. Clouds drifted between the distant mountains; it was a quiet afternoon, steeped in the scent of the sea.'  },  
   {
     id: 'signalHill',
@@ -53,7 +53,7 @@ const originals = [
     date: '2022-07-16',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/signalHill/signalHill.jpg',
-    images: gallery('signalHill', ['signalHill.jpg', 'signalHill2.jpg']),
+    images: gallery('signalHill', ['signalHill.jpg', 'signalHill3.jpg']),
     description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },  
   {
@@ -67,7 +67,7 @@ const originals = [
     date: '2024-09-28',
     location: 'Boulder, Colorado, USA',
     image: '/images/waldenPonds/waldenPonds.jpg',
-    images: gallery('waldenPonds', ['waldenPonds.jpg']),
+    images: gallery('waldenPonds', ['waldenPonds.jpg', 'waldenPonds2.jpg']),
     description: 'Walden Ponds Wildlife Habitat unfolds as a series of quiet pools scattered across Boulder\'s edge. A family of geese claimed the first; more had settled in the second, unhurried and entirely unbothered by my arrival. For once, there was a bench — positioned as though someone had known exactly where to place it for the best views. The sunlight had chosen one patch of water and was doing something extraordinary with it.'
   },
   {
@@ -81,7 +81,7 @@ const originals = [
     date: '2024-10-07',
     location: 'Vail, Colorado, USA',
     image: '/images/goreCreek/goreCreek.jpg',
-    images: gallery('goreCreek', ['goreCreek.png', 'goreCreek2.jpg']),
+    images: gallery('goreCreek', ['goreCreek.png', 'goreCreek-1.5mat.jpg']),
     description: 'Vail — the reputation of this town travels far. I went there not for the snow, but for the aspen trees in fall. Layers of evergreen pressed in around them, creating depth and a palette of colours, all of it reflected perfectly in the creek. I sat watching the people fishing, half-listening to the birds.'
   },
   // {
@@ -109,7 +109,7 @@ const originals = [
     date: '2026-03',
     location: 'Boulder County, Colorado, USA',
     image: '/images/grossReservoir/grossReservoir.png',
-    images: gallery('grossReservoir', ['grossReservoir.png']),
+    images: gallery('grossReservoir', ['grossReservoir.png', 'grossReservoir-1.5mat.jpg']),
     description: 'I was captivated by the light filtering through the trees and reflecting off the creek, softened by the water vapor hanging in the air. The atmosphere felt dreamlike — still and undisturbed. I brought some photographs back to the studio and worked up this study.'
   },
   {
@@ -123,7 +123,7 @@ const originals = [
     date: '2024-05-31',
     location: 'Bourton-on-the-Water, England',
     image: '/images/bourtonOnTheWater/bourtonOnTheWater.jpg',
-    images: gallery('bourtonOnTheWater', ['bourtonOnTheWater.jpg', 'bourtonOnTheWater2.jpg']),
+    images: gallery('bourtonOnTheWater', ['bourtonOnTheWater.jpg', 'bourtonOnTheWater-1.5mat.jpg']),
     description: 'It was a peaceful, sunny day during my graduation trip to England, the Coltwolds looked like a dream from centuries ago. Some sheeps were grazing on the farm, and some were laying down in a circle underneath the giant trees avoiding the sun. My friend and I parted ways to wander separately. I chose a bench beside the river and captured the history of this old town, listening to the water flowing. My most cherished encounter: a father urging his daughter for five whole minutes to watch me paint, while she remained entirely unmoved and longed to be anywhere else.'
   },
   {
@@ -137,7 +137,7 @@ const originals = [
     date: '2024-06-02',
     location: 'Chateau De Versailles, France',
     image: '/images/chateauDeVersailles/chateauDeVersailles.jpg',
-    images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles2.jpg']),
+    images: gallery('chateauDeVersailles', ['chateauDeVersailles.jpg', 'chateauDeVersailles-1.5mat.jpg']),
     description: 'The day was warm and filled with light. In front of the palace, families had spread themselves across the lawns with their picnics, and ducks claimed the Grand Canal as their own lunch spot. A little girl was very curious about the painting, but was too shy to ask — until her mother approached politely. Neither of us spoke the other\'s language, yet we shared a moment of warmth and kindness through the canvas between us.'
   },
    {
@@ -151,7 +151,7 @@ const originals = [
     date: '2024-09-15',
     location: 'Longmont, CO, USA',
     image: '/images/rooseveltPark/rooseveltPark.jpg',
-    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark2.jpg']),
+    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark4.jpg']),
     description: 'It was a pleasure to be joining the Artists\' Guild for a get together in Roosevelt Park. I was most fond of the flora beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground and let the scene come to me.',
   },
   // {
@@ -177,7 +177,7 @@ const originals = [
     date: '2023-08-28',
     location: 'Algonquin Provincial Park, Ontario, Canada',
     image: '/images/lakeOfTwoRivers/lakeOfTwoRivers.jpg',
-    images: gallery('lakeOfTwoRivers', ['lakeOfTwoRivers.jpg', 'lakeOfTwoRivers2.jpg']),
+    images: gallery('lakeOfTwoRivers', ['lakeOfTwoRivers.jpg', 'lakeOfTwoRivers-1.5mat.jpg']),
     description: 'We happened upon a quiet beach in the late afternoon — a canoe resting on the shore, unattended, untethered. As the sun descended, I watched the small waves nudge it again and again, and felt something like loneliness settle over the scene. Would it feel abandoned when it\'s dark? Or perhaps I was the one projecting — perhaps it was entirely in its element, having the time of its life, content with the solitude I had yet to make peace with.'
   },
   {
@@ -191,7 +191,7 @@ const originals = [
     date: '2022-07-10',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/oxenPond/oxenPond.jpg',
-    images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond2.jpg']),
+    images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond-1.5mat.jpg']),
     description: 'The sun was beaming down on the pond, and I must have stilled myself enough to watch a group of ducks edge toward the shore and gather near my feet, unbothered. Some dove beneath the surface to graze on algae; others simply rested. I captured one of them with their head submerged and their butt skyward, it was such an adorable scene to watch.'
   },
   {
@@ -205,7 +205,7 @@ const originals = [
     date: '2025-05-26',
     location: 'San Diego, California, USA',
     image: '/images/pacificBeach/pacificBeach.jpg',
-    images: gallery('pacificBeach', [ 'pacificBeach.jpg', 'pacificBeach2.jpg']),
+    images: gallery('pacificBeach', [ 'pacificBeach.jpg', 'pacificBeach-1.5mat.jpg']),
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
   {
@@ -219,7 +219,7 @@ const originals = [
     date: '2023-08-27',
     location: 'Ottawa, Ontario, Canada',
     image: '/images/majorsHillPark/majorsHillPark.jpg',
-    images: gallery('majorsHillPark', ['majorsHillPark.jpg', 'majorsHillPark2.jpg']),
+    images: gallery('majorsHillPark', ['majorsHillPark.jpg', 'majorsHillPark-1.5mat.jpg']),
     description: 'From Major\'s Hill Park in the heart of the capital of Canada, the Parliament Buildings emerged through the canopy — majestic and half-disclosed. People had gathered in clusters on the grass, taking in the sunlight and the breeze. I found myself in unexpected company: another plein air painter, working the same light.'
   },
   {
@@ -233,7 +233,7 @@ const originals = [
     date: '2024-06-25',
     location: 'Tobermory, Ontario, Canada',
     image: '/images/tobermory/tobermory.jpg',
-    images: gallery('tobermory', ['tobermory.jpg']),
+    images: gallery('tobermory', ['tobermory.jpg', 'tobermory-1.5mat.jpg']),
     description: 'The duck kept approaching me, convinced my watercolor palette was food. This painting is about that particular one—marching over with absolute confidence, ready for a feast.'
   },
 ]
