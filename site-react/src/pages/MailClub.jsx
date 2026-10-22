@@ -64,9 +64,9 @@ export default function MailClub() {
           </p>
           <p>Each month, you will receive:</p>
           <ul>
-            <li>A personal letter from me</li>
             <li>A 4 × 6 postcard featuring one of my paintings</li>
-            <li>A bookmark</li>
+            <li>A full tutorial of the painting process so you can paint along</li>
+            <li>A personal letter about the painting's inspiration and my art journey</li>
           </ul>
           <p><b>
             Each month, I will also send one extra surprise item to one lucky friend on the list. You are the only one to ever receive this work.
