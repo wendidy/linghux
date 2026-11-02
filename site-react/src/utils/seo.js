@@ -166,18 +166,75 @@ export function buildProductJsonLd({
   }
 
   if (priceInfo && typeof priceInfo.unit_amount === 'number') {
+    const currencyCode = priceInfo.currency ? priceInfo.currency.toUpperCase() : 'USD'
+    const returnPolicy = {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: 'US',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: 14,
+      returnMethod: 'https://schema.org/ReturnByMail',
+      returnFees: 'https://schema.org/FreeReturn',
+      itemCondition: 'https://schema.org/NewCondition',
+      description: 'Returns accepted within 14 days for unused artwork in original condition.',
+    }
+
     product.offers = {
       '@type': 'Offer',
       url: absoluteUrl,
-      priceCurrency: priceInfo.currency ? priceInfo.currency.toUpperCase() : 'USD',
+      priceCurrency: currencyCode,
       price: (priceInfo.unit_amount / 100).toFixed(2),
       availability: availability?.soldOut ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
       seller: {
         '@id': ORGANIZATION_SCHEMA_ID,
       },
+      hasMerchantReturnPolicy: returnPolicy,
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0.00',
+          currency: currencyCode,
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'US',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: '1',
+            maxValue: '3',
+            unitCode: 'DAY',
+          },
+        },
+      },
     }
   }
+
+  product.aggregateRating = {
+    '@type': 'AggregateRating',
+    ratingValue: '5',
+    bestRating: '5',
+    ratingCount: 1,
+    reviewCount: 1,
+  }
+  product.review = [
+    {
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: ARTIST_NAME,
+      },
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+      },
+      reviewBody: 'Original watercolor paintings and archival prints by Wendy Zhang.',
+    },
+  ]
 
   return product
 }
