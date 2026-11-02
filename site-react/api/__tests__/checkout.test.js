@@ -258,7 +258,7 @@ describe('Checkout API Handler', () => {
       })
     })
 
-    it('should add a 60% surcharge to print categories while keeping originals at full price', async () => {
+    it('should add a 50% surcharge to all non-mail-club categories, including originals', async () => {
       req.body = {
         lineItems: [
           {
@@ -274,6 +274,7 @@ describe('Checkout API Handler', () => {
             quantity: 1,
           },
           { id: 'original-1', category: 'originals', quantity: 1 },
+          { id: 'mail-club-1', category: 'mail-club', quantity: 1 },
         ],
         currency: 'USD',
         shippingCountry: 'US',
@@ -283,6 +284,7 @@ describe('Checkout API Handler', () => {
           ['dreamLake:open-edition-prints:8x10', { product: createMockProduct('prod_print_1'), price: { ...createMockPrice('price_print_1', 'prod_print_1'), unit_amount: 10000 } }],
           ['mountSanitas:limited-edition-prints:8x10', { product: createMockProduct('prod_print_2'), price: { ...createMockPrice('price_print_2', 'prod_print_2'), unit_amount: 12500 } }],
           ['original-1', { product: createMockProduct('prod_original'), price: { ...createMockPrice('price_original', 'prod_original'), unit_amount: 20000 } }],
+          ['mail-club-1', { product: createMockProduct('prod_mail_club'), price: { ...createMockPrice('price_mail_club', 'prod_mail_club'), unit_amount: 5000 } }],
         ])
       )
       reserveInventory.mockResolvedValueOnce([])
@@ -292,14 +294,18 @@ describe('Checkout API Handler', () => {
       const call = mockStripeInstance.checkout.sessions.create.mock.calls[0][0]
       expect(call.line_items).toEqual([
         {
-          price_data: { currency: 'USD', product: 'prod_print_1', unit_amount: 16000 },
+          price_data: { currency: 'USD', product: 'prod_print_1', unit_amount: 15000 },
           quantity: 1,
         },
         {
-          price_data: { currency: 'USD', product: 'prod_print_2', unit_amount: 20000 },
+          price_data: { currency: 'USD', product: 'prod_print_2', unit_amount: 18750 },
           quantity: 1,
         },
-        { price: 'price_original', quantity: 1 },
+        {
+          price_data: { currency: 'USD', product: 'prod_original', unit_amount: 30000 },
+          quantity: 1,
+        },
+        { price: 'price_mail_club', quantity: 1 },
       ])
     })
 

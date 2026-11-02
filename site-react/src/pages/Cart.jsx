@@ -109,6 +109,11 @@ export default function Cart() {
     return getEditionLabel(item, availabilityForItem(item))
   }
 
+  const isMailClubItem = (item) => {
+    const category = String(item?.category || '').trim().toLowerCase()
+    return category.includes('mail-club') || category.includes('mail club')
+  }
+
   const canIncreaseQuantity = (item) => {
     if (isOpenEdition(item)) return true
     if (!isLimitedEdition(item)) return false
@@ -223,9 +228,9 @@ export default function Cart() {
                     {isLimitedEdition(item) && (
                       <p className="cart-item-detail">{availabilityLabelForItem(item)}</p>
                     )}
-                    {shippingCountry === 'US' && (isLimitedEdition(item) || isOpenEdition(item)) && (
+                    {shippingCountry === 'US' && !isMailClubItem(item) && (
                       <p className="cart-item-tariff-note">
-                        US tariff contribution: a 60% surcharge will be added at checkout. <Link to="/shipping">Info</Link>
+                        US tariff contribution: a 50% surcharge will be added at checkout. <Link to="/shipping">Info</Link>
                       </p>
                     )}
                     {!isOriginal(item) && (
