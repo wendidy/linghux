@@ -39,8 +39,8 @@ export default function Shipping() {
           </ul>
           <p>Shipping rates are automatically applied at checkout.</p>
 
-          <h3>US print orders and tariff contribution</h3>
-          <p>For orders shipped to the United States, we currently add a 60% tariff contribution to the listed price of limited-edition prints and open-edition prints at checkout. This means the print portion of the order is charged at 160% of the listed price. Original paintings are not included in this adjustment, and Canadian orders are not affected.</p>
+          <h3>US tariff contribution</h3>
+          <p>For orders shipped to the United States, we add a 50% tariff contribution to the listed price of all artwork at checkout. This means the item portion of the order is charged at 150% of the listed price. Canadian orders are not affected.</p>
           <p>Import charges are determined by US Customs and Border Protection and can depend on the product classification, origin, value, and the rules in effect when the shipment enters the United States. Tariff rates and exemptions may change, so the amount collected at checkout is an estimate toward these costs rather than a guarantee of the final assessment. Any additional customs duty, tax, brokerage, or carrier fee requested on delivery remains the buyer's responsibility.</p>
           <p>For current official guidance, see <a href="https://www.cbp.gov/trade/basic-import-export/internet-purchases" target="_blank" rel="noreferrer">US Customs and Border Protection's guidance for internet purchases</a> and the <a href="https://hts.usitc.gov/" target="_blank" rel="noreferrer">US Harmonized Tariff Schedule</a>.</p>
 

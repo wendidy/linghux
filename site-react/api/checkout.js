@@ -36,11 +36,19 @@ const DEFAULT_SHIPPING_COUNTRY_BY_CURRENCY = {
 }
 const METADATA_TEXT_MAX_LENGTH = 120
 const METADATA_VALUE_MAX_LENGTH = 500
-const TARIFF_PRINT_CATEGORIES = new Set([
-  'limited-edition-prints',
-  'open-edition-prints',
+const TARIFF_EXEMPT_CATEGORIES = new Set([
+  'mail-club',
+  'mail-club-membership',
+  'mail-club-subscription',
 ])
-const TARIFF_SURCHARGE_PERCENT = 60
+const TARIFF_SURCHARGE_PERCENT = 50
+
+function shouldApplyTariff(category) {
+  const normalized = typeof category === 'string' ? category.trim().toLowerCase() : ''
+  if (!normalized) return false
+  if (TARIFF_EXEMPT_CATEGORIES.has(normalized)) return false
+  return true
+}
 
 function getBaseUrl(req) {
   if (process.env.SITE_URL) {
@@ -98,11 +106,17 @@ function categoryFromItemId(itemId) {
 }
 
 function categoryForLine(item, product) {
-  return product?.metadata?.category || catalogCategoryFor(item) || categoryFromItemId(item?.itemId || item?.id) || ''
+  return (
+    item?.category ||
+    product?.metadata?.category ||
+    catalogCategoryFor(item) ||
+    categoryFromItemId(item?.itemId || item?.id) ||
+    ''
+  )
 }
 
 function checkoutLineItemFor(line, shippingCountry) {
-  if (shippingCountry !== 'US' || !TARIFF_PRINT_CATEGORIES.has(line.category)) {
+  if (shippingCountry !== 'US' || !shouldApplyTariff(line.category)) {
     return { price: line.price, quantity: line.quantity }
   }
 
