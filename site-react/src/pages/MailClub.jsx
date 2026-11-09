@@ -40,7 +40,7 @@ export default function MailClub() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <strong>US &amp; Canada</strong>
+                  <strong>US &amp; Canada - 9USD</strong>
                 </a>
                 <a
                   className="button mail-club-signup-button"
@@ -48,7 +48,7 @@ export default function MailClub() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <strong>International</strong>
+                  <strong>International - 11USD</strong>
                 </a>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function MailClub() {
             Mail is sent during the first week of each month using an untracked stamp. This helps keep the cost down and adds a little mystery to its arrival. We ship to every country from Canada🇨🇦. Please allow up to 21 business days for delivery.
           </p>
           <p>
-            Join by the 20th of the month to receive the current month’s mailer. If you join after the 20th, you will subscribe to the next month’s mailer.
+            Join by the 25th of the month to receive the current month’s mailer. If you join after the 25th, you will subscribe to the next month’s mailer.
           </p>
           <p>
             Your subscription is billed on the same day each month that you initially subscribed.

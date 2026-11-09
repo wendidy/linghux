@@ -39,6 +39,11 @@
       <image:title>Sidney by Wendy Zhang</image:title>
       <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada — Watercolor and pencil on paper</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/sidney/sidney1-mock.jpeg</image:loc>
+      <image:title>Sidney by Wendy Zhang</image:title>
+      <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada — Watercolor and pencil on paper</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/originals/signalHill</loc>
@@ -165,6 +170,11 @@
       <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA — Watercolor and pencil on paper</image:caption>
     </image:image>
     <image:image>
+      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach2-mock.jpeg</image:loc>
+      <image:title>Pacific Beach by Wendy Zhang</image:title>
+      <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA — Watercolor and pencil on paper</image:caption>
+    </image:image>
+    <image:image>
       <image:loc>https://linghux.com/images/pacificBeach/pacificBeach-1.5mat.jpg</image:loc>
       <image:title>Pacific Beach by Wendy Zhang</image:title>
       <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA — Watercolor and pencil on paper</image:caption>
@@ -187,6 +197,11 @@
     <loc>https://linghux.com/artwork/originals/tobermory</loc>
     <image:image>
       <image:loc>https://linghux.com/images/tobermory/tobermory.jpg</image:loc>
+      <image:title>Tobermory by Wendy Zhang</image:title>
+      <image:caption>Tobermory watercolor painting by Wendy Zhang — Tobermory, Ontario, Canada — Watercolor and pencil on paper</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/tobermory/tobermory-mock.jpeg</image:loc>
       <image:title>Tobermory by Wendy Zhang</image:title>
       <image:caption>Tobermory watercolor painting by Wendy Zhang — Tobermory, Ontario, Canada — Watercolor and pencil on paper</image:caption>
     </image:image>
@@ -216,11 +231,21 @@
       <image:title>Dream Lake by Wendy Zhang</image:title>
       <image:caption>Dream Lake watercolor painting by Wendy Zhang — Rocky Mountain National Park, Colorado, USA</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/dreamLake/dreamLake-mock.jpeg</image:loc>
+      <image:title>Dream Lake by Wendy Zhang</image:title>
+      <image:caption>Dream Lake watercolor painting by Wendy Zhang — Rocky Mountain National Park, Colorado, USA</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/open-edition-prints/sidney</loc>
     <image:image>
       <image:loc>https://linghux.com/images/sidney/sidney.jpg</image:loc>
+      <image:title>Sidney by Wendy Zhang</image:title>
+      <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/sidney/sidney-mock.jpeg</image:loc>
       <image:title>Sidney by Wendy Zhang</image:title>
       <image:caption>Sidney watercolor painting by Wendy Zhang — Sidney, BC, Canada</image:caption>
     </image:image>
@@ -232,11 +257,21 @@
       <image:title>Pelee Island by Wendy Zhang</image:title>
       <image:caption>Pelee Island watercolor painting by Wendy Zhang — Pelee Island, Ontario, Canada</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/peleeIsland/peleeIsland-mock.jpeg</image:loc>
+      <image:title>Pelee Island by Wendy Zhang</image:title>
+      <image:caption>Pelee Island watercolor painting by Wendy Zhang — Pelee Island, Ontario, Canada</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/open-edition-prints/universityOfDenver</loc>
     <image:image>
       <image:loc>https://linghux.com/images/universityOfDenver/universityOfDenver.jpg</image:loc>
+      <image:title>University of Denver by Wendy Zhang</image:title>
+      <image:caption>University of Denver watercolor painting by Wendy Zhang — Denver, Colorado, USA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/universityOfDenver/universityOfDenver-mock.jpeg</image:loc>
       <image:title>University of Denver by Wendy Zhang</image:title>
       <image:caption>University of Denver watercolor painting by Wendy Zhang — Denver, Colorado, USA</image:caption>
     </image:image>
@@ -248,6 +283,11 @@
       <image:title>Walden Ponds by Wendy Zhang</image:title>
       <image:caption>Walden Ponds watercolor painting by Wendy Zhang — Boulder, Colorado, USA</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/waldenPonds/waldenPonds-mock.jpeg</image:loc>
+      <image:title>Walden Ponds by Wendy Zhang</image:title>
+      <image:caption>Walden Ponds watercolor painting by Wendy Zhang — Boulder, Colorado, USA</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/open-edition-prints/goreCreek</loc>
@@ -256,11 +296,21 @@
       <image:title>Gore Creek by Wendy Zhang</image:title>
       <image:caption>Gore Creek watercolor painting by Wendy Zhang — Vail, Colorado, USA</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/goreCreek/goreCreek-mock.jpeg</image:loc>
+      <image:title>Gore Creek by Wendy Zhang</image:title>
+      <image:caption>Gore Creek watercolor painting by Wendy Zhang — Vail, Colorado, USA</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/open-edition-prints/theLaughingGoat</loc>
     <image:image>
       <image:loc>https://linghux.com/images/theLaughingGoat/theLaughingGoat.jpg</image:loc>
+      <image:title>The Laughing Goat by Wendy Zhang</image:title>
+      <image:caption>The Laughing Goat watercolor painting by Wendy Zhang — Boulder, Colorado, USA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/theLaughingGoat/theLaughingGoat-mock.jpeg</image:loc>
       <image:title>The Laughing Goat by Wendy Zhang</image:title>
       <image:caption>The Laughing Goat watercolor painting by Wendy Zhang — Boulder, Colorado, USA</image:caption>
     </image:image>
@@ -312,11 +362,21 @@
       <image:title>Roosevelt Park by Wendy Zhang</image:title>
       <image:caption>Roosevelt Park watercolor painting by Wendy Zhang — Longmont, CO, USA — Watercolor and pencil on paper</image:caption>
     </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/rooseveltPark/rooseveltPark-mock.jpeg</image:loc>
+      <image:title>Roosevelt Park by Wendy Zhang</image:title>
+      <image:caption>Roosevelt Park watercolor painting by Wendy Zhang — Longmont, CO, USA — Watercolor and pencil on paper</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://linghux.com/artwork/open-edition-prints/oxenPond</loc>
     <image:image>
       <image:loc>https://linghux.com/images/oxenPond/oxenPond.jpg</image:loc>
+      <image:title>Oxen Pond by Wendy Zhang</image:title>
+      <image:caption>Oxen Pond watercolor painting by Wendy Zhang — St John&apos;s, Newfoundland, Canada — Watercolor and pencil on paper</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/oxenPond/oxenPond-mock.jpeg</image:loc>
       <image:title>Oxen Pond by Wendy Zhang</image:title>
       <image:caption>Oxen Pond watercolor painting by Wendy Zhang — St John&apos;s, Newfoundland, Canada — Watercolor and pencil on paper</image:caption>
     </image:image>
@@ -333,6 +393,11 @@
     <loc>https://linghux.com/artwork/open-edition-prints/signalHill</loc>
     <image:image>
       <image:loc>https://linghux.com/images/signalHill/signalHill.jpg</image:loc>
+      <image:title>Signal Hill by Wendy Zhang</image:title>
+      <image:caption>Signal Hill watercolor painting by Wendy Zhang — St John&apos;s, Newfoundland, Canada</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/signalHill/signalHill-mock.jpeg</image:loc>
       <image:title>Signal Hill by Wendy Zhang</image:title>
       <image:caption>Signal Hill watercolor painting by Wendy Zhang — St John&apos;s, Newfoundland, Canada</image:caption>
     </image:image>
@@ -357,6 +422,16 @@
     <loc>https://linghux.com/artwork/open-edition-prints/pacificBeach</loc>
     <image:image>
       <image:loc>https://linghux.com/images/pacificBeach/pacificBeach.jpg</image:loc>
+      <image:title>Pacific Beach by Wendy Zhang</image:title>
+      <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach-mock.jpeg</image:loc>
+      <image:title>Pacific Beach by Wendy Zhang</image:title>
+      <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://linghux.com/images/pacificBeach/pacificBeach1-mock.jpeg</image:loc>
       <image:title>Pacific Beach by Wendy Zhang</image:title>
       <image:caption>Pacific Beach watercolor painting by Wendy Zhang — San Diego, California, USA</image:caption>
     </image:image>
