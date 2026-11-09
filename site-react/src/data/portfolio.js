@@ -40,7 +40,7 @@ const originals = [
     date: '2022-08-26',
     location: 'Sidney, BC, Canada',
     image: '/images/sidney/sidney.jpg',
-    images: gallery('sidney', ['sidney.jpg', 'sidney2.jpg']),
+    images: gallery('sidney', ['sidney.jpg', 'sidney2.jpg','sidney1-mock.jpeg']),
     description: 'I was on a ferry from Vancouver to Victoria when I came upon an artist painting the ocean beneath the sun. I was mesmerized by the way her brush moved, and it inspired me toward a new style in my own work - this piece, Sidney, marks that beginning. My companions wandered off to a local market while I stayed behind, seated on a rock by the shore, painting this scene. Clouds drifted between the distant mountains; it was a quiet afternoon, steeped in the scent of the sea.'  },  
   {
     id: 'signalHill',
@@ -48,7 +48,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Signal Hill',
     size: '7.32"x9.96"',
-    framedSize: '8.86"x10.83"',
+    framedSize: 'will be determined by the artist once the order is placed.',
     medium: 'Watercolor and pencil on paper',
     date: '2022-07-16',
     location: 'St John\'s, Newfoundland, Canada',
@@ -118,7 +118,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Bourton-on-the-Water',
     size: '5.35"x7.64"',
-    framedSize: 'comes in a 8×10 frame — style is artist\'s choice and may vary from shown.',
+    framedSize: '8"x10"',
     medium: 'Watercolor and pencil on paper',
     date: '2024-05-31',
     location: 'Bourton-on-the-Water, England',
@@ -132,7 +132,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Château De Versailles',
     size: '5.2"x7.48"',
-    framedSize: 'comes in a 8×10 frame — style is artist\'s choice and may vary from shown.',
+    framedSize: '8"x10"',
     medium: 'Watercolor and pencil on paper',
     date: '2024-06-02',
     location: 'Chateau De Versailles, France',
@@ -146,7 +146,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Roosevelt Park',
     size: '7.48"x10.63"',
-    framedSize: '9.21"x11.81"',
+    framedSize: 'will be determined by the artist once the order is placed.',
     medium: 'Watercolor and pencil on paper',
     date: '2024-09-15',
     location: 'Longmont, CO, USA',
@@ -172,7 +172,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Lake of Two Rivers',
     size: '5.12"x7.32"',
-    framedSize: '8.86"x10.83"',
+    framedSize: '8"x10"',
     medium: 'Watercolor on paper',
     date: '2023-08-28',
     location: 'Algonquin Provincial Park, Ontario, Canada',
@@ -186,7 +186,7 @@ const originals = [
     type: 'Plein Air',
     title: 'Oxen Pond',
     size: '7.32"x9.88"',
-    framedSize: '9.25"x11.77"',
+    framedSize: 'will be determined by the artist once the order is placed.',
     medium: 'Watercolor and pencil on paper',
     date: '2022-07-10',
     location: 'St John\'s, Newfoundland, Canada',
@@ -200,12 +200,12 @@ const originals = [
     type: 'Plein Air',
     title: 'Pacific Beach',
     size: '7.4"x10"',
-    framedSize: 'comes in a 8×10 frame — style is artist\'s choice and may vary from shown.',
+    framedSize: 'will be determined by the artist once the order is placed.',
     medium: 'Watercolor and pencil on paper',
     date: '2025-05-26',
     location: 'San Diego, California, USA',
     image: '/images/pacificBeach/pacificBeach.jpg',
-    images: gallery('pacificBeach', [ 'pacificBeach.jpg', 'pacificBeach-1.5mat.jpg']),
+    images: gallery('pacificBeach', [ 'pacificBeach.jpg', 'pacificBeach2-mock.jpeg', 'pacificBeach-1.5mat.jpg']),
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
   {
@@ -228,12 +228,12 @@ const originals = [
     type: 'Plein Air',
     title: 'Tobermory',
     size: '7.24"x10.08"',
-    framedSize: 'comes in a 8×10 frame — style is artist\'s choice and may vary from shown.',
+    framedSize: 'will be determined by the artist once the order is placed.',
     medium: 'Watercolor and pencil on paper',
     date: '2024-06-25',
     location: 'Tobermory, Ontario, Canada',
     image: '/images/tobermory/tobermory.jpg',
-    images: gallery('tobermory', ['tobermory.jpg', 'tobermory-1.5mat.jpg']),
+    images: gallery('tobermory', ['tobermory.jpg', 'tobermory-mock.jpeg', 'tobermory-1.5mat.jpg']),
     description: 'The duck kept approaching me, convinced my watercolor palette was food. This painting is about that particular one—marching over with absolute confidence, ready for a feast.'
   },
 ]
@@ -263,7 +263,7 @@ const openEditionPrints = [
     date: '2024-09-08',
     location: 'Rocky Mountain National Park, Colorado, USA',
     image: '/images/dreamLake/dreamLake.jpg',
-    images: gallery('dreamLake', ['dreamLake.jpg']),
+    images: gallery('dreamLake', ['dreamLake.jpg', 'dreamLake-mock.jpeg']),
     description: 'It was the first time I set foot in Rocky Mountain National Park — a place that would later become my refuge for two years. Sitting beside the lake, I watched clouds veil the sun and bring down the snowflakes of September, accompanied by a group of chipmunks awaiting their familiar feast. It felt like slipping into a dream just like its name..'
   },
   {
@@ -274,7 +274,7 @@ const openEditionPrints = [
     date: '2022-08-26',
     location: 'Sidney, BC, Canada',
     image: '/images/sidney/sidney.jpg',
-    images: gallery('sidney', ['sidney.jpg']),
+    images: gallery('sidney', ['sidney.jpg', 'sidney-mock.jpeg']),
     description: 'I was on a ferry from Vancouver to Victoria when I came upon an artist painting the ocean beneath the sun. I was mesmerized by the way her brush moved, and it inspired me toward a new style in my own work - this piece, Sidney, marks that beginning. My companions wandered off to a local market while I stayed behind, seated on a rock by the shore, painting this scene. Clouds drifted between the distant mountains; it was a quiet afternoon, steeped in the scent of the sea.'  },  
   {
     id: 'peleeIsland',
@@ -284,7 +284,7 @@ const openEditionPrints = [
     date: '2024-05-19',
     location: 'Pelee Island, Ontario, Canada',
     image: '/images/peleeIsland/peleeIsland.jpg',
-    images: gallery('peleeIsland', ['peleeIsland.jpg']),
+    images: gallery('peleeIsland', ['peleeIsland.jpg', 'peleeIsland-mock.jpeg']),
     description: 'Have you ever watched a snake move through water with that fluid, impossible velocity? Sitting on the dock, I was startled at first by the little creatures swimming past. But they were entirely indifferent to me, absorbed in their own busy lives. I was quite comfortable being the invisible observer of the fish, herons, snakes, muskrats, and the lighthouse dissolving in the distance. Silence, when you let it, becomes the most profound form of connection with the world.'
   },
   {
@@ -295,7 +295,7 @@ const openEditionPrints = [
     date: '2024-11-15',
     location: 'Denver, Colorado, USA',
     image: '/images/universityOfDenver/universityOfDenver.jpg',
-    images: gallery('universityOfDenver', ['universityOfDenver.jpg']),
+    images: gallery('universityOfDenver', ['universityOfDenver.jpg', 'universityOfDenver-mock.jpeg']),
     description: 'My friend and I arrived early to Denver to slip ahead of the traffic before the concert. The University of Denver surprised me — intimate in scale, with white and red lounge chairs scattered across the grounds like punctuation among the trees. The accent colours caught the afternoon light with quiet confidence. I found shelter beneath a full-leafed canopy and let one red chair become the whole story.'
   },
   {
@@ -306,7 +306,7 @@ const openEditionPrints = [
     date: '2024-09-28',
     location: 'Boulder, Colorado, USA',
     image: '/images/waldenPonds/waldenPonds.jpg',
-    images: gallery('waldenPonds', ['waldenPonds.jpg']),
+    images: gallery('waldenPonds', ['waldenPonds.jpg', 'waldenPonds-mock.jpeg']),
     description: 'Walden Ponds Wildlife Habitat unfolds as a series of quiet pools scattered across Boulder\'s edge. A family of geese claimed the first; more had settled in the second, unhurried and entirely unbothered by my arrival. For once, there was a bench — positioned as though someone had known exactly where to place it for the best views. The sunlight had chosen one patch of water and was doing something extraordinary with it.'
   },
   {
@@ -317,7 +317,7 @@ const openEditionPrints = [
     date: '2024-10-07',
     location: 'Vail, Colorado, USA',
     image: '/images/goreCreek/goreCreek.jpg',
-    images: gallery('goreCreek', ['goreCreek.png']),
+    images: gallery('goreCreek', ['goreCreek.png', 'goreCreek-mock.jpeg']),
     description: 'Vail — the reputation of this town travels far. I went there not for the snow, but for the aspen trees in fall. Layers of evergreen pressed in around them, creating depth and a palette of colours, all of it reflected perfectly in the creek. I sat watching the people fishing, half-listening to the birds.'
   },
   {
@@ -328,6 +328,7 @@ const openEditionPrints = [
     date: '2024-08',
     location: 'Boulder, Colorado, USA',
     image: '/images/theLaughingGoat/theLaughingGoat.jpg',
+    images: gallery('theLaughingGoat', ['theLaughingGoat.jpg', 'theLaughingGoat-mock.jpeg']),
     description: 'I wandered into a busy café in the heart of downtown Boulder and immediately fell in love with its warm wooden interiors and earthy tones. I settled into a corner seat, where I could take in the entire café at once. A man beside me spent the morning in meetings, becoming an unexpected companion to my painting session.' 
   },
   {
@@ -398,7 +399,7 @@ const openEditionPrints = [
     date: '2024-09-15',
     location: 'Longmont, CO, USA',
     image: '/images/rooseveltPark/rooseveltPark.jpg',
-    images: gallery('rooseveltPark', ['rooseveltPark.jpg']),
+    images: gallery('rooseveltPark', ['rooseveltPark.jpg', 'rooseveltPark-mock.jpeg']),
     description: 'It was a pleasure to be joining the Artists\' Guild for a get together in Roosevelt Park. I was most fond of the flora beautifully arranged in the garden, and the way the man made objects interwined with nature. As usual, I sat on the ground and let the scene come to me.',
   },
   {
@@ -410,7 +411,7 @@ const openEditionPrints = [
     date: '2022-07-10',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/oxenPond/oxenPond.jpg',
-    images: gallery('oxenPond', ['oxenPond.jpg']),
+    images: gallery('oxenPond', ['oxenPond.jpg', 'oxenPond-mock.jpeg']),
     description: 'The sun was beaming down on the pond, and I must have stilled myself enough to watch a group of ducks edge toward the shore and gather near my feet, unbothered. Some dove beneath the surface to graze on algae; others simply rested. I captured one of them with their head submerged and their butt skyward, it was such an adorable scene to watch.'
   },
   {
@@ -432,7 +433,7 @@ const openEditionPrints = [
     date: '2022-07-16',
     location: 'St John\'s, Newfoundland, Canada',
     image: '/images/signalHill/signalHill.jpg',
-    images: gallery('signalHill', ['signalHill.jpg']),
+    images: gallery('signalHill', ['signalHill.jpg', 'signalHill-mock.jpeg']),
     description: 'Life, work, and relationships were slowly wearing me down — so I made the decision to take my first solo trip to the east coast of Canada. Solitude is terrifying, yet it offers something irreplaceable: the unhurried introspective moments to get to know yourself better. I climbed the road\'s edge to visit the old landmark of St John\'s - Signal Hill. I sat in the endless sweep of grass, watching ships pass in and out of the harbour, humpbacks float up and down the ocean — just like what the landmark has done for over 350 years.'
   },
   {
@@ -465,7 +466,7 @@ const openEditionPrints = [
     date: '2025-05-26',
     location: 'San Diego, California, USA',
     image: '/images/pacificBeach/pacificBeach.jpg',
-    images: gallery('pacificBeach', ['pacificBeach.jpg']),
+    images: gallery('pacificBeach', ['pacificBeach.jpg', 'pacificBeach-mock.jpeg', 'pacificBeach1-mock.jpeg']),
     description: 'My friends insisted I experience La Jolla and Pacific Beach — a proper initiation into San Diego\'s coastal world. We settled on the sand together, and I sat on the edge of a beach towel, very aware of being the third wheel. Still, the deck floated out there amid the turqoise water and the cloudless sky — and I was, quietly, impossibly glad to be there.'
   },
 ]
