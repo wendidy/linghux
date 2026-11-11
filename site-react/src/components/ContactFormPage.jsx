@@ -26,17 +26,35 @@ export default function ContactFormPage({
     }
   }, [])
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    const form = e.target
-    if (window.emailjs && window.emailjs.sendForm) {
-      window.emailjs.sendForm('service_1bbz9d9', 'template_584scza', form)
-        .then(() => alert('Message sent successfully!'))
-        .catch((err) => alert('Failed to send message:\n' + JSON.stringify(err)))
-    } else {
+    const form = e.currentTarget
+    const timeField = form.elements.namedItem('time')
+    if (timeField) timeField.value = new Date().toLocaleString()
+    if (!window.emailjs || !window.emailjs.sendForm) {
       alert('Email service is not loaded. Please try again later.')
+      return
     }
-    form.reset()
+
+    try {
+      await window.emailjs.sendForm('service_1bbz9d9', 'template_wdofuj1', form)
+    } catch (err) {
+      const details = err?.text || err?.message || JSON.stringify(err)
+      const status = err?.status ? ` (${err.status})` : ''
+      alert(`Failed to send message${status}:\n${details}`)
+      return
+    }
+
+    await new Promise((resolve) => window.setTimeout(resolve, 1100))
+    try {
+      await window.emailjs.sendForm('service_1bbz9d9', 'template_584scza', form)
+      alert('Your message was sent, and a confirmation email was sent to you.')
+    } catch (err) {
+      const details = err?.text || err?.message || JSON.stringify(err)
+      alert(`Your message was sent, but the confirmation email failed:\n${details}`)
+    } finally {
+      form.reset()
+    }
   }
 
   return (
@@ -56,6 +74,7 @@ export default function ContactFormPage({
           </header>
           <div className="box">
             <form id="contact-form" onSubmit={handleSubmit}>
+              <input type="hidden" name="time" />
               <div className="fields">
                 <div className="field half"><input type="text" name="name" placeholder="Name" /></div>
                 <div className="field half"><input type="email" name="email" placeholder="Email" /></div>
