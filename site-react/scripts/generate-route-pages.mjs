@@ -16,6 +16,7 @@ const pages = [
   '/',
   '/about',
   '/contact',
+  '/commission',
   '/shipping',
   '/mail-club',
   '/artwork',
