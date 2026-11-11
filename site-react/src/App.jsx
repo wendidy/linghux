@@ -7,6 +7,7 @@ import CheckoutCancel from './pages/CheckoutCancel'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Commission from './pages/Commission'
 import Shipping from './pages/Shipping'
 import MailClub from './pages/MailClub'
 import Layout from './components/Layout'
@@ -25,6 +26,7 @@ export default function App(){
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="commission" element={<Commission />} />
           <Route path="shipping" element={<Shipping />} />
           <Route path="mail-club" element={<MailClub />} />
           <Route path="cart" element={<Cart />} />

@@ -76,6 +76,7 @@ export default function Home(){
     <>
       <Seo
         title={pageTitle}
+        tabTitle="linghux | Watercolor Art"
         description={pageDescription}
         url={pageUrl}
         keywords="linghux art, Wendy Zhang artist, shop original watercolor paintings, limited edition watercolor prints, open edition watercolor prints, Canadian watercolor artist"

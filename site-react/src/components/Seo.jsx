@@ -42,6 +42,7 @@ function updateJsonLd(jsonLd) {
 
 export default function Seo({
   title,
+  tabTitle,
   description,
   url,
   image,
@@ -64,7 +65,7 @@ export default function Seo({
         ? keywords.join(', ')
         : DEFAULT_SEO.keywords
 
-    document.title = pageTitle
+    document.title = tabTitle || pageTitle
     updateLink('canonical', pageUrl)
     updateMeta('name', 'description', pageDescription)
     updateMeta('name', 'keywords', pageKeywords)
@@ -80,7 +81,7 @@ export default function Seo({
     updateMeta('name', 'twitter:description', pageDescription)
     updateMeta('name', 'twitter:image', pageImage)
     updateJsonLd(jsonLd ? JSON.parse(jsonLdString) : null)
-  }, [title, description, url, image, keywords, robots, type, pathname, jsonLdString])
+  }, [title, tabTitle, description, url, image, keywords, robots, type, pathname, jsonLdString])
 
   return null
 }

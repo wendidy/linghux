@@ -54,6 +54,7 @@ export default function Header(){
                 ))}
               </ul>
             </li>
+            <li><NavLink to="/commission" className={linkClass}>Commission</NavLink></li>
             <li><NavLink to="/about" className={linkClass}>About Me</NavLink></li>
             <li><NavLink to="/contact" className={linkClass}>Contact</NavLink></li>
             <li className="artworks-dropdown">
@@ -131,6 +132,7 @@ export default function Header(){
                 ))}
               </ul>
             </li>
+            <li><NavLink to="/commission" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Commission</NavLink></li>
             <li><NavLink to="/about" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>About Me</NavLink></li>
             <li><NavLink to="/contact" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink></li>
             <li><NavLink to="/mail-club" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>Mail Club</NavLink></li>

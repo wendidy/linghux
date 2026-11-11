@@ -23,7 +23,7 @@ export function canonicalForPath(pathname = '/') {
 }
 
 export const DEFAULT_SEO = {
-  title: 'linghux watercolor art by Wendy Zhang | Original paintings and prints',
+  title: 'linghux | Watercolor Art',
   description:
     'Shop original watercolor paintings and archival prints by Wendy Zhang, the Canadian artist behind linghux, with plein air landscapes from Newfoundland, Colorado, and beyond.',
   keywords:
