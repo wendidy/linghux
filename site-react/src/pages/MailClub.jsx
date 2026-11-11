@@ -57,21 +57,25 @@ export default function MailClub() {
 
         <div className="mail-club-content">
           <header>
-            <h2>A small way to stay connected</h2>
+            <h2>A quieter road walked together</h2>
           </header>
           <p>
-            I started the Mail Club as a way to send a little piece of my creative journey to you. Each envelope is a personal note put together by hand.
+            Maybe you’re craving a slower rhythm. A little time each month that isn’t about chasing, producing, or keeping up, just you, a brush, and making a painting.          
           </p>
-          <p>Each month, you will receive:</p>
+          <p>
+            The Mail Club is for you. Each month, an envelope arrives at your door, put together by hand, to help you come back to that calm.
+          </p>
+          <p>Each month, your envelope holds:</p>
           <ul>
-            <li>A 4 × 6 postcard featuring one of my paintings</li>
-            <li>A full tutorial of the painting process so you can paint along</li>
-            <li>A personal letter about the painting's inspiration and my art journey</li>
+            <li>A <b>4 × 6 postcard</b> of one of my paintings, something to set on your desk or tuck by a window, a small reminder to pause</li>
+            <li>A <b>full step-by-step tutorial</b>, so you can sit down and paint the same piece at your own pace. No pressure to get it “right”; the point is the quiet hour you give yourself</li>
+            <li>A <b>personal letter</b> about the painting's inspiration and my art journey</li>
           </ul>
           <p><b>
-            Each month, I will also send one extra surprise item to one lucky friend on the list. You are the only one to ever receive this work.
+            Every month, one friend in the club receives an extra surprise in their envelope. It’s a one-of-one piece, made for one person, and it will never be sent to anyone else.
           </b>
           </p>
+          <p>Come walk with me</p>
           <p>
             Choose the subscription option for your shipping destination above to join the Mail Club.
           </p>
