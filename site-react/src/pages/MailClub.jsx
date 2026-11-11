@@ -75,7 +75,7 @@ export default function MailClub() {
             Every month, one friend in the club receives an extra surprise in their envelope. It’s a one-of-one piece, made for one person, and it will never be sent to anyone else.
           </b>
           </p>
-          <p>Come walk with me</p>
+          <p>Come walk with me.</p>
           <p>
             Choose the subscription option for your shipping destination above to join the Mail Club.
           </p>
